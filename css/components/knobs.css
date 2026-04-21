@@ -96,7 +96,7 @@
     position: absolute;
     width: 4px;
     height: 16px;
-    background-color: #111;
+    background-color: var(--color-yaw-indicator);
     /* Dark when inactive */
     border-radius: 2px;
     top: 8px;
@@ -105,7 +105,7 @@
     /* Centered without transform */
     transform-origin: 50% 17px;
     /* Center of rotation (17px down is center of the 50x50 dial) */
-    box-shadow: inset 1px 1px 2px rgba(0, 0, 0, 0.8);
+    box-shadow: var(--shadow-yaw-indicator);
     transition: background-color 0.2s, box-shadow 0.2s;
 }
 
