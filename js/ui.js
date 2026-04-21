@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { innerPuck, outerRing, yawRing, displays, knobs } from './dom.js';
+import { innerPuck, outerRing, yawRing, displays, knobs, sliderTrack } from './dom.js';
 import { throttleOSC } from './osc.js';
 
 // --- Visual & Data Update ---
@@ -35,6 +35,14 @@ export function updateState() {
     knobs[0].indicator.style.transform = `rotateZ(${state.k1 * 360}deg)`;
     knobs[1].indicator.style.transform = `rotateZ(${state.k2 * 360}deg)`;
     knobs[2].indicator.style.transform = `rotateZ(${state.k3 * 360}deg)`;
+
+    // Update slider ribbon background position based on state
+    if (sliderTrack) {
+        const offset = `${state.slider * 500}px`;
+        sliderTrack.style.backgroundPositionX = offset;
+        sliderTrack.style.WebkitMaskPositionX = offset;
+        sliderTrack.style.maskPositionX = offset;
+    }
 
     throttleOSC();
 }

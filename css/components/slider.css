@@ -1,0 +1,78 @@
+.ribbon-slider {
+    width: calc(var(--size-yaw) - 32px);
+    height: 36px;
+    background: var(--color-bg-main);
+    border-radius: 8px;
+    box-shadow:
+        inset 3px 3px 10px rgba(0, 0, 0, 0.8),
+        inset -2px -2px 6px rgba(255, 255, 255, 0.04);
+    margin-bottom: 24px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    touch-action: none;
+    border: 1px solid #000;
+}
+
+.ribbon-slider-track {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    left: 2px;
+    right: 2px;
+    border-radius: 2px;
+    background-image: linear-gradient(to right,
+            transparent 0%,
+            transparent 12.5%,
+            var(--color-keycap-base) 12.5%,
+            var(--color-keycap-base) 62.5%,
+            var(--color-yaw-inner) 87.5%,
+            transparent 87.5%,
+            transparent 100%);
+    background-size: 8px 100%;
+    background-repeat: repeat-x;
+    pointer-events: none;
+    transition: background-color 0.1s;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='8' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='2' width='6' height='26' rx='3' fill='black'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg width='8' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='1' y='2' width='6' height='26' rx='3' fill='black'/%3E%3C/svg%3E");
+    -webkit-mask-size: 8px 100%;
+    mask-size: 8px 100%;
+    -webkit-mask-repeat: repeat-x;
+    mask-repeat: repeat-x;
+    box-shadow:
+        inset 0 3px 5px rgba(0, 0, 0, 0.4),
+        inset 0 -3px 5px rgba(0, 0, 0, 0.4);
+}
+
+.ribbon-slider::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 2px;
+    background: linear-gradient(
+        to right,
+        rgba(0,0,0,0.95) 0%,
+        rgba(0,0,0,0.3) 15%,
+        rgba(0,0,0,0) 30%,
+        rgba(0,0,0,0) 70%,
+        rgba(0,0,0,0.3) 85%,
+        rgba(0,0,0,0.95) 100%
+    );
+    pointer-events: none;
+    box-shadow:
+        inset 0 3px 6px rgba(0, 0, 0, 0.4),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+}
+
+.ribbon-slider:active .ribbon-slider-track {
+    background-image: linear-gradient(to right,
+            transparent 0%,
+            transparent 12.5%,
+            var(--color-keycap-cavity) 12.5%,
+            var(--color-keycap-cavity) 62.5%,
+            var(--color-yaw-inner) 87.5%,
+            transparent 87.5%,
+            transparent 100%);
+    background-size: 8px 100%;
+    background-repeat: repeat-x;
+}

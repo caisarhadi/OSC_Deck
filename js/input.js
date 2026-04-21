@@ -1,5 +1,5 @@
 import { state, activePointers, PIXELS_TO_MAX } from './state.js';
-import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs } from './dom.js';
+import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider } from './dom.js';
 import { clamp } from './utils.js';
 import { updateState } from './ui.js';
 
@@ -18,6 +18,19 @@ export function initInput() {
                 startY: e.clientY,
                 startValue: state[`k${idx+1}`]
             });
+        });
+    });
+
+    // --- Slider Event Listener ---
+    slider.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        slider.setPointerCapture(e.pointerId);
+        slider.classList.add('active');
+        activePointers.set(e.pointerId, { 
+            zone: 'slider', 
+            startX: e.clientX, 
+            startValue: state.slider
         });
     });
 
@@ -112,6 +125,11 @@ export function initInput() {
             const newValue = p.startValue + deltaValue;
             state[`k${p.index+1}`] = newValue;
         }
+        else if (p.zone === 'slider') {
+            const dX = e.clientX - p.startX;
+            const deltaValue = dX / PIXELS_TO_MAX;
+            state.slider = p.startValue + deltaValue; // Infinite like knobs
+        }
         updateState();
     });
 
@@ -122,6 +140,7 @@ export function initInput() {
         else if (p.zone === 'outer') { state.tz = 0; state.ry = 0; outerRing.classList.remove('active'); }
         else if (p.zone === 'yaw') { state.rz = 0; yawRing.classList.remove('active'); }
         else if (p.zone === 'knob') { knobs[p.index].wrap.classList.remove('active'); }
+        else if (p.zone === 'slider') { slider.classList.remove('active'); }
         activePointers.delete(e.pointerId);
         updateState();
     };
