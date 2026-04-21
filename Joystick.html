@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>OSC Touch Controller & ATEM Selector</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="js/main.js"></script>
+</head>
+<body class="app-body">
+
+    <!-- Header HUD -->
+    <header class="app-header">
+        <h1 class="header-title">
+            <span class="status-pulse"></span>
+            SYS.OP // 5-Axis Tracking
+        </h1>
+        <div class="hud-grid">
+            <div>
+                <div class="hud-label label-red">[ INNER PUCK ]</div>
+                <div id="val-tx" class="hud-value">PAN.X: +0.00</div>
+                <div id="val-ty" class="hud-value">PAN.Y: +0.00</div>
+            </div>
+            <div>
+                <div class="hud-label label-slate">[ OUTER RING ]</div>
+                <div id="val-tz" class="hud-value">HEAVE.Z: +0.00</div>
+                <div id="val-ry" class="hud-value">ROLL.T: +0.00</div>
+            </div>
+            <div>
+                <div class="hud-label label-slate-dark">[ YAW RING ]</div>
+                <div id="val-rz" class="hud-value">YAW.R: +0.00</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Interaction Area -->
+    <main id="space-container">
+        
+        <!-- Rotary Knobs -->
+        <div class="knob-rack">
+            <div class="knob-wrap" id="knob-1">
+                <div class="knob-track"></div>
+                <div class="knob-base">
+                    <div class="knob-dial">
+                        <div class="knob-indicator"></div>
+                    </div>
+                </div>
+                <div class="knob-label">K1</div>
+            </div>
+            <div class="knob-wrap" id="knob-2">
+                <div class="knob-track"></div>
+                <div class="knob-base">
+                    <div class="knob-dial">
+                        <div class="knob-indicator"></div>
+                    </div>
+                </div>
+                <div class="knob-label">K2</div>
+            </div>
+            <div class="knob-wrap" id="knob-3">
+                <div class="knob-track"></div>
+                <div class="knob-base">
+                    <div class="knob-dial">
+                        <div class="knob-indicator"></div>
+                    </div>
+                </div>
+                <div class="knob-label">K3</div>
+            </div>
+        </div>
+
+        <!-- Outermost Rotary Ring: Controls Yaw -->
+        <div id="yaw-ring"></div>
+
+        <!-- Outer Zone: Controls Heave Z and Roll -->
+        <div id="outer-ring">
+            <div class="ring-indicator" id="outer-indicator"></div>
+        </div>
+        
+        <!-- Pan Limit Boundary -->
+        <div id="pan-boundary"></div>
+        
+        <!-- Inner Zone: Controls Pan X and Pan Y (The Jog) -->
+        <div id="inner-puck">
+            <div class="puck-arrow p-up"></div>
+            <div class="puck-arrow p-down"></div>
+            <div class="puck-arrow p-left"></div>
+            <div class="puck-arrow p-right"></div>
+            <div class="puck-slope">
+                <div class="puck-center"></div>
+            </div>
+        </div>
+
+        <!-- Broadcast Console Camera Selectors (ATEM Style) -->
+        <div class="console-unit">
+            <div class="unit-label">Camera Selector</div>
+            <div class="button-row">
+                <div class="key-wrap">
+                    <div class="keycap lit-green" data-cam="1">
+                        <div class="keycap-base"></div>
+                        <div class="keycap-cavity">
+                            <div class="keycap-glow"></div>
+                            <div class="keycap-label"><span class="cam-word">CAM</span><span class="cam-num">1</span></div>
+                        </div>
+                        <div class="keycap-glass"></div>
+                    </div>
+                    <div class="key-meta active"></div>
+                </div>
+
+                <div class="key-wrap">
+                    <div class="keycap" data-cam="2">
+                        <div class="keycap-base"></div>
+                        <div class="keycap-cavity">
+                            <div class="keycap-glow"></div>
+                            <div class="keycap-label"><span class="cam-word">CAM</span><span class="cam-num">2</span></div>
+                        </div>
+                        <div class="keycap-glass"></div>
+                    </div>
+                    <div class="key-meta"></div>
+                </div>
+
+                <div class="key-wrap">
+                    <div class="keycap" data-cam="3">
+                        <div class="keycap-base"></div>
+                        <div class="keycap-cavity">
+                            <div class="keycap-glow"></div>
+                            <div class="keycap-label"><span class="cam-word">CAM</span><span class="cam-num">3</span></div>
+                        </div>
+                        <div class="keycap-glass"></div>
+                    </div>
+                    <div class="key-meta"></div>
+                </div>
+
+                <div class="key-wrap">
+                    <div class="keycap" data-cam="4">
+                        <div class="keycap-base"></div>
+                        <div class="keycap-cavity">
+                            <div class="keycap-glow"></div>
+                            <div class="keycap-label"><span class="cam-word">CAM</span><span class="cam-num">4</span></div>
+                        </div>
+                        <div class="keycap-glass"></div>
+                    </div>
+                    <div class="key-meta"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- OSC Output Log -->
+    <div class="osc-log-panel" id="osc-log">
+        <span class="log-title"># WEBSOCKET OSC BRIDGE PAYLOAD</span>
+    </div>
+</body>
+</html>

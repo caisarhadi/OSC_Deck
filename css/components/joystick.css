@@ -1,0 +1,189 @@
+/* Yaw Rotary Ring (Physical Slate Dial) */
+#yaw-ring {
+    width: var(--size-yaw);
+    height: var(--size-yaw);
+    border-radius: 50%;
+    background: 
+        conic-gradient(from 0deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0.1) 25%, rgba(255,255,255,0.03) 50%, rgba(0,0,0,0.1) 75%, rgba(255,255,255,0.03) 100%),
+        linear-gradient(145deg, var(--color-yaw-bg-alt), var(--color-yaw-bg));
+    border: 1px solid var(--color-yaw-border);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow-yaw);
+    transition: transform var(--transition-spring), box-shadow var(--transition-fast);
+    will-change: transform, box-shadow;
+    cursor: pointer;
+    z-index: var(--z-yaw);
+}
+
+/* Deep inner channel */
+#yaw-ring::before {
+    content: '';
+    position: absolute;
+    width: var(--size-yaw-inner); 
+    height: var(--size-yaw-inner);
+    border-radius: 50%;
+    background: var(--color-yaw-inner);
+    box-shadow: var(--shadow-yaw-inner);
+    pointer-events: none;
+}
+
+/* Yaw Position LED Indicator */
+#yaw-ring::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    width: var(--size-yaw-indicator);
+    height: var(--size-yaw-indicator);
+    border-radius: 50%;
+    background: var(--color-yaw-indicator);
+    box-shadow: var(--shadow-yaw-indicator);
+    transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+#yaw-ring.active {
+    transition: none;
+    box-shadow: var(--shadow-yaw-active);
+}
+
+#yaw-ring.active::after {
+    background: var(--color-yaw-indicator-active);
+    box-shadow: var(--shadow-yaw-indicator-active);
+}
+
+/* Outer Zone: Heave (Z) and Roll */
+#outer-ring {
+    width: var(--size-outer);
+    height: var(--size-outer);
+    border-radius: 50%;
+    background: var(--color-outer-bg);
+    border: 2px solid var(--color-outer-border);
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow-outer);
+    transition: transform var(--transition-spring), box-shadow var(--transition-fast);
+    will-change: transform, box-shadow;
+    cursor: pointer;
+    z-index: var(--z-outer);
+    overflow: hidden;
+}
+
+#outer-ring::before, #outer-ring::after {
+    content: ''; 
+    position: absolute; 
+    background: var(--color-outer-line);
+    pointer-events: none;
+}
+#outer-ring::before { width: 100%; height: 1px; }
+#outer-ring::after { width: 1px; height: 100%; }
+
+#outer-ring.active {
+    transition: none;
+    border-color: var(--color-outer-border-active);
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.ring-indicator {
+    position: absolute;
+    width: var(--size-outer-indicator);
+    height: var(--size-outer-indicator);
+    background: var(--color-outer-indicator);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: var(--shadow-outer-indicator);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+    z-index: var(--z-indicator);
+}
+
+#outer-ring.active .ring-indicator {
+    opacity: 1;
+}
+
+/* Pan Limit Boundary */
+#pan-boundary {
+    width: var(--size-pan);
+    height: var(--size-pan);
+    border-radius: 50%;
+    border: 2px dashed var(--color-pan-border);
+    position: absolute;
+    pointer-events: none;
+    z-index: var(--z-pan);
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+#pan-boundary.active {
+    border-color: var(--color-pan-border-active);
+    background: radial-gradient(circle, var(--color-pan-bg-active) 0%, transparent 70%);
+}
+
+/* Inner Zone: Pan X and Pan Y */
+#inner-puck {
+    width: var(--size-puck);
+    height: var(--size-puck);
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--color-puck-grad-1), var(--color-puck-grad-2));
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: var(--shadow-puck);
+    transition: transform var(--transition-spring);
+    will-change: transform;
+    cursor: pointer;
+    z-index: var(--z-puck);
+}
+
+.puck-slope {
+    width: var(--size-puck-slope);
+    height: var(--size-puck-slope);
+    border-radius: 50%;
+    background: var(--color-puck-slope);
+    border: 1px solid var(--color-puck-slope-border);
+    box-shadow: var(--shadow-puck-slope);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    pointer-events: none;
+}
+
+.puck-center {
+    width: var(--size-puck-center);
+    height: var(--size-puck-center);
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--color-puck-center-grad-1), var(--color-puck-center-grad-2));
+    box-shadow: var(--shadow-puck-center);
+    transition: background var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.puck-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    opacity: 0.35;
+    pointer-events: none;
+}
+.puck-arrow.p-up { top: 6px; border-width: 0 6px 8px 6px; border-color: transparent transparent var(--color-puck-arrow) transparent; }
+.puck-arrow.p-down { bottom: 6px; border-width: 8px 6px 0 6px; border-color: var(--color-puck-arrow) transparent transparent transparent; }
+.puck-arrow.p-left { left: 6px; border-width: 6px 8px 6px 0; border-color: transparent var(--color-puck-arrow) transparent transparent; }
+.puck-arrow.p-right { right: 6px; border-width: 6px 0 6px 8px; border-color: transparent transparent transparent var(--color-puck-arrow); }
+
+#inner-puck.active {
+    transition: none;
+    box-shadow: var(--shadow-puck-active);
+}
+
+#inner-puck.active .puck-center {
+    background: radial-gradient(circle at 30% 30%, var(--color-puck-center-active-1), var(--color-puck-center-active-2));
+    box-shadow: var(--shadow-puck-center-active);
+}
