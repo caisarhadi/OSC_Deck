@@ -1,5 +1,5 @@
 import { state, logBuffer } from './state.js';
-import { oscLog } from './dom.js';
+import { logContent } from './dom.js';
 
 let lastSendTime = 0;
 
@@ -10,9 +10,8 @@ export function throttleOSC() {
         logBuffer.push(msg);
         if (logBuffer.length > 4) logBuffer.shift();
         
-        oscLog.innerHTML = `<span class="log-title"># WEBSOCKET OSC BRIDGE PAYLOAD</span><br>` + 
-                           logBuffer.map(l => `> ${l}`).join('<br>');
-        oscLog.scrollTop = oscLog.scrollHeight;
+        logContent.innerHTML = logBuffer.map(l => `> ${l}`).join('<br>');
+        logContent.scrollTop = logContent.scrollHeight;
         lastSendTime = now;
     }
 }

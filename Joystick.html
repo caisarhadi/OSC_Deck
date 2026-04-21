@@ -11,33 +11,16 @@
 </head>
 <body class="app-body">
 
-    <!-- Header HUD -->
-    <header class="app-header">
-        <h1 class="header-title">
-            <span class="status-pulse"></span>
-            SYS.OP // 5-Axis Tracking
-        </h1>
-        <div class="hud-grid">
-            <div>
-                <div class="hud-label label-red">[ INNER PUCK ]</div>
-                <div id="val-tx" class="hud-value">PAN.X: +0.00</div>
-                <div id="val-ty" class="hud-value">PAN.Y: +0.00</div>
-            </div>
-            <div>
-                <div class="hud-label label-slate">[ OUTER RING ]</div>
-                <div id="val-tz" class="hud-value">HEAVE.Z: +0.00</div>
-                <div id="val-ry" class="hud-value">ROLL.T: +0.00</div>
-            </div>
-            <div>
-                <div class="hud-label label-slate-dark">[ YAW RING ]</div>
-                <div id="val-rz" class="hud-value">YAW.R: +0.00</div>
-            </div>
-        </div>
-    </header>
-
+    <!-- Header Removed -->
     <!-- Main Interaction Area -->
     <main id="space-container">
         
+        <!-- OLED Display -->
+        <div class="oled-display">
+            <div class="oled-label" id="oled-label">SYS.OP</div>
+            <div class="oled-value" id="oled-value">IDLE</div>
+        </div>
+
         <!-- Rotary Knobs -->
         <div class="knob-rack">
             <div class="knob-wrap" id="knob-1">
@@ -155,8 +138,12 @@
     </main>
 
     <!-- OSC Output Log -->
-    <div class="osc-log-panel" id="osc-log">
-        <span class="log-title"># WEBSOCKET OSC BRIDGE PAYLOAD</span>
+    <div class="osc-log-panel collapsed" id="osc-log">
+        <div class="log-header" id="log-toggle">
+            <span class="log-title">CONSOLE LOG</span>
+            <span class="log-icon">▼</span>
+        </div>
+        <div class="log-content" id="log-content"></div>
     </div>
 </body>
 </html>

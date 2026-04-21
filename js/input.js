@@ -115,6 +115,8 @@ export function initInput() {
             const mag = Math.sqrt(cleanTx**2 + cleanTy**2);
             state.tx = mag > 1 ? cleanTx / mag : cleanTx;
             state.ty = mag > 1 ? cleanTy / mag : cleanTy;
+            state.activeLabel = 'INNER PUCK';
+            state.activeValue = `X:${(state.tx >= 0 ? '+' : '')}${state.tx.toFixed(2)} Y:${(state.ty >= 0 ? '+' : '')}${state.ty.toFixed(2)}`;
         } 
         else if (p.zone === 'outer') {
             const dX = e.clientX - p.startX;
@@ -125,6 +127,8 @@ export function initInput() {
             }
             if (p.lockedAxis === 'roll') { state.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); state.tz = 0; }
             else if (p.lockedAxis === 'heave') { state.tz = clamp(-dY / PIXELS_TO_MAX, -1, 1); state.ry = 0; }
+            state.activeLabel = 'OUTER RING';
+            state.activeValue = `Z:${(state.tz >= 0 ? '+' : '')}${state.tz.toFixed(2)} R:${(state.ry >= 0 ? '+' : '')}${state.ry.toFixed(2)}`;
         }
         else if (p.zone === 'yaw') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -132,22 +136,31 @@ export function initInput() {
             if (deltaAngle > Math.PI) deltaAngle -= 2 * Math.PI;
             if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
             state.rz = clamp(p.baseRz + (deltaAngle / Math.PI), -1, 1);
+            state.activeLabel = 'YAW RING';
+            state.activeValue = `YAW:${(state.rz >= 0 ? '+' : '')}${state.rz.toFixed(2)}`;
         }
         else if (p.zone === 'knob') {
             const dY = e.clientY - p.startY;
             const deltaValue = -dY / 360;
             const newValue = p.startValue + deltaValue;
             state[`k${p.index+1}`] = newValue;
+            const labels = ['ISO', 'IRIS', 'WB'];
+            state.activeLabel = labels[p.index];
+            state.activeValue = newValue.toFixed(2);
         }
         else if (p.zone === 'slider') {
             const dX = e.clientX - p.startX;
             const deltaValue = dX / PIXELS_TO_MAX;
             state.slider = p.startValue + deltaValue; // Infinite like knobs
+            state.activeLabel = 'SLIDER H';
+            state.activeValue = state.slider.toFixed(2);
         }
         else if (p.zone === 'sliderV') {
             const dY = e.clientY - p.startY;
             const deltaValue = -dY / PIXELS_TO_MAX;
             state.sliderV = p.startValue + deltaValue;
+            state.activeLabel = 'SLIDER V';
+            state.activeValue = state.sliderV.toFixed(2);
         }
         updateState();
     });

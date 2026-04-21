@@ -1,5 +1,5 @@
-// 5-Axis State + 3 Knobs + 2 Sliders
-export const state = { tx: 0, ty: 0, tz: 0, ry: 0, rz: 0, k1: 0, k2: 0, k3: 0, slider: 0, sliderV: 0 };
+// 5-Axis State + 3 Knobs + 2 Sliders + OLED active state
+export const state = { tx: 0, ty: 0, tz: 0, ry: 0, rz: 0, k1: 0, k2: 0, k3: 0, slider: 0, sliderV: 0, activeLabel: 'SYS.OP', activeValue: 'IDLE' };
 
 // Active pointers map to allow true simultaneous multi-touch tracking
 export const activePointers = new Map();

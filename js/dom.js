@@ -7,13 +7,10 @@ export const oscLog = document.getElementById('osc-log');
 export const spaceContainer = document.getElementById('space-container');
 export const outerIndicator = document.getElementById('outer-indicator');
 
-export const displays = {
-    tx: document.getElementById('val-tx'), 
-    ty: document.getElementById('val-ty'), 
-    tz: document.getElementById('val-tz'),
-    ry: document.getElementById('val-ry'),
-    rz: document.getElementById('val-rz')
-};
+export const oledLabel = document.getElementById('oled-label');
+export const oledValue = document.getElementById('oled-value');
+export const logToggle = document.getElementById('log-toggle');
+export const logContent = document.getElementById('log-content');
 
 // Camera Selector Buttons
 export const camBtns = document.querySelectorAll('.keycap');
