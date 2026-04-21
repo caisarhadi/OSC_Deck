@@ -1,9 +1,19 @@
-import { state, activePointers, PIXELS_TO_MAX } from './state.js';
-import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, sliderV } from './dom.js';
+import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX } from './state.js';
+import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn } from './dom.js';
 import { clamp } from './utils.js';
 import { updateState } from './ui.js';
 
 export function initInput() {
+    // --- Reset Button ---
+    resetBtn.addEventListener('click', () => {
+        const s = getActiveCamState();
+        s.ty = 0;
+        s.rz = 0;
+        globalState.activeLabel = 'PITCH / YAW';
+        globalState.activeValue = '0.00 / 0.00';
+        updateState();
+    });
+
     // --- Knob Event Listeners ---
     knobs.forEach((k, idx) => {
         k.wrap.addEventListener('pointerdown', (e) => {
@@ -12,12 +22,17 @@ export function initInput() {
             k.wrap.setPointerCapture(e.pointerId);
             k.wrap.classList.add('active');
             
+            const startVal = getActiveCamState()[`k${idx+1}`];
             activePointers.set(e.pointerId, { 
                 zone: 'knob', 
                 index: idx,
                 startY: e.clientY,
-                startValue: state[`k${idx+1}`]
+                startValue: startVal
             });
+            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
+            globalState.activeLabel = labels[idx];
+            globalState.activeValue = startVal.toFixed(2);
+            updateState();
         });
     });
 
@@ -27,26 +42,40 @@ export function initInput() {
         e.stopPropagation();
         slider.setPointerCapture(e.pointerId);
         slider.classList.add('active');
-        activePointers.set(e.pointerId, { 
-            zone: 'slider', 
-            startX: e.clientX, 
-            startValue: state.slider
-        });
+            const startVal = getActiveCamState().slider;
+            activePointers.set(e.pointerId, { 
+                zone: 'slider', 
+                startX: e.clientX, 
+                startValue: startVal
+            });
+            globalState.activeLabel = 'SLIDER H';
+            globalState.activeValue = startVal.toFixed(2);
+            updateState();
     });
 
-    if (sliderV) {
-        sliderV.addEventListener('pointerdown', (e) => {
+    slidersV.forEach((sv, idx) => {
+        if (!sv.wrap) return;
+        sv.wrap.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            sliderV.setPointerCapture(e.pointerId);
-            sliderV.classList.add('active');
+            sv.wrap.setPointerCapture(e.pointerId);
+            sv.wrap.classList.add('active');
+            
+            const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
+            const labels = ['FOCUS', 'IRIS', 'ZOOM'];
+            const startVal = getActiveCamState()[stateKeys[idx]];
+            
             activePointers.set(e.pointerId, { 
                 zone: 'sliderV', 
+                index: idx,
                 startY: e.clientY, 
-                startValue: state.sliderV
+                startValue: startVal
             });
+            globalState.activeLabel = labels[idx];
+            globalState.activeValue = startVal.toFixed(2);
+            updateState();
         });
-    }
+    });
 
     // --- Pointer Event Listeners ---
     innerPuck.addEventListener('pointerdown', (e) => {
@@ -56,6 +85,10 @@ export function initInput() {
         innerPuck.classList.add('active');
         panBoundary.classList.add('active');
         activePointers.set(e.pointerId, { zone: 'inner', startX: e.clientX, startY: e.clientY });
+        const s = getActiveCamState();
+        globalState.activeLabel = 'INNER PUCK';
+        globalState.activeValue = `X:${(s.tx >= 0 ? '+' : '')}${s.tx.toFixed(2)} Y:${(s.ty >= 0 ? '+' : '')}${s.ty.toFixed(2)}`;
+        updateState();
     });
 
     outerRing.addEventListener('pointerdown', (e) => {
@@ -77,6 +110,9 @@ export function initInput() {
         else { outerIndicator.style.left = '50%'; outerIndicator.style.top = '0%'; }
 
         activePointers.set(e.pointerId, { zone: 'outer', startX: e.clientX, startY: e.clientY, lockedAxis: null });
+        const s = getActiveCamState();
+        globalState.activeLabel = 'OUTER RING';
+        globalState.activeValue = `Z:${(s.tz >= 0 ? '+' : '')}${s.tz.toFixed(2)} R:${(s.ry >= 0 ? '+' : '')}${s.ry.toFixed(2)}`;
         updateState();
     });
 
@@ -90,13 +126,18 @@ export function initInput() {
         const cx = rect.left + rect.width / 2;
         const cy = rect.top + rect.height / 2;
         const startAngle = Math.atan2(e.clientY - cy, e.clientX - cx);
-        activePointers.set(e.pointerId, { zone: 'yaw', cx, cy, startAngle, baseRz: state.rz });
+        const s = getActiveCamState();
+        activePointers.set(e.pointerId, { zone: 'yaw', cx, cy, startAngle, baseRz: s.rz });
+        globalState.activeLabel = 'YAW RING';
+        globalState.activeValue = `YAW:${(s.rz >= 0 ? '+' : '')}${s.rz.toFixed(2)}`;
+        updateState();
     });
 
     window.addEventListener('pointermove', (e) => {
         if (!activePointers.has(e.pointerId)) return;
         const p = activePointers.get(e.pointerId);
         
+        const s = getActiveCamState();
         if (p.zone === 'inner') {
             const deltaX = e.clientX - p.startX;
             const deltaY = e.clientY - p.startY;
@@ -113,10 +154,10 @@ export function initInput() {
             let cleanTx = applyFluidDeadzone(rawTx);
             let cleanTy = applyFluidDeadzone(rawTy);
             const mag = Math.sqrt(cleanTx**2 + cleanTy**2);
-            state.tx = mag > 1 ? cleanTx / mag : cleanTx;
-            state.ty = mag > 1 ? cleanTy / mag : cleanTy;
-            state.activeLabel = 'INNER PUCK';
-            state.activeValue = `X:${(state.tx >= 0 ? '+' : '')}${state.tx.toFixed(2)} Y:${(state.ty >= 0 ? '+' : '')}${state.ty.toFixed(2)}`;
+            s.tx = mag > 1 ? cleanTx / mag : cleanTx;
+            s.ty = mag > 1 ? cleanTy / mag : cleanTy;
+            globalState.activeLabel = 'INNER PUCK';
+            globalState.activeValue = `X:${(s.tx >= 0 ? '+' : '')}${s.tx.toFixed(2)} Y:${(s.ty >= 0 ? '+' : '')}${s.ty.toFixed(2)}`;
         } 
         else if (p.zone === 'outer') {
             const dX = e.clientX - p.startX;
@@ -125,42 +166,45 @@ export function initInput() {
                 if (Math.abs(dX) > 10) p.lockedAxis = 'roll';
                 else if (Math.abs(dY) > 10) p.lockedAxis = 'heave';
             }
-            if (p.lockedAxis === 'roll') { state.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); state.tz = 0; }
-            else if (p.lockedAxis === 'heave') { state.tz = clamp(-dY / PIXELS_TO_MAX, -1, 1); state.ry = 0; }
-            state.activeLabel = 'OUTER RING';
-            state.activeValue = `Z:${(state.tz >= 0 ? '+' : '')}${state.tz.toFixed(2)} R:${(state.ry >= 0 ? '+' : '')}${state.ry.toFixed(2)}`;
+            if (p.lockedAxis === 'roll') { s.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); s.tz = 0; }
+            else if (p.lockedAxis === 'heave') { s.tz = clamp(-dY / PIXELS_TO_MAX, -1, 1); s.ry = 0; }
+            globalState.activeLabel = 'OUTER RING';
+            globalState.activeValue = `Z:${(s.tz >= 0 ? '+' : '')}${s.tz.toFixed(2)} R:${(s.ry >= 0 ? '+' : '')}${s.ry.toFixed(2)}`;
         }
         else if (p.zone === 'yaw') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
             let deltaAngle = currentAngle - p.startAngle;
             if (deltaAngle > Math.PI) deltaAngle -= 2 * Math.PI;
             if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
-            state.rz = clamp(p.baseRz + (deltaAngle / Math.PI), -1, 1);
-            state.activeLabel = 'YAW RING';
-            state.activeValue = `YAW:${(state.rz >= 0 ? '+' : '')}${state.rz.toFixed(2)}`;
+            s.rz = clamp(p.baseRz + (deltaAngle / Math.PI), -1, 1);
+            globalState.activeLabel = 'YAW RING';
+            globalState.activeValue = `YAW:${(s.rz >= 0 ? '+' : '')}${s.rz.toFixed(2)}`;
         }
         else if (p.zone === 'knob') {
             const dY = e.clientY - p.startY;
-            const deltaValue = -dY / 360;
-            const newValue = p.startValue + deltaValue;
-            state[`k${p.index+1}`] = newValue;
-            const labels = ['ISO', 'IRIS', 'WB'];
-            state.activeLabel = labels[p.index];
-            state.activeValue = newValue.toFixed(2);
+            const deltaValue = -dY / PIXELS_TO_MAX;
+            const newValue = clamp(p.startValue + deltaValue, -1, 1);
+            s[`k${p.index+1}`] = newValue;
+            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
+            globalState.activeLabel = labels[p.index];
+            globalState.activeValue = newValue.toFixed(2);
         }
         else if (p.zone === 'slider') {
             const dX = e.clientX - p.startX;
             const deltaValue = dX / PIXELS_TO_MAX;
-            state.slider = p.startValue + deltaValue; // Infinite like knobs
-            state.activeLabel = 'SLIDER H';
-            state.activeValue = state.slider.toFixed(2);
+            s.slider = clamp(p.startValue + deltaValue, -1, 1);
+            globalState.activeLabel = 'SLIDER H';
+            globalState.activeValue = s.slider.toFixed(2);
         }
         else if (p.zone === 'sliderV') {
             const dY = e.clientY - p.startY;
             const deltaValue = -dY / PIXELS_TO_MAX;
-            state.sliderV = p.startValue + deltaValue;
-            state.activeLabel = 'SLIDER V';
-            state.activeValue = state.sliderV.toFixed(2);
+            const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
+            const labels = ['FOCUS', 'IRIS', 'ZOOM'];
+            const key = stateKeys[p.index];
+            s[key] = clamp(p.startValue + deltaValue, -1, 1);
+            globalState.activeLabel = labels[p.index];
+            globalState.activeValue = s[key].toFixed(2);
         }
         updateState();
     });
@@ -168,12 +212,13 @@ export function initInput() {
     const handleRelease = (e) => {
         if (!activePointers.has(e.pointerId)) return;
         const p = activePointers.get(e.pointerId);
-        if (p.zone === 'inner') { state.tx = 0; state.ty = 0; innerPuck.classList.remove('active'); panBoundary.classList.remove('active'); }
-        else if (p.zone === 'outer') { state.tz = 0; state.ry = 0; outerRing.classList.remove('active'); }
-        else if (p.zone === 'yaw') { state.rz = 0; yawRing.classList.remove('active'); }
+        const s = getActiveCamState();
+        if (p.zone === 'inner') { s.tx = 0; s.ty = 0; innerPuck.classList.remove('active'); panBoundary.classList.remove('active'); }
+        else if (p.zone === 'outer') { s.tz = 0; s.ry = 0; outerRing.classList.remove('active'); }
+        else if (p.zone === 'yaw') { s.rz = 0; yawRing.classList.remove('active'); }
         else if (p.zone === 'knob') { knobs[p.index].wrap.classList.remove('active'); }
         else if (p.zone === 'slider') { slider.classList.remove('active'); }
-        else if (p.zone === 'sliderV') { sliderV.classList.remove('active'); }
+        else if (p.zone === 'sliderV') { slidersV[p.index].wrap.classList.remove('active'); }
         activePointers.delete(e.pointerId);
         updateState();
     };

@@ -1,21 +1,23 @@
-import { state } from './state.js';
-import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, sliderVTrack } from './dom.js';
+import { getActiveCamState, globalState } from './state.js';
+import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV } from './dom.js';
 import { throttleOSC } from './osc.js';
 
 // --- Visual & Data Update ---
 export function updateState() {
-    oledLabel.textContent = state.activeLabel;
-    oledValue.textContent = state.activeValue;
+    oledLabel.textContent = globalState.activeLabel;
+    oledValue.textContent = globalState.activeValue;
 
-    const visTx = state.tx * 50; 
-    const visTy = -state.ty * 50; 
-    const visYaw = state.rz * 180; 
+    const s = getActiveCamState();
+
+    const visTx = s.tx * 50; 
+    const visTy = -s.ty * 50; 
+    const visYaw = s.rz * 180; 
 
     innerPuck.style.transform = `translate3d(${visTx}px, ${visTy}px, 0)`;
     
     if (outerRing.classList.contains('active')) {
-        const shadowX = state.ry * 20;
-        const shadowY = -state.tz * 20;
+        const shadowX = s.ry * 20;
+        const shadowY = -s.tz * 20;
         outerRing.style.boxShadow = `
             ${shadowX}px ${shadowY}px 30px rgba(255, 255, 255, 0.08), 
             inset ${-shadowX}px ${-shadowY}px 20px rgba(255, 255, 255, 0.05),
@@ -27,25 +29,29 @@ export function updateState() {
     
     yawRing.style.transform = `rotateZ(${visYaw}deg)`;
     
-    // Infinite rotation mapping: 1.0 = 360 degrees
+    // Knob rotation mapping: -1.0 to 1.0 maps to -135 to 135 degrees
     // We rotate the indicator instead of the dial so the dial's asymmetric shadow stays static!
-    knobs[0].indicator.style.transform = `rotateZ(${state.k1 * 360}deg)`;
-    knobs[1].indicator.style.transform = `rotateZ(${state.k2 * 360}deg)`;
-    knobs[2].indicator.style.transform = `rotateZ(${state.k3 * 360}deg)`;
+    const KNOB_MAX_DEG = 135;
+    knobs[0].indicator.style.transform = `rotateZ(${s.k1 * KNOB_MAX_DEG}deg)`;
+    knobs[1].indicator.style.transform = `rotateZ(${s.k2 * KNOB_MAX_DEG}deg)`;
+    knobs[2].indicator.style.transform = `rotateZ(${s.k3 * KNOB_MAX_DEG}deg)`;
 
     // Update slider ribbon background position based on state
     if (sliderTrack) {
-        const offset = `${state.slider * 500}px`;
+        const offset = `${s.slider * 500}px`;
         sliderTrack.style.backgroundPositionX = offset;
         sliderTrack.style.WebkitMaskPositionX = offset;
         sliderTrack.style.maskPositionX = offset;
     }
-    if (sliderVTrack) {
-        const offsetV = `${state.sliderV * 500}px`;
-        sliderVTrack.style.backgroundPositionY = offsetV;
-        sliderVTrack.style.WebkitMaskPositionY = offsetV;
-        sliderVTrack.style.maskPositionY = offsetV;
-    }
+    const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
+    slidersV.forEach((sv, idx) => {
+        if (sv.track) {
+            const offsetV = `${s[stateKeys[idx]] * 500}px`;
+            sv.track.style.backgroundPositionY = offsetV;
+            sv.track.style.WebkitMaskPositionY = offsetV;
+            sv.track.style.maskPositionY = offsetV;
+        }
+    });
 
     throttleOSC();
 }

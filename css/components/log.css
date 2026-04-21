@@ -1,0 +1,60 @@
+.osc-log-panel {
+    background-color: var(--color-bg-main);
+    border-top: 1px solid var(--color-outer-border);
+    font-family: var(--font-roboto-mono);
+    font-size: 0.75rem;
+    color: var(--color-keycap-text);
+    z-index: var(--z-console);
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    transition: height 0.3s ease;
+}
+
+.osc-log-panel:not(.collapsed) {
+    height: 8rem;
+}
+
+.osc-log-panel.collapsed {
+    height: 2.5rem;
+}
+
+.log-header {
+    padding: 0.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.log-title {
+    color: var(--color-console-label);
+    font-weight: bold;
+}
+
+.log-icon {
+    color: var(--color-console-label);
+    font-size: 0.7rem;
+    transition: transform 0.3s ease;
+}
+
+.osc-log-panel.collapsed .log-icon {
+    transform: rotate(180deg);
+}
+
+.log-content {
+    padding: 0 0.75rem 0.75rem 0.75rem;
+    overflow-y: auto;
+    flex: 1;
+    pointer-events: none;
+}
+
+.osc-log-panel.collapsed .log-content {
+    display: none;
+}

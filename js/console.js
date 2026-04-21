@@ -1,5 +1,5 @@
 import { camBtns, camMetas, logToggle } from './dom.js';
-import { logBuffer, state } from './state.js';
+import { logBuffer, globalState } from './state.js';
 import { updateState } from './ui.js';
 
 export function initConsole() {
@@ -12,8 +12,9 @@ export function initConsole() {
             btn.classList.add('lit-green');
             camMetas[idx].classList.add('active');
             
-            state.activeLabel = 'CAMERA';
-            state.activeValue = 'CAM ' + btn.dataset.cam;
+            globalState.activeCam = btn.dataset.cam;
+            globalState.activeLabel = 'CAMERA';
+            globalState.activeValue = 'CAM ' + btn.dataset.cam;
 
             logBuffer.push(`ws.send: /cam/select [${btn.dataset.cam}]`);
             if (logBuffer.length > 4) logBuffer.shift();

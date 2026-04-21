@@ -1,4 +1,4 @@
-import { state, logBuffer } from './state.js';
+import { globalState, getActiveCamState, logBuffer } from './state.js';
 import { logContent } from './dom.js';
 
 let lastSendTime = 0;
@@ -6,7 +6,9 @@ let lastSendTime = 0;
 export function throttleOSC() {
     const now = Date.now();
     if (now - lastSendTime > 33) { // ~30fps 
-        const msg = `ws.send: /5axis [${state.tx.toFixed(2)}, ${state.ty.toFixed(2)}, ${state.tz.toFixed(2)}, ${state.ry.toFixed(2)}, ${state.rz.toFixed(2)}] | /knobs [${state.k1.toFixed(2)}, ${state.k2.toFixed(2)}, ${state.k3.toFixed(2)}] | /sliders [${state.slider.toFixed(2)}, ${state.sliderV.toFixed(2)}]`;
+        const s = getActiveCamState();
+        const prefix = `/cam/${globalState.activeCam}`;
+        const msg = `ws.send: ${prefix}/5axis [${s.tx.toFixed(2)}, ${s.ty.toFixed(2)}, ${s.tz.toFixed(2)}, ${s.ry.toFixed(2)}, ${s.rz.toFixed(2)}] | ${prefix}/knobs [${s.k1.toFixed(2)}, ${s.k2.toFixed(2)}, ${s.k3.toFixed(2)}] | ${prefix}/sliders [${s.slider.toFixed(2)}, ${s.sliderV.toFixed(2)}, ${s.sliderV2.toFixed(2)}, ${s.sliderV3.toFixed(2)}]`;
         logBuffer.push(msg);
         if (logBuffer.length > 4) logBuffer.shift();
         
