@@ -6,21 +6,38 @@
 
     /* Base Colors */
     --color-bg-main: #050505;
-    --color-bg-grid: rgba(20, 184, 166, 0.05);
+    --color-bg-grid: rgba(255, 255, 255, 0.03);
+
+    /* Typography */
+    --font-size-micro: 8px;
+    --font-size-label: 11px;
+    --font-size-base: 14px;
+    --font-size-large: 16px;
+
+    /* Border Radius */
+    --radius-base: 8px;
+    --radius-inner: 6px;
+    --radius-small: 4px;
+    --radius-tiny: 2px;
+    --radius-round: 50%;
+
+    /* Layout */
+    --layout-console-offset: 240px;
 
     /* Yaw Ring Colors */
-    --color-yaw-bg: #18181a;
-    --color-yaw-bg-alt: #2c2c2e;
+    --color-yaw-bg: #181818;
+    --color-yaw-bg-alt: #2c2c2c;
     --color-yaw-inner: #111;
+    --color-yaw-border: #111;
     --color-yaw-indicator: #111;
-    --color-yaw-indicator-active: #f8fafc;
+    --color-yaw-indicator-active: #ffffff;
 
     /* Outer Ring Colors */
     --color-outer-bg: #1b1b1b;
     --color-outer-border: #3a3a3a;
-    --color-outer-border-active: #64748b;
+    --color-outer-border-active: #737373;
     --color-outer-line: rgba(80, 80, 80, 0.8);
-    --color-outer-indicator: #f8fafc;
+    --color-outer-indicator: #ffffff;
 
     /* Pan Boundary Colors */
     --color-pan-border: rgba(255, 255, 255, 0.15);
@@ -39,13 +56,20 @@
     --color-puck-arrow: #000;
 
     /* Console Colors */
-    --color-console-label: #475569;
-    --color-keycap-base: #1a1a1c;
-    --color-keycap-cavity: #25262a;
-    --color-keycap-text: #94a3b8;
-    --color-keycap-text-active: #f8fafc;
+    --color-console-label: #525252;
+    --color-keycap-base: #1a1a1a;
+    --color-keycap-cavity: #262626;
+    --color-keycap-text: #a3a3a3;
+    --color-keycap-text-active: #ffffff;
     --color-keycap-lit-green: #22c55e;
     --color-keycap-lit-red: #ef4444;
+
+    /* Knob Colors */
+    --color-knob-base-grad-1: #2c2c2c;
+    --color-knob-base-grad-2: #181818;
+    --color-knob-dial-grad-1: #333333;
+    --color-knob-dial-grad-2: #1a1a1a;
+    --color-knob-border: #111;
 
     /* Sizes */
     --size-yaw: 400px;
@@ -62,6 +86,24 @@
     --size-puck-center: 30px;
 
     --size-keycap: 76px;
+    
+    --size-slider-height: 36px;
+    
+    --size-knob-track: 120px;
+    --size-knob-base: 80px;
+    --size-knob-dial: 50px;
+    --size-knob-indicator-w: 4px;
+    --size-knob-indicator-h: 16px;
+
+    /* Gradients */
+    --grad-keycap-base: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+    --grad-keycap-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+    --grad-keycap-glow-green: radial-gradient(circle at center, rgba(34, 197, 94, 0.7) 0%, rgba(34, 197, 94, 0.2) 60%, transparent 90%);
+    --grad-keycap-glow-red: radial-gradient(circle at center, rgba(239, 68, 68, 0.4) 0%, transparent 70%);
+    --grad-keycap-glow-base: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    --grad-slider-overlay: linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.3) 85%, rgba(0,0,0,0.95) 100%);
+    --grad-knob-base: linear-gradient(145deg, var(--color-knob-base-grad-1), var(--color-knob-base-grad-2));
+    --grad-knob-dial: linear-gradient(145deg, var(--color-knob-dial-grad-1), var(--color-knob-dial-grad-2));
 
     /* Shadows - Default States */
     --shadow-yaw: -4px -4px 10px rgba(255, 255, 255, 0.03), 12px 12px 25px rgba(0, 0, 0, 0.8), inset 2px 2px 4px rgba(255, 255, 255, 0.06), inset -2px -2px 6px rgba(0, 0, 0, 0.5);
@@ -76,15 +118,34 @@
     --shadow-puck-center: -1px -1px 3px rgba(255, 255, 255, 0.06), 3px 3px 6px rgba(0, 0, 0, 0.7), inset 1px 1px 1px rgba(255, 255, 255, 0.05);
 
     --shadow-keycap: 0 8px 15px rgba(0, 0, 0, 0.8), inset 0 2px 2px rgba(255, 255, 255, 0.05);
+    --shadow-keycap-cavity: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 0.05);
+    --shadow-key-meta: inset 0 1px 2px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.05);
+    
+    --shadow-knob-base: 5px 5px 12px rgba(0, 0, 0, 0.6), -1px -1px 4px rgba(255, 255, 255, 0.03), inset 1px 1px 1px rgba(255, 255, 255, 0.05);
+    --shadow-knob-dial: 3px 3px 8px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(255, 255, 255, 0.02), inset 1px 1px 2px rgba(255, 255, 255, 0.08), inset -1px -1px 3px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--color-knob-border);
+    
+    --shadow-slider-housing: inset 3px 3px 10px rgba(0, 0, 0, 0.8), inset -2px -2px 6px rgba(255, 255, 255, 0.04);
+    --shadow-slider-track: inset 0 3px 5px rgba(0, 0, 0, 0.4), inset 0 -3px 5px rgba(0, 0, 0, 0.4);
+    --shadow-slider-overlay: inset 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 -3px 6px rgba(0, 0, 0, 0.4);
 
     /* Shadows - Active/Interactive States */
     --shadow-yaw-active: -1px -1px 4px rgba(255, 255, 255, 0.02), 6px 6px 15px rgba(0, 0, 0, 0.9), inset 2px 2px 4px rgba(255, 255, 255, 0.06), inset -2px -2px 6px rgba(0, 0, 0, 0.5);
     --shadow-yaw-indicator-active: inset 1px 1px 3px rgba(0, 0, 0, 0.8), inset -1px -1px 2px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
 
-    --shadow-puck-active: -1px -1px 3px rgba(255, 255, 255, 0.03), 2px 2px 8px rgba(0, 0, 0, 0.9), 0 0 15px rgba(20, 184, 166, 0.15), inset 1px 1px 2px rgba(255, 255, 255, 0.05), inset -1px -1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-puck-active: -1px -1px 3px rgba(255, 255, 255, 0.03), 2px 2px 8px rgba(0, 0, 0, 0.9), inset 1px 1px 2px rgba(255, 255, 255, 0.05), inset -1px -1px 3px rgba(0, 0, 0, 0.5);
     --shadow-puck-center-active: -1px -1px 2px rgba(255, 255, 255, 0.1), 2px 2px 4px rgba(0, 0, 0, 0.8), inset 1px 1px 2px rgba(255, 255, 255, 0.4), 0 0 12px rgba(239, 68, 68, 0.6);
 
     --shadow-keycap-active: 0 2px 4px rgba(0, 0, 0, 0.9), inset 0 2px 6px rgba(0, 0, 0, 0.8);
+    
+    --shadow-key-meta-active: 0 0 8px rgba(34, 197, 94, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    --shadow-keycap-lit-green-active: 0 0 25px rgba(34, 197, 94, 0.5), inset 0 2px 6px rgba(34, 197, 94, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.1);
+    --shadow-keycap-lit-red-active: 0 0 15px rgba(239, 68, 68, 0.2), inset 0 2px 2px rgba(255, 255, 255, 0.05);
+
+    --shadow-keycap-lit-green-text: 0 0 12px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.5);
+    --shadow-keycap-lit-red-text: 0 0 8px rgba(255, 255, 255, 0.5);
+
+    --shadow-knob-base-active: 4px 4px 10px rgba(0, 0, 0, 0.9), -1px -1px 3px rgba(255, 255, 255, 0.02), inset 1px 1px 2px rgba(255, 255, 255, 0.05);
+    --shadow-knob-indicator-active: 0 0 10px rgba(248, 113, 113, 0.8);
 
     /* Z-indexes */
     --z-yaw: 1;
@@ -92,6 +153,7 @@
     --z-indicator: 6;
     --z-pan: 7;
     --z-puck: 10;
+    --z-knob: 15;
     --z-console: 20;
 
     /* Transitions */

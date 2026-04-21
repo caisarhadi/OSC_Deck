@@ -1,13 +1,12 @@
 .knob-rack {
     position: absolute;
-    bottom: calc(50% + 240px);
-    /* Symmetrical distance as the console below the joystick */
+    bottom: calc(50% + var(--layout-console-offset));
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     justify-content: space-between;
-    width: calc(var(--size-yaw) - 32px); /* Match button row width and margin */
-    z-index: 15;
+    width: calc(var(--size-yaw) - 32px);
+    z-index: var(--z-knob);
 }
 
 .knob-wrap {
@@ -16,109 +15,78 @@
     align-items: center;
     position: relative;
     touch-action: none;
-    /* Prevent scrolling when dragging */
     cursor: pointer;
 }
 
 .knob-label {
     margin-top: 1.5rem;
     font-weight: 700;
-    font-size: 11px;
+    font-size: var(--font-size-label);
     letter-spacing: 0.15em;
     color: var(--color-console-label);
     text-transform: uppercase;
-    transition: color 0.2s;
+    transition: color var(--transition-fast);
 }
 
-/* The track holding the infinite dots */
 .knob-track {
     position: absolute;
     top: 40px;
-    /* Center of the knob base (which is 80px tall, plus label offset) */
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    /* Infinite dots using a repeating conic gradient */
-    background: repeating-conic-gradient(var(--color-console-label) 0deg,
-            var(--color-console-label) 3.5deg,
-            transparent 3.5deg,
-            transparent 30deg);
-    /* Cut out the inner and outer parts to make the lines look like dots */
-    -webkit-mask: radial-gradient(transparent 56px, #000 56px, #000 59px, transparent 59px);
-    mask: radial-gradient(transparent 56px, #000 56px, #000 59px, transparent 59px);
+    width: var(--size-knob-track);
+    height: var(--size-knob-track);
+    border-radius: var(--radius-round);
+    background: var(--color-console-label);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='2.5' r='1.5'/%3E%3Ccircle cx='88.8' cy='10.2' r='1.5'/%3E%3Ccircle cx='109.8' cy='31.3' r='1.5'/%3E%3Ccircle cx='117.5' cy='60' r='1.5'/%3E%3Ccircle cx='109.8' cy='88.8' r='1.5'/%3E%3Ccircle cx='88.8' cy='109.8' r='1.5'/%3E%3Ccircle cx='60' cy='117.5' r='1.5'/%3E%3Ccircle cx='31.3' cy='109.8' r='1.5'/%3E%3Ccircle cx='10.2' cy='88.8' r='1.5'/%3E%3Ccircle cx='2.5' cy='60' r='1.5'/%3E%3Ccircle cx='10.2' cy='31.3' r='1.5'/%3E%3Ccircle cx='31.3' cy='10.2' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='2.5' r='1.5'/%3E%3Ccircle cx='88.8' cy='10.2' r='1.5'/%3E%3Ccircle cx='109.8' cy='31.3' r='1.5'/%3E%3Ccircle cx='117.5' cy='60' r='1.5'/%3E%3Ccircle cx='109.8' cy='88.8' r='1.5'/%3E%3Ccircle cx='88.8' cy='109.8' r='1.5'/%3E%3Ccircle cx='60' cy='117.5' r='1.5'/%3E%3Ccircle cx='31.3' cy='109.8' r='1.5'/%3E%3Ccircle cx='10.2' cy='88.8' r='1.5'/%3E%3Ccircle cx='2.5' cy='60' r='1.5'/%3E%3Ccircle cx='10.2' cy='31.3' r='1.5'/%3E%3Ccircle cx='31.3' cy='10.2' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
     pointer-events: none;
     z-index: 1;
-    transition: opacity 0.2s;
+    transition: opacity var(--transition-fast);
 }
 
-/* The outer base of the knob */
 .knob-base {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #2c2c2e, #18181a);
-    box-shadow:
-        5px 5px 12px rgba(0, 0, 0, 0.6),
-        -1px -1px 4px rgba(255, 255, 255, 0.03),
-        inset 1px 1px 1px rgba(255, 255, 255, 0.05);
+    width: var(--size-knob-base);
+    height: var(--size-knob-base);
+    border-radius: var(--radius-round);
+    background: var(--grad-knob-base);
+    box-shadow: var(--shadow-knob-base);
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #111;
+    border: 1px solid var(--color-knob-border);
     z-index: 2;
     transition: box-shadow 0.1s;
 }
 
-/* The inner dial (raised, convex) */
 .knob-dial {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(145deg, #333336, #1a1a1c);
-    /* Light top-left to dark bottom-right for convex */
-    box-shadow:
-        3px 3px 8px rgba(0, 0, 0, 0.8),
-        /* Drop shadow casting onto the base */
-        -1px -1px 2px rgba(255, 255, 255, 0.02),
-        inset 1px 1px 2px rgba(255, 255, 255, 0.08),
-        /* Top-left highlight */
-        inset -1px -1px 3px rgba(0, 0, 0, 0.5),
-        /* Bottom-right soft shadow */
-        0 0 0 1px #111;
+    width: var(--size-knob-dial);
+    height: var(--size-knob-dial);
+    border-radius: var(--radius-round);
+    background: var(--grad-knob-dial);
+    box-shadow: var(--shadow-knob-dial);
     position: relative;
 }
 
-/* The red indicator line on the dial */
 .knob-indicator {
     position: absolute;
-    width: 4px;
-    height: 16px;
+    width: var(--size-knob-indicator-w);
+    height: var(--size-knob-indicator-h);
     background-color: var(--color-yaw-indicator);
-    /* Dark when inactive */
-    border-radius: 2px;
+    border-radius: var(--radius-tiny);
     top: 8px;
-    /* Positioned at the top, pointing up */
     left: calc(50% - 2px);
-    /* Centered without transform */
     transform-origin: 50% 17px;
-    /* Center of rotation (17px down is center of the 50x50 dial) */
     box-shadow: var(--shadow-yaw-indicator);
-    transition: background-color 0.2s, box-shadow 0.2s;
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-/* Active/Dragging states */
 .knob-wrap.active .knob-base {
-    box-shadow:
-        4px 4px 10px rgba(0, 0, 0, 0.9),
-        -1px -1px 3px rgba(255, 255, 255, 0.02),
-        inset 1px 1px 2px rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-knob-base-active);
 }
 
 .knob-wrap.active .knob-indicator {
-    box-shadow: 0 0 10px rgba(248, 113, 113, 0.8);
+    box-shadow: var(--shadow-knob-indicator-active);
     background-color: var(--color-puck-center-active-1);
 }
 

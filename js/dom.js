@@ -26,6 +26,8 @@ export const knobs = [
     { wrap: document.getElementById('knob-3'), indicator: document.querySelector('#knob-3 .knob-indicator') }
 ];
 
-// Slider
+// Sliders
 export const slider = document.getElementById('neumorphic-slider');
 export const sliderTrack = document.querySelector('#neumorphic-slider .ribbon-slider-track');
+export const sliderV = document.getElementById('neumorphic-slider-vertical');
+export const sliderVTrack = document.querySelector('#neumorphic-slider-vertical .ribbon-slider-track');

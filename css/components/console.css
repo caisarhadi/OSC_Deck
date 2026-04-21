@@ -1,18 +1,18 @@
 .console-unit {
     position: absolute;
-    top: calc(50% + 240px);
+    top: calc(50% + var(--layout-console-offset));
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: var(--size-yaw); /* Changed to yaw size for absolute positioning container, though could just use max-content */
+    width: var(--size-yaw);
     z-index: var(--z-console);
 }
 
 .unit-label {
     font-weight: 700;
-    font-size: 11px;
+    font-size: var(--font-size-label);
     letter-spacing: 0.15em;
     color: var(--color-console-label);
     text-transform: uppercase;
@@ -23,7 +23,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    width: calc(var(--size-yaw) - 32px); /* Slight margin relative to yaw ring */
+    width: calc(var(--size-yaw) - 32px);
 }
 
 .key-wrap {
@@ -36,14 +36,14 @@
     position: relative;
     width: var(--size-keycap);
     height: var(--size-keycap);
-    border-radius: 8px;
+    border-radius: var(--radius-base);
     background: var(--color-keycap-base);
     box-shadow: var(--shadow-keycap);
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    transition: transform 0.1s, box-shadow 0.1s;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
     user-select: none;
 }
 
@@ -55,8 +55,8 @@
 .keycap-base {
     position: absolute;
     inset: 0;
-    border-radius: 8px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+    border-radius: var(--radius-base);
+    background: var(--grad-keycap-base);
     pointer-events: none;
 }
 
@@ -64,9 +64,9 @@
     position: relative;
     width: calc(100% - 12px);
     height: calc(100% - 12px);
-    border-radius: 6px;
+    border-radius: var(--radius-inner);
     background: var(--color-keycap-cavity);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-keycap-cavity);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -85,13 +85,13 @@
 }
 
 .cam-word {
-    font-size: 8px;
+    font-size: var(--font-size-micro);
     letter-spacing: 0.1em;
     opacity: 0.7;
 }
 
 .cam-num {
-    font-size: 16px;
+    font-size: var(--font-size-large);
     margin-top: -2px;
 }
 
@@ -99,8 +99,8 @@
     position: absolute;
     inset: 0;
     opacity: 0;
-    transition: opacity 0.2s;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+    transition: opacity var(--transition-fast);
+    background: var(--grad-keycap-glow-base);
 }
 
 .keycap-glass {
@@ -109,51 +109,51 @@
     left: 2px;
     right: 2px;
     height: 12px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-    border-radius: 4px 4px 0 0;
+    background: var(--grad-keycap-glass);
+    border-radius: var(--radius-small) var(--radius-small) 0 0;
     pointer-events: none;
 }
 
 /* Lit states */
 .keycap.lit-green .keycap-label {
     color: var(--color-keycap-text-active);
-    text-shadow: 0 0 12px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.5);
+    text-shadow: var(--shadow-keycap-lit-green-text);
 }
 
 .keycap.lit-green .keycap-glow {
     opacity: 1;
-    background: radial-gradient(circle at center, rgba(34, 197, 94, 0.7) 0%, rgba(34, 197, 94, 0.2) 60%, transparent 90%);
+    background: var(--grad-keycap-glow-green);
 }
 
 .keycap.lit-green {
-    box-shadow: 0 0 25px rgba(34, 197, 94, 0.5), inset 0 2px 6px rgba(34, 197, 94, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-keycap-lit-green-active);
 }
 
 .keycap.lit-red .keycap-label {
     color: var(--color-keycap-text-active);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    text-shadow: var(--shadow-keycap-lit-red-text);
 }
 
 .keycap.lit-red .keycap-glow {
     opacity: 1;
-    background: radial-gradient(circle at center, rgba(239, 68, 68, 0.4) 0%, transparent 70%);
+    background: var(--grad-keycap-glow-red);
 }
 
 .keycap.lit-red {
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.2), inset 0 2px 2px rgba(255, 255, 255, 0.05);
+    box-shadow: var(--shadow-keycap-lit-red-active);
 }
 
 .key-meta {
     margin-top: 10px;
     width: 28px;
     height: 4px;
-    border-radius: 2px;
+    border-radius: var(--radius-tiny);
     background: var(--color-console-label);
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.05);
-    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow-key-meta);
+    transition: background var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .key-meta.active {
     background: var(--color-keycap-lit-green);
-    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    box-shadow: var(--shadow-key-meta-active);
 }

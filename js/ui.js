@@ -1,5 +1,5 @@
 import { state } from './state.js';
-import { innerPuck, outerRing, yawRing, displays, knobs, sliderTrack } from './dom.js';
+import { innerPuck, outerRing, yawRing, displays, knobs, sliderTrack, sliderVTrack } from './dom.js';
 import { throttleOSC } from './osc.js';
 
 // --- Visual & Data Update ---
@@ -42,6 +42,12 @@ export function updateState() {
         sliderTrack.style.backgroundPositionX = offset;
         sliderTrack.style.WebkitMaskPositionX = offset;
         sliderTrack.style.maskPositionX = offset;
+    }
+    if (sliderVTrack) {
+        const offsetV = `${state.sliderV * 500}px`;
+        sliderVTrack.style.backgroundPositionY = offsetV;
+        sliderVTrack.style.WebkitMaskPositionY = offsetV;
+        sliderVTrack.style.maskPositionY = offsetV;
     }
 
     throttleOSC();
