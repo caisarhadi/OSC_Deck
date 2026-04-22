@@ -21,5 +21,8 @@ export const activePointers = new Map();
 // Tuning: How many pixels of drag equal 1.0 (100% axis output)
 export const PIXELS_TO_MAX = 100;
 
+// Sliders need much more physical travel — roughly matching their element length
+export const SLIDER_PIXELS_TO_MAX = 270;
+
 // Simulated OSC Output buffer
 export const logBuffer = [];

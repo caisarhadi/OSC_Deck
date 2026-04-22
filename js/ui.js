@@ -1,4 +1,5 @@
 import { getActiveCamState, globalState } from './state.js';
+import { SLIDER_PIXELS_TO_MAX } from './state.js';
 import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV } from './dom.js';
 import { throttleOSC } from './osc.js';
 
@@ -36,9 +37,9 @@ export function updateState() {
     knobs[1].indicator.style.transform = `rotateZ(${s.k2 * KNOB_MAX_DEG}deg)`;
     knobs[2].indicator.style.transform = `rotateZ(${s.k3 * KNOB_MAX_DEG}deg)`;
 
-    // Update slider ribbon background position based on state
+    // Visual offset = value * SLIDER_PIXELS_TO_MAX — matches the physical drag range 1:1
     if (sliderTrack) {
-        const offset = `${s.slider * 500}px`;
+        const offset = `${s.slider * SLIDER_PIXELS_TO_MAX}px`;
         sliderTrack.style.backgroundPositionX = offset;
         sliderTrack.style.WebkitMaskPositionX = offset;
         sliderTrack.style.maskPositionX = offset;
@@ -46,7 +47,7 @@ export function updateState() {
     const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
     slidersV.forEach((sv, idx) => {
         if (sv.track) {
-            const offsetV = `${s[stateKeys[idx]] * 500}px`;
+            const offsetV = `${s[stateKeys[idx]] * SLIDER_PIXELS_TO_MAX}px`;
             sv.track.style.backgroundPositionY = offsetV;
             sv.track.style.WebkitMaskPositionY = offsetV;
             sv.track.style.maskPositionY = offsetV;

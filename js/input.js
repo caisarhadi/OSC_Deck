@@ -1,4 +1,4 @@
-import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX } from './state.js';
+import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX } from './state.js';
 import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn } from './dom.js';
 import { clamp } from './utils.js';
 import { updateState } from './ui.js';
@@ -220,14 +220,14 @@ export function initInput() {
         }
         else if (p.zone === 'slider') {
             const dX = e.clientX - p.startX;
-            const deltaValue = dX / PIXELS_TO_MAX;
+            const deltaValue = dX / SLIDER_PIXELS_TO_MAX;
             s.slider = clamp(p.startValue + deltaValue, -1, 1);
             globalState.activeLabel = 'SLIDER H';
             globalState.activeValue = s.slider.toFixed(2);
         }
         else if (p.zone === 'sliderV') {
             const dY = e.clientY - p.startY;
-            const deltaValue = -dY / PIXELS_TO_MAX;
+            const deltaValue = -dY / SLIDER_PIXELS_TO_MAX;
             const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
             const labels = ['FOCUS', 'IRIS', 'ZOOM'];
             const key = stateKeys[p.index];
