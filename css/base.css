@@ -1,6 +1,7 @@
 body { 
     font-family: var(--font-main);
     overscroll-behavior: none; 
+    touch-action: none; 
     user-select: none;
     -webkit-user-select: none;
     background-color: var(--color-bg-main);

@@ -48,8 +48,10 @@ export function initInput() {
                 zone: 'knob', 
                 index: idx,
                 cx, cy,
-                startAngle,
-                startValue: startVal
+                // Frame-by-frame accumulation: prevAngle updates every move event
+                // so each delta is a tiny arc — safe to wrap, no boundary jumps
+                prevAngle: startAngle,
+                currentValue: startVal  // clamped accumulator
             });
             const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
             globalState.activeLabel = labels[idx];
@@ -204,15 +206,17 @@ export function initInput() {
         }
         else if (p.zone === 'knob') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
-            let deltaAngle = currentAngle - p.startAngle;
-            // Wrap delta to [-π, π] to handle crossing the ±180° boundary
-            if (deltaAngle > Math.PI) deltaAngle -= 2 * Math.PI;
-            if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
-            const newValue = clamp(p.startValue + (deltaAngle / Math.PI), -1, 1);
-            s[`k${p.index+1}`] = newValue;
+            // Per-frame micro-delta — always < half revolution, wrap is always correct
+            let frameDelta = currentAngle - p.prevAngle;
+            if (frameDelta > Math.PI)  frameDelta -= 2 * Math.PI;
+            if (frameDelta < -Math.PI) frameDelta += 2 * Math.PI;
+            p.prevAngle = currentAngle;  // advance reference to this frame
+            // Accumulate into clamped value — stops at ±1, responds immediately on reverse
+            p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
+            s[`k${p.index+1}`] = p.currentValue;
             const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
             globalState.activeLabel = labels[p.index];
-            globalState.activeValue = newValue.toFixed(2);
+            globalState.activeValue = p.currentValue.toFixed(2);
         }
         else if (p.zone === 'slider') {
             const dX = e.clientX - p.startX;

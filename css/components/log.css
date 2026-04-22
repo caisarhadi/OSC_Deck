@@ -7,7 +7,6 @@
     z-index: var(--z-console);
     position: absolute;
     bottom: 0;
-    left: 0;
     width: 100%;
     box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
     box-sizing: border-box;
@@ -15,10 +14,6 @@
     flex-direction: column;
     pointer-events: auto;
     transition: height 0.3s ease;
-    /* The log panel sits outside the scaled container (it's absolutely
-       positioned at the viewport bottom), so it needs its own safe-area
-       handling for iPhone home indicator. */
-    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .osc-log-panel:not(.collapsed) {
@@ -55,7 +50,7 @@
 
 .log-content {
     padding: 0 0.75rem 0.75rem 0.75rem;
-    overflow-y: hidden;
+    overflow-y: auto;
     flex: 1;
     pointer-events: none;
 }
