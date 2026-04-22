@@ -99,6 +99,20 @@ export function initInput() {
             globalState.activeValue = startVal.toFixed(2);
             updateState();
         });
+
+        if (sv.reset) {
+            sv.reset.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
+                const labels = ['FOCUS', 'IRIS', 'ZOOM'];
+                const s = getActiveCamState();
+                s[stateKeys[idx]] = 0;
+                globalState.activeLabel = labels[idx];
+                globalState.activeValue = '0.00';
+                updateState();
+            });
+        }
     });
 
     // --- Pointer Event Listeners ---
