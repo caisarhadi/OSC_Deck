@@ -44,8 +44,9 @@
 
 .log-icon {
     color: var(--color-console-label);
-    font-size: 0.7rem;
+    font-size: 1rem;
     transition: transform 0.3s ease;
+    margin-left: 4px;
 }
 
 .osc-log-panel.collapsed .log-icon {
