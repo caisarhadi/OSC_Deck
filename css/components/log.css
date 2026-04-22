@@ -55,7 +55,7 @@
 
 .log-content {
     padding: 0 0.75rem 0.75rem 0.75rem;
-    overflow-y: auto;
+    overflow-y: hidden;
     flex: 1;
     pointer-events: none;
 }
