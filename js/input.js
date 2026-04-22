@@ -1,6 +1,6 @@
 import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX } from './state.js';
 import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn } from './dom.js';
-import { clamp } from './utils.js';
+import { clamp, fmt, fmtUnsigned } from './utils.js';
 import { updateState } from './ui.js';
 
 export function initInput() {
@@ -21,11 +21,15 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                s[`k${idx+1}`] = 0;
+                if (idx >= 3) {
+                    s[`k${idx+1}`] = 1;
+                } else {
+                    s[`k${idx+1}`] = 0;
+                }
                 
-                const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
+                const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE'];
                 globalState.activeLabel = labels[idx];
-                globalState.activeValue = '0.00';
+                globalState.activeValue = idx >= 3 ? '1.00' : '0.00';
                 updateState();
             });
         }
@@ -53,9 +57,9 @@ export function initInput() {
                 prevAngle: startAngle,
                 currentValue: startVal  // clamped accumulator
             });
-            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
+            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE'];
             globalState.activeLabel = labels[idx];
-            globalState.activeValue = startVal.toFixed(2);
+            globalState.activeValue = fmtUnsigned(startVal);
             updateState();
         });
     });
@@ -73,7 +77,7 @@ export function initInput() {
                 startValue: startVal
             });
             globalState.activeLabel = 'SLIDER H';
-            globalState.activeValue = startVal.toFixed(2);
+            globalState.activeValue = fmtUnsigned(startVal);
             updateState();
     });
 
@@ -96,7 +100,7 @@ export function initInput() {
                 startValue: startVal
             });
             globalState.activeLabel = labels[idx];
-            globalState.activeValue = startVal.toFixed(2);
+            globalState.activeValue = fmtUnsigned(startVal);
             updateState();
         });
 
@@ -125,7 +129,7 @@ export function initInput() {
         activePointers.set(e.pointerId, { zone: 'inner', startX: e.clientX, startY: e.clientY });
         const s = getActiveCamState();
         globalState.activeLabel = 'INNER PUCK';
-        globalState.activeValue = `X:${(s.tx >= 0 ? '+' : '')}${s.tx.toFixed(2)} Y:${(s.ty >= 0 ? '+' : '')}${s.ty.toFixed(2)}`;
+        globalState.activeValue = `X:${fmt(s.tx * s.k4)} Y:${fmt(s.ty * s.k4)}`;
         updateState();
     });
 
@@ -150,7 +154,7 @@ export function initInput() {
         activePointers.set(e.pointerId, { zone: 'outer', startX: e.clientX, startY: e.clientY, lockedAxis: null });
         const s = getActiveCamState();
         globalState.activeLabel = 'OUTER RING';
-        globalState.activeValue = `Z:${(s.tz >= 0 ? '+' : '')}${s.tz.toFixed(2)} R:${(s.ry >= 0 ? '+' : '')}${s.ry.toFixed(2)}`;
+        globalState.activeValue = `Z:${fmt(s.tz * s.k5)} R:${fmt(s.ry * s.k5)}`;
         updateState();
     });
 
@@ -167,7 +171,7 @@ export function initInput() {
         const s = getActiveCamState();
         activePointers.set(e.pointerId, { zone: 'yaw', cx, cy, startAngle, baseRz: s.rz });
         globalState.activeLabel = 'YAW RING';
-        globalState.activeValue = `YAW:${(s.rz >= 0 ? '+' : '')}${s.rz.toFixed(2)}`;
+        globalState.activeValue = `YAW:${fmt(s.rz * s.k5)}`;
         updateState();
     });
 
@@ -195,7 +199,7 @@ export function initInput() {
             s.tx = mag > 1 ? cleanTx / mag : cleanTx;
             s.ty = mag > 1 ? cleanTy / mag : cleanTy;
             globalState.activeLabel = 'INNER PUCK';
-            globalState.activeValue = `X:${(s.tx >= 0 ? '+' : '')}${s.tx.toFixed(2)} Y:${(s.ty >= 0 ? '+' : '')}${s.ty.toFixed(2)}`;
+            globalState.activeValue = `X:${fmt(s.tx * s.k4)} Y:${fmt(s.ty * s.k4)}`;
         } 
         else if (p.zone === 'outer') {
             const dX = e.clientX - p.startX;
@@ -207,7 +211,7 @@ export function initInput() {
             if (p.lockedAxis === 'roll') { s.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); s.tz = 0; }
             else if (p.lockedAxis === 'heave') { s.tz = clamp(-dY / PIXELS_TO_MAX, -1, 1); s.ry = 0; }
             globalState.activeLabel = 'OUTER RING';
-            globalState.activeValue = `Z:${(s.tz >= 0 ? '+' : '')}${s.tz.toFixed(2)} R:${(s.ry >= 0 ? '+' : '')}${s.ry.toFixed(2)}`;
+            globalState.activeValue = `Z:${fmt(s.tz * s.k5)} R:${fmt(s.ry * s.k5)}`;
         }
         else if (p.zone === 'yaw') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -216,7 +220,7 @@ export function initInput() {
             if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
             s.rz = clamp(p.baseRz + (deltaAngle / Math.PI), -1, 1);
             globalState.activeLabel = 'YAW RING';
-            globalState.activeValue = `YAW:${(s.rz >= 0 ? '+' : '')}${s.rz.toFixed(2)}`;
+            globalState.activeValue = `YAW:${fmt(s.rz * s.k5)}`;
         }
         else if (p.zone === 'knob') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -225,19 +229,22 @@ export function initInput() {
             if (frameDelta > Math.PI)  frameDelta -= 2 * Math.PI;
             if (frameDelta < -Math.PI) frameDelta += 2 * Math.PI;
             p.prevAngle = currentAngle;  // advance reference to this frame
-            // Accumulate into clamped value — stops at ±1, responds immediately on reverse
-            p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
+            if (p.index >= 3) {
+                p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), 0, 1);
+            } else {
+                p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
+            }
             s[`k${p.index+1}`] = p.currentValue;
-            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
+            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE'];
             globalState.activeLabel = labels[p.index];
-            globalState.activeValue = p.currentValue.toFixed(2);
+            globalState.activeValue = fmtUnsigned(p.currentValue);
         }
         else if (p.zone === 'slider') {
             const dX = e.clientX - p.startX;
             const deltaValue = dX / SLIDER_PIXELS_TO_MAX;
             s.slider = clamp(p.startValue + deltaValue, -1, 1);
             globalState.activeLabel = 'SLIDER H';
-            globalState.activeValue = s.slider.toFixed(2);
+            globalState.activeValue = fmtUnsigned(s.slider);
         }
         else if (p.zone === 'sliderV') {
             const dY = e.clientY - p.startY;
@@ -247,7 +254,7 @@ export function initInput() {
             const key = stateKeys[p.index];
             s[key] = clamp(p.startValue + deltaValue, -1, 1);
             globalState.activeLabel = labels[p.index];
-            globalState.activeValue = s[key].toFixed(2);
+            globalState.activeValue = fmtUnsigned(s[key]);
         }
         updateState();
     });

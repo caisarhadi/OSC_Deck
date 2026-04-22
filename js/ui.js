@@ -36,6 +36,9 @@ export function updateState() {
     knobs[0].indicator.style.transform = `rotateZ(${s.k1 * KNOB_MAX_DEG}deg)`;
     knobs[1].indicator.style.transform = `rotateZ(${s.k2 * KNOB_MAX_DEG}deg)`;
     knobs[2].indicator.style.transform = `rotateZ(${s.k3 * KNOB_MAX_DEG}deg)`;
+    // Rate knobs go from 0 to 1, mapped to -135deg to +135deg
+    knobs[3].indicator.style.transform = `rotateZ(${(s.k4 * 270) - 135}deg)`;
+    knobs[4].indicator.style.transform = `rotateZ(${(s.k5 * 270) - 135}deg)`;
 
     // Visual offset = value * SLIDER_PIXELS_TO_MAX — matches the physical drag range 1:1
     if (sliderTrack) {

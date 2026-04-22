@@ -1,5 +1,6 @@
 import { globalState, getActiveCamState, logBuffer } from './state.js';
 import { logContent } from './dom.js';
+import { fmtUnsigned } from './utils.js';
 
 let lastSendTime = 0;
 
@@ -8,7 +9,16 @@ export function throttleOSC() {
     if (now - lastSendTime > 33) { // ~30fps 
         const s = getActiveCamState();
         const prefix = `/cam/${globalState.activeCam}`;
-        const msg = `ws.send: ${prefix}/5axis [${s.tx.toFixed(2)}, ${s.ty.toFixed(2)}, ${s.tz.toFixed(2)}, ${s.ry.toFixed(2)}, ${s.rz.toFixed(2)}] | ${prefix}/knobs [${s.k1.toFixed(2)}, ${s.k2.toFixed(2)}, ${s.k3.toFixed(2)}] | ${prefix}/sliders [${s.slider.toFixed(2)}, ${s.sliderV.toFixed(2)}, ${s.sliderV2.toFixed(2)}, ${s.sliderV3.toFixed(2)}]`;
+        
+        const f = fmtUnsigned;
+        // Multiply outputs by rates
+        const tx = f(s.tx * s.k4);
+        const ty = f(s.ty * s.k4);
+        const tz = f(s.tz * s.k5);
+        const ry = f(s.ry * s.k5);
+        const rz = f(s.rz * s.k5);
+
+        const msg = `ws.send: ${prefix}/5axis [${tx}, ${ty}, ${tz}, ${ry}, ${rz}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}] | ${prefix}/sliders [${f(s.slider)}, ${f(s.sliderV)}, ${f(s.sliderV2)}, ${f(s.sliderV3)}]`;
         logBuffer.push(msg);
         if (logBuffer.length > 4) logBuffer.shift();
         
