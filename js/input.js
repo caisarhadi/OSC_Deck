@@ -16,17 +16,39 @@ export function initInput() {
 
     // --- Knob Event Listeners ---
     knobs.forEach((k, idx) => {
+        if (k.reset) {
+            k.reset.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const s = getActiveCamState();
+                s[`k${idx+1}`] = 0;
+                
+                const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
+                globalState.activeLabel = labels[idx];
+                globalState.activeValue = '0.00';
+                updateState();
+            });
+        }
+
         k.wrap.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             e.stopPropagation();
             k.wrap.setPointerCapture(e.pointerId);
             k.wrap.classList.add('active');
-            
+
+            // Use the knob dial center for angular rotation (same mechanic as yaw ring)
+            const dial = k.wrap.querySelector('.knob-dial') || k.wrap;
+            const rect = dial.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            const startAngle = Math.atan2(e.clientY - cy, e.clientX - cx);
+
             const startVal = getActiveCamState()[`k${idx+1}`];
             activePointers.set(e.pointerId, { 
                 zone: 'knob', 
                 index: idx,
-                startY: e.clientY,
+                cx, cy,
+                startAngle,
                 startValue: startVal
             });
             const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
@@ -181,9 +203,12 @@ export function initInput() {
             globalState.activeValue = `YAW:${(s.rz >= 0 ? '+' : '')}${s.rz.toFixed(2)}`;
         }
         else if (p.zone === 'knob') {
-            const dY = e.clientY - p.startY;
-            const deltaValue = -dY / PIXELS_TO_MAX;
-            const newValue = clamp(p.startValue + deltaValue, -1, 1);
+            const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
+            let deltaAngle = currentAngle - p.startAngle;
+            // Wrap delta to [-π, π] to handle crossing the ±180° boundary
+            if (deltaAngle > Math.PI) deltaAngle -= 2 * Math.PI;
+            if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
+            const newValue = clamp(p.startValue + (deltaAngle / Math.PI), -1, 1);
             s[`k${p.index+1}`] = newValue;
             const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE'];
             globalState.activeLabel = labels[p.index];

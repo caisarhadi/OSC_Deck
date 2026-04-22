@@ -18,10 +18,11 @@
 
 .osc-log-panel:not(.collapsed) {
     height: 8rem;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .osc-log-panel.collapsed {
-    height: 2.5rem;
+    height: calc(2.5rem + env(safe-area-inset-bottom, 0px));
 }
 
 .log-header {

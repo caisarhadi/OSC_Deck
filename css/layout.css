@@ -2,10 +2,17 @@
 .app-body {
     background-color: var(--color-bg-main);
     color: #fff;
-    height: 100vh;
+    /* iOS Safari: 100vh includes the browser chrome, causing clipping.
+       dvh adapts to the actual visible viewport (toolbar shown/hidden).
+       -webkit-fill-available is the older iOS fallback. */
+    height: 100vh;           /* baseline */
+    height: -webkit-fill-available; /* iOS 12 fallback */
+    height: 100dvh;          /* iOS 15.4+ / Chrome 108+ — the right fix */
+    min-height: 100vh;       /* safety for browsers without dvh */
     display: flex;
     flex-direction: column;
     margin: 0;
+    overflow: hidden;        /* prevent iOS rubber-band scroll revealing bg */
 }
 
 .app-body ::selection {

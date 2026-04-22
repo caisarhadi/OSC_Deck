@@ -19,9 +19,9 @@ export const camMetas = document.querySelectorAll('.key-meta');
 
 // Knobs
 export const knobs = [
-    { wrap: document.getElementById('knob-1'), indicator: document.querySelector('#knob-1 .knob-indicator') },
-    { wrap: document.getElementById('knob-2'), indicator: document.querySelector('#knob-2 .knob-indicator') },
-    { wrap: document.getElementById('knob-3'), indicator: document.querySelector('#knob-3 .knob-indicator') }
+    { wrap: document.getElementById('knob-1'), indicator: document.querySelector('#knob-1 .knob-indicator'), reset: document.querySelector('#knob-1 .knob-reset') },
+    { wrap: document.getElementById('knob-2'), indicator: document.querySelector('#knob-2 .knob-indicator'), reset: document.querySelector('#knob-2 .knob-reset') },
+    { wrap: document.getElementById('knob-3'), indicator: document.querySelector('#knob-3 .knob-indicator'), reset: document.querySelector('#knob-3 .knob-reset') }
 ];
 
 // Sliders

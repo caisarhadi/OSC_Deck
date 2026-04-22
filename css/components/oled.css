@@ -1,8 +1,8 @@
 .oled-display {
     position: absolute;
     bottom: calc(50% + (var(--layout-console-offset) * 2) - 30px);
-    width: 200px;
-    height: 60px;
+    width: clamp(160px, 50%, 200px);
+    height: clamp(50px, 6vmin, 60px);
     background-color: #000;
     border: 2px solid #333;
     border-radius: 8px;

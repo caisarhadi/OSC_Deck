@@ -141,6 +141,8 @@
     color: var(--color-keycap-text-active);
 }
 
-.vertical-slider-wrap.v1 { left: calc(50% + calc(var(--size-yaw) / 2) + 40px); }
-.vertical-slider-wrap.v2 { left: calc(50% + calc(var(--size-yaw) / 2) + 100px); }
-.vertical-slider-wrap.v3 { left: calc(50% + calc(var(--size-yaw) / 2) + 160px); }
+/* Vertical slider column positions — spaced relative to the yaw ring edge.
+   --size-slider-height doubles as our column step width (same dimension). */
+.vertical-slider-wrap.v1 { left: calc(50% + calc(var(--size-yaw) / 2) + var(--size-slider-height) + 4px); }
+.vertical-slider-wrap.v2 { left: calc(50% + calc(var(--size-yaw) / 2) + var(--size-slider-height) * 2 + 8px + 24px); }
+.vertical-slider-wrap.v3 { left: calc(50% + calc(var(--size-yaw) / 2) + var(--size-slider-height) * 3 + 12px + 48px); }
