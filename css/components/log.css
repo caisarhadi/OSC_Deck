@@ -7,21 +7,25 @@
     z-index: var(--z-console);
     position: absolute;
     bottom: 0;
-    width: 100%;
+    right: 0;
     box-shadow: 0 -10px 30px rgba(0,0,0,0.8);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     pointer-events: auto;
-    transition: height 0.3s ease;
+    transition: width 0.3s ease, height 0.3s ease, box-shadow 0.3s ease, border-top-color 0.3s ease;
 }
 
 .osc-log-panel:not(.collapsed) {
+    width: 100%;
     height: 8rem;
 }
 
 .osc-log-panel.collapsed {
+    width: auto;       /* shrinks to fit the header tab content */
     height: 2.5rem;
+    border-top-color: transparent;
+    box-shadow: none;
 }
 
 .log-header {
