@@ -31,7 +31,7 @@ export const knobs = [
 export const slider = document.getElementById('neumorphic-slider');
 export const sliderTrack = document.querySelector('#neumorphic-slider .ribbon-slider-track');
 export const slidersV = [
-    { wrap: document.getElementById('neumorphic-slider-vertical'), track: document.querySelector('#neumorphic-slider-vertical .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v1 .slider-v-reset') },
+    { wrap: document.getElementById('neumorphic-slider-vertical'), track: document.querySelector('#neumorphic-slider-vertical .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v3 .slider-v-reset') },
     { wrap: document.getElementById('neumorphic-slider-vertical-2'), track: document.querySelector('#neumorphic-slider-vertical-2 .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v2 .slider-v-reset') },
-    { wrap: document.getElementById('neumorphic-slider-vertical-3'), track: document.querySelector('#neumorphic-slider-vertical-3 .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v3 .slider-v-reset') }
+    { wrap: document.getElementById('neumorphic-slider-vertical-3'), track: document.querySelector('#neumorphic-slider-vertical-3 .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v1 .slider-v-reset') }
 ];

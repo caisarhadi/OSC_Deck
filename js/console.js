@@ -13,7 +13,7 @@ export function initConsole() {
             camMetas[idx].classList.add('active');
             
             globalState.activeCam = btn.dataset.cam;
-            globalState.activeLabel = 'CAMERA';
+            globalState.activeLabel = 'SELECTED';
             globalState.activeValue = 'CAM ' + btn.dataset.cam;
 
             logBuffer.push(`ws.send: /cam/select [${btn.dataset.cam}]`);
