@@ -1,4 +1,4 @@
-const createCamState = () => ({ tx: 0, ty: 0, tz: 0, ry: 0, rz: 0, k1: 0, k2: 0, k3: 0, k4: 1, k5: 1, slider: 0, sliderV: 0, sliderV2: 0, sliderV3: 0 });
+const createCamState = () => ({ tx: 0, ty: 0, tz: 0, ry: 0, rz: 0, k1: 0, k2: 0, k3: 0, k4: 1, k5: 1, k6: 1, slider: 0, sliderV: 0, sliderV2: 0, sliderV3: 0 });
 
 export const cameras = {
     'A': createCamState(),

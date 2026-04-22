@@ -12,13 +12,13 @@ export function throttleOSC() {
         
         const f = fmtUnsigned;
         // Multiply outputs by rates
-        const tx = f(s.tx * s.k4);
-        const ty = f(s.ty * s.k4);
-        const tz = f(s.tz * s.k5);
-        const ry = f(s.ry * s.k5);
-        const rz = f(s.rz * s.k5);
+        const tx = f(s.tx * s.k4 * s.k6);
+        const ty = f(s.ty * s.k4 * s.k6);
+        const tz = f(s.tz * s.k5 * s.k6);
+        const ry = f(s.ry * s.k5 * s.k6);
+        const rz = f(s.rz * s.k5 * s.k6);
 
-        const msg = `ws.send: ${prefix}/5axis [${tx}, ${ty}, ${tz}, ${ry}, ${rz}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}] | ${prefix}/sliders [${f(s.slider)}, ${f(s.sliderV)}, ${f(s.sliderV2)}, ${f(s.sliderV3)}]`;
+        const msg = `ws.send: ${prefix}/5axis [${tx}, ${ty}, ${tz}, ${ry}, ${rz}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.slider * s.k6)}, ${f(s.sliderV * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV3 * s.k6)}]`;
         logBuffer.push(msg);
         if (logBuffer.length > 4) logBuffer.shift();
         

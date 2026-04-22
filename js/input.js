@@ -27,7 +27,7 @@ export function initInput() {
                     s[`k${idx+1}`] = 0;
                 }
                 
-                const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE'];
+                const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE', 'MASTER RATE'];
                 globalState.activeLabel = labels[idx];
                 globalState.activeValue = idx >= 3 ? '1.00' : '0.00';
                 updateState();
@@ -57,7 +57,7 @@ export function initInput() {
                 prevAngle: startAngle,
                 currentValue: startVal  // clamped accumulator
             });
-            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE'];
+            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE', 'MASTER RATE'];
             globalState.activeLabel = labels[idx];
             globalState.activeValue = fmtUnsigned(startVal);
             updateState();
@@ -77,7 +77,7 @@ export function initInput() {
                 startValue: startVal
             });
             globalState.activeLabel = 'SLIDER H';
-            globalState.activeValue = fmtUnsigned(startVal);
+            globalState.activeValue = fmtUnsigned(startVal * s.k6);
             updateState();
     });
 
@@ -100,7 +100,7 @@ export function initInput() {
                 startValue: startVal
             });
             globalState.activeLabel = labels[idx];
-            globalState.activeValue = fmtUnsigned(startVal);
+            globalState.activeValue = fmtUnsigned(startVal * getActiveCamState().k6);
             updateState();
         });
 
@@ -129,7 +129,7 @@ export function initInput() {
         activePointers.set(e.pointerId, { zone: 'inner', startX: e.clientX, startY: e.clientY });
         const s = getActiveCamState();
         globalState.activeLabel = 'INNER PUCK';
-        globalState.activeValue = `X:${fmt(s.tx * s.k4)} Y:${fmt(s.ty * s.k4)}`;
+        globalState.activeValue = `X:${fmt(s.tx * s.k4 * s.k6)} Y:${fmt(s.ty * s.k4 * s.k6)}`;
         updateState();
     });
 
@@ -154,7 +154,7 @@ export function initInput() {
         activePointers.set(e.pointerId, { zone: 'outer', startX: e.clientX, startY: e.clientY, lockedAxis: null });
         const s = getActiveCamState();
         globalState.activeLabel = 'OUTER RING';
-        globalState.activeValue = `Z:${fmt(s.tz * s.k5)} R:${fmt(s.ry * s.k5)}`;
+        globalState.activeValue = `Z:${fmt(s.tz * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
         updateState();
     });
 
@@ -171,7 +171,7 @@ export function initInput() {
         const s = getActiveCamState();
         activePointers.set(e.pointerId, { zone: 'yaw', cx, cy, startAngle, baseRz: s.rz });
         globalState.activeLabel = 'YAW RING';
-        globalState.activeValue = `YAW:${fmt(s.rz * s.k5)}`;
+        globalState.activeValue = `YAW:${fmt(s.rz * s.k5 * s.k6)}`;
         updateState();
     });
 
@@ -199,7 +199,7 @@ export function initInput() {
             s.tx = mag > 1 ? cleanTx / mag : cleanTx;
             s.ty = mag > 1 ? cleanTy / mag : cleanTy;
             globalState.activeLabel = 'INNER PUCK';
-            globalState.activeValue = `X:${fmt(s.tx * s.k4)} Y:${fmt(s.ty * s.k4)}`;
+            globalState.activeValue = `X:${fmt(s.tx * s.k4 * s.k6)} Y:${fmt(s.ty * s.k4 * s.k6)}`;
         } 
         else if (p.zone === 'outer') {
             const dX = e.clientX - p.startX;
@@ -211,7 +211,7 @@ export function initInput() {
             if (p.lockedAxis === 'roll') { s.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); s.tz = 0; }
             else if (p.lockedAxis === 'heave') { s.tz = clamp(-dY / PIXELS_TO_MAX, -1, 1); s.ry = 0; }
             globalState.activeLabel = 'OUTER RING';
-            globalState.activeValue = `Z:${fmt(s.tz * s.k5)} R:${fmt(s.ry * s.k5)}`;
+            globalState.activeValue = `Z:${fmt(s.tz * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
         }
         else if (p.zone === 'yaw') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -220,7 +220,7 @@ export function initInput() {
             if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
             s.rz = clamp(p.baseRz + (deltaAngle / Math.PI), -1, 1);
             globalState.activeLabel = 'YAW RING';
-            globalState.activeValue = `YAW:${fmt(s.rz * s.k5)}`;
+            globalState.activeValue = `YAW:${fmt(s.rz * s.k5 * s.k6)}`;
         }
         else if (p.zone === 'knob') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -235,7 +235,7 @@ export function initInput() {
                 p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
             }
             s[`k${p.index+1}`] = p.currentValue;
-            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE'];
+            const labels = ['ISO', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE', 'MASTER RATE'];
             globalState.activeLabel = labels[p.index];
             globalState.activeValue = fmtUnsigned(p.currentValue);
         }
@@ -244,7 +244,7 @@ export function initInput() {
             const deltaValue = dX / SLIDER_PIXELS_TO_MAX;
             s.slider = clamp(p.startValue + deltaValue, -1, 1);
             globalState.activeLabel = 'SLIDER H';
-            globalState.activeValue = fmtUnsigned(s.slider);
+            globalState.activeValue = fmtUnsigned(s.slider * s.k6);
         }
         else if (p.zone === 'sliderV') {
             const dY = e.clientY - p.startY;
@@ -254,7 +254,7 @@ export function initInput() {
             const key = stateKeys[p.index];
             s[key] = clamp(p.startValue + deltaValue, -1, 1);
             globalState.activeLabel = labels[p.index];
-            globalState.activeValue = fmtUnsigned(s[key]);
+            globalState.activeValue = fmtUnsigned(s[key] * s.k6);
         }
         updateState();
     });
