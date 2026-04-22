@@ -1,3 +1,4 @@
+import { applyScale } from './responsive.js';
 import { initInput } from './input.js';
 import { initConsole } from './console.js';
 import { updateState } from './ui.js';

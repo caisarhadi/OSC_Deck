@@ -21,8 +21,8 @@
     --radius-tiny: 2px;
     --radius-round: 50%;
 
-    /* Layout — scales with the smallest viewport axis */
-    --layout-console-offset: clamp(160px, 23.5vmin, 240px);
+    /* Layout */
+    --layout-console-offset: 240px;
 
     /* Yaw Ring Colors */
     --color-yaw-bg: #181818;
@@ -71,29 +71,29 @@
     --color-knob-dial-grad-2: #1a1a1a;
     --color-knob-border: #111;
 
-    /* Sizes — all clamp(min, preferred-vmin, max) so the UI scales on iPad/iOS */
-    --size-yaw: clamp(260px, 39vmin, 400px);
-    --size-yaw-inner: clamp(216px, 32.4vmin, 332px);
-    --size-yaw-indicator: clamp(10px, 1.4vmin, 14px);
+    /* Sizes */
+    --size-yaw: 400px;
+    --size-yaw-inner: 332px;
+    --size-yaw-indicator: 14px;
 
-    --size-outer: clamp(208px, 31.2vmin, 320px);
-    --size-outer-indicator: clamp(11px, 1.6vmin, 16px);
+    --size-outer: 320px;
+    --size-outer-indicator: 16px;
 
-    --size-pan: clamp(130px, 19.5vmin, 200px);
+    --size-pan: 200px;
 
-    --size-puck: clamp(65px, 9.75vmin, 100px);
-    --size-puck-slope: clamp(39px, 5.85vmin, 60px);
-    --size-puck-center: clamp(20px, 2.9vmin, 30px);
+    --size-puck: 100px;
+    --size-puck-slope: 60px;
+    --size-puck-center: 30px;
 
-    --size-keycap: clamp(52px, 7.4vmin, 76px);
-
-    --size-slider-height: clamp(26px, 3.5vmin, 36px);
-
-    --size-knob-track: clamp(78px, 11.7vmin, 120px);
-    --size-knob-base: clamp(52px, 7.8vmin, 80px);
-    --size-knob-dial: clamp(33px, 4.9vmin, 50px);
+    --size-keycap: 76px;
+    
+    --size-slider-height: 36px;
+    
+    --size-knob-track: 120px;
+    --size-knob-base: 80px;
+    --size-knob-dial: 50px;
     --size-knob-indicator-w: 4px;
-    --size-knob-indicator-h: clamp(11px, 1.6vmin, 16px);
+    --size-knob-indicator-h: 16px;
 
     /* Gradients */
     --grad-keycap-base: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);

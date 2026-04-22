@@ -30,7 +30,7 @@
 
 .knob-track {
     position: absolute;
-    top: calc(var(--size-knob-base) / 2);
+    top: 40px;
     left: 50%;
     transform: translate(-50%, -50%);
     width: var(--size-knob-track);
@@ -100,9 +100,10 @@
 /* → top: 40 - 42 = -2px, right offset: 42 - 40 = 2px behind right edge     */
 .knob-reset {
     position: absolute;
-    /* 45° outside the track ring, scaled from knob-base center */
-    top: calc(var(--size-knob-base) / 2 - var(--size-knob-track) / 2 * 0.707 - 18px);
-    left: calc(50% + var(--size-knob-track) / 2 * 0.707 - 11px);
+    /* Center at 45° outside the 120px track ring: track center=(50%,40px), r=60px */
+    /* At 45°: offset = (60+14+4)*cos(45°) ≈ 55px each axis                        */
+    top: calc(40px - 55px - 14px);      /* = -29px: clearly above-right of ring   */
+    left: calc(50% + 55px - 14px);      /* = 50%+41px: clearly right of ring      */
     width: 22px;
     height: 22px;
     border-radius: var(--radius-round);
