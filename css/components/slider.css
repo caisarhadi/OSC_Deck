@@ -127,7 +127,7 @@
     position: absolute;
     top: 50%;
     left: 100%;
-    margin-left: 3px;
+    margin-left: 2px;
     transform: translateY(-50%);
     width: 20px;
     height: 6px;
@@ -169,8 +169,8 @@
 .zoom-label {
     position: absolute;
     left: 100%;
-    margin-left: 4px;
-    font-size: var(--font-size-label);
+    margin-left: 6px;
+    font-size: calc(var(--font-size-label) * 1.2);
     font-weight: 700;
     letter-spacing: 0.1em;
     color: var(--color-console-label);
@@ -184,9 +184,9 @@
 .iris-icon {
     position: absolute;
     left: 100%;
-    margin-left: 4px;
-    width: var(--font-size-label);
-    height: var(--font-size-label);
+    margin-left: 6px;
+    width: calc(var(--font-size-label) * 1.2);
+    height: calc(var(--font-size-label) * 1.2);
     color: var(--color-console-label);
     pointer-events: none;
     transform: translateY(-50%);
