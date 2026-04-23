@@ -127,9 +127,6 @@
     background-color: var(--color-puck-center-active-1);
 }
 
-.knob-wrap.active .knob-label {
-    color: var(--color-keycap-text-active);
-}
 
 /* Knob Mini Reset Button — outside the top-right of the track ring */
 /* knob-track center: top:40px, horizontally centered in wrap (~80px wide)    */

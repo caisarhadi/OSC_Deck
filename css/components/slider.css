@@ -156,9 +156,6 @@
     transition: color var(--transition-fast);
 }
 
-.vertical-slider-wrap:has(.ribbon-slider.active) .slider-label {
-    color: var(--color-keycap-text-active);
-}
 
 .vertical-slider-wrap.v1 {
     left: calc(50% + calc(var(--size-yaw) / 2) + 40px);
