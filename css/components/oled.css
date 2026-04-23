@@ -3,7 +3,7 @@
     top: calc(50% + var(--layout-console-offset) + 106px);
     left: calc(50% + calc(var(--size-yaw) / 2) + 118px);
     transform: translateX(-50%);
-    width: 156px;
+    width: 180px;
     height: 60px;
     background-color: #000;
     border: 2px solid #333;
