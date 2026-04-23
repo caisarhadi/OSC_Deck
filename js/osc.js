@@ -12,8 +12,8 @@ export function throttleOSC() {
         
         const f = fmtUnsigned;
         // Multiply outputs by rates
-        const tx = f(s.tx * s.k4 * s.k6);
-        const ty = f(s.ty * s.k4 * s.k6);
+        const tx = f(s.tx * s.k5 * s.k6);
+        const ty = f(s.ty * s.k5 * s.k6);
         const tz = f(s.tz * s.k5 * s.k6);
         const ry = f(s.ry * s.k5 * s.k6);
         const rz = f(s.rz * s.k5 * s.k6);

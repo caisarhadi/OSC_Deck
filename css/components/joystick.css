@@ -231,3 +231,11 @@
     fill: currentColor;
     transform: scale(1.25);
 }
+
+/* Master Rate Reset — bottom-left of joystick, exact mirror of #reset-btn */
+#master-rate-reset {
+    left: calc(50% - calc(var(--size-yaw) / 2));
+    top: calc(50% + calc(var(--size-yaw) / 2));
+    transform: translate(0%, -100%);
+}
+

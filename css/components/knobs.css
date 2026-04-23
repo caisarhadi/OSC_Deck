@@ -4,8 +4,8 @@
     left: 50%;
     transform: translateX(-50%);
     display: flex;
-    justify-content: space-between;
-    width: calc(var(--size-yaw) - 32px);
+    justify-content: center;
+    gap: 64px;
     z-index: var(--z-knob);
 }
 
@@ -34,15 +34,12 @@
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 170'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='26.7' cy='143.3' r='1.5'/%3E%3Ccircle cx='5.3' cy='106.4' r='1.5'/%3E%3Ccircle cx='5.3' cy='63.6' r='1.5'/%3E%3Ccircle cx='26.7' cy='26.7' r='1.5'/%3E%3Ccircle cx='63.6' cy='5.3' r='1.5'/%3E%3Ccircle cx='106.4' cy='5.3' r='1.5'/%3E%3Ccircle cx='143.3' cy='26.7' r='1.5'/%3E%3Ccircle cx='164.7' cy='63.6' r='1.5'/%3E%3Ccircle cx='164.7' cy='106.4' r='1.5'/%3E%3Ccircle cx='143.3' cy='143.3' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
 }
 
-.knob-wrap.master-knob .reset-wrap {
-    position: absolute;
-    top: -41px;
-    left: calc(50% - 106px);
-    transform: none;
-}
 
-/* Diagonal machine line on the outer ring (knob-base) */
-.knob-wrap.master-knob .knob-base::after {
+
+
+/* Diagonal machine line on the outer ring */
+.knob-wrap.master-knob .knob-base::after,
+#knob-5 .knob-base::after {
     content: '';
     position: absolute;
     bottom: 50%;
@@ -55,7 +52,8 @@
     z-index: 1;
 }
 
-.knob-wrap.master-knob .knob-dial {
+.knob-wrap.master-knob .knob-dial,
+#knob-5 .knob-dial {
     z-index: 2; /* Keep dial above the diagonal line */
 }
 
@@ -83,6 +81,25 @@
 }
 
 .knob-wrap.master-knob.active .master-dot {
+    background-color: var(--color-puck-center-active-1);
+    box-shadow: var(--shadow-knob-indicator-active);
+}
+
+/* HTML Dot Indicator for T-Rate Knob (scaled down) */
+.t-rate-dot {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-round);
+    background-color: var(--color-yaw-indicator);
+    box-shadow: var(--shadow-yaw-indicator);
+    top: 10px; /* Scaled inward from the edge */
+    left: calc(50% - 3px);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    z-index: 5;
+}
+
+#knob-5.active .t-rate-dot {
     background-color: var(--color-puck-center-active-1);
     box-shadow: var(--shadow-knob-indicator-active);
 }
@@ -192,6 +209,12 @@
     cursor: pointer;
     z-index: 10;
     transition: all var(--transition-fast);
+}
+
+/* Mirror T-RATE reset button to bottom-left — same math as .knob-reset but signs flipped */
+#knob-5 .knob-reset {
+    top: calc(40px + 55px - 14px);   /* = 81px: mirrored from -29px top */
+    left: calc(50% - 55px - 14px);  /* = 50%-69px: mirrored from 50%+41px right */
 }
 
 /* Convex inner surface — mirrors main reset button's .reset-inner */

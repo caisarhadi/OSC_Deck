@@ -1,8 +1,9 @@
 .oled-display {
     position: absolute;
-    bottom: calc(50% + var(--layout-console-offset) + 47px);
-    left: calc(50% + calc(var(--size-yaw) / 2) + 38px);
-    width: 160px;
+    top: calc(50% + var(--layout-console-offset) + 106px);
+    left: calc(50% + calc(var(--size-yaw) / 2) + 118px);
+    transform: translateX(-50%);
+    width: 156px;
     height: 60px;
     background-color: #000;
     border: 2px solid #333;

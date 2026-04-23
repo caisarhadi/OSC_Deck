@@ -27,6 +27,22 @@
 
         <!-- Rotary Knobs -->
         <div class="knob-rack">
+            <div class="knob-wrap" id="knob-2">
+                <div class="knob-reset" title="Reset SHUTTER">
+                    <div class="knob-reset-inner">
+                        <svg class="knob-reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="8" fill="currentColor" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="knob-track"></div>
+                <div class="knob-base">
+                    <div class="knob-dial">
+                        <div class="knob-indicator"></div>
+                    </div>
+                </div>
+                <div class="knob-label">SHUTTER</div>
+            </div>
             <div class="knob-wrap" id="knob-1">
                 <div class="knob-reset" title="Reset EI">
                     <div class="knob-reset-inner">
@@ -43,8 +59,8 @@
                 </div>
                 <div class="knob-label">EI</div>
             </div>
-            <div class="knob-wrap" id="knob-2">
-                <div class="knob-reset" title="Reset SHUTTER">
+            <div class="knob-wrap" id="knob-4">
+                <div class="knob-reset" title="Reset ND">
                     <div class="knob-reset-inner">
                         <svg class="knob-reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <circle cx="12" cy="12" r="8" fill="currentColor" />
@@ -57,7 +73,7 @@
                         <div class="knob-indicator"></div>
                     </div>
                 </div>
-                <div class="knob-label">SHUTTER</div>
+                <div class="knob-label">ND</div>
             </div>
             <div class="knob-wrap" id="knob-3">
                 <div class="knob-reset" title="Reset WB">
@@ -79,23 +95,7 @@
 
         <!-- Vertical Knobs (Left Side) -->
         <div class="knob-rack-vertical">
-            <div class="knob-wrap master-knob" id="knob-6">
-                <div class="reset-wrap master-reset" title="Reset MASTER RATE">
-                    <div class="reset-inner">
-                        <svg class="reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="4" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="knob-track"></div>
-                <div class="knob-base">
-                    <div class="knob-dial">
-                        <div class="master-ticks-container" id="master-knob-center"></div>
-                    </div>
-                </div>
-                <div class="knob-label">MASTER RATE</div>
-            </div>
-            <div class="knob-wrap" id="knob-4">
+            <div class="knob-wrap" id="knob-5">
                 <div class="knob-reset" title="Reset T-RATE">
                     <div class="knob-reset-inner">
                         <svg class="knob-reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -106,26 +106,19 @@
                 <div class="knob-track"></div>
                 <div class="knob-base">
                     <div class="knob-dial">
-                        <div class="knob-indicator"></div>
+                        <div class="master-ticks-container" id="t-rate-knob-center"></div>
                     </div>
                 </div>
                 <div class="knob-label">T-RATE</div>
             </div>
-            <div class="knob-wrap" id="knob-5">
-                <div class="knob-reset" title="Reset R-RATE">
-                    <div class="knob-reset-inner">
-                        <svg class="knob-reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="8" fill="currentColor" />
-                        </svg>
-                    </div>
-                </div>
+            <div class="knob-wrap master-knob" id="knob-6">
                 <div class="knob-track"></div>
                 <div class="knob-base">
                     <div class="knob-dial">
-                        <div class="knob-indicator"></div>
+                        <div class="master-ticks-container" id="master-knob-center"></div>
                     </div>
                 </div>
-                <div class="knob-label">R-RATE</div>
+                <div class="knob-label">MASTER RATE</div>
             </div>
         </div>
 
@@ -140,12 +133,21 @@
         <!-- Pan Limit Boundary -->
         <div id="pan-boundary"></div>
 
-        <!-- Reset Button -->
+        <!-- Reset Button (bottom-right of joystick) -->
         <div id="reset-btn" class="reset-wrap" title="Reset Camera">
             <div class="reset-inner">
                 <svg class="reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path
                         d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+                </svg>
+            </div>
+        </div>
+
+        <!-- Master Rate Reset Button (bottom-left of joystick, mirrors reset-btn) -->
+        <div id="master-rate-reset" class="reset-wrap master-reset" title="Reset MASTER RATE">
+            <div class="reset-inner">
+                <svg class="reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="4" />
                 </svg>
             </div>
         </div>

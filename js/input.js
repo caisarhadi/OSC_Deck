@@ -129,7 +129,7 @@ export function initInput() {
         activePointers.set(e.pointerId, { zone: 'inner', startX: e.clientX, startY: e.clientY });
         const s = getActiveCamState();
         globalState.activeLabel = 'INNER PUCK';
-        globalState.activeValue = `X:${fmt(s.tx * s.k4 * s.k6)} Y:${fmt(s.ty * s.k4 * s.k6)}`;
+        globalState.activeValue = `X:${fmt(s.tx * s.k5 * s.k6)} Y:${fmt(s.ty * s.k5 * s.k6)}`;
         updateState();
     });
 
@@ -199,7 +199,7 @@ export function initInput() {
             s.tx = mag > 1 ? cleanTx / mag : cleanTx;
             s.ty = mag > 1 ? cleanTy / mag : cleanTy;
             globalState.activeLabel = 'INNER PUCK';
-            globalState.activeValue = `X:${fmt(s.tx * s.k4 * s.k6)} Y:${fmt(s.ty * s.k4 * s.k6)}`;
+            globalState.activeValue = `X:${fmt(s.tx * s.k5 * s.k6)} Y:${fmt(s.ty * s.k5 * s.k6)}`;
         }
         else if (p.zone === 'outer') {
             const dX = e.clientX - p.startX;
@@ -235,7 +235,7 @@ export function initInput() {
                 p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
             }
             s[`k${p.index + 1}`] = p.currentValue;
-            const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE', 'MASTER RATE'];
+            const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'ND', 'T-RATE', 'MASTER RATE'];
             globalState.activeLabel = labels[p.index];
             globalState.activeValue = fmtUnsigned(p.currentValue);
         }
