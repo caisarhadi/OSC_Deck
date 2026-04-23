@@ -138,6 +138,15 @@
     transition: all var(--transition-fast);
 }
 
+.slider-v-reset::after {
+    content: '';
+    position: absolute;
+    top: -20px;
+    bottom: -20px;
+    left: -2px;
+    right: -10px;
+}
+
 .slider-v-reset:active {
     transform: translateY(calc(-50% + 2px));
 }
