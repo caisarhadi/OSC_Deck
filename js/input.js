@@ -230,7 +230,7 @@ export function initInput() {
             if (frameDelta < -Math.PI) frameDelta += 2 * Math.PI;
             p.prevAngle = currentAngle;  // advance reference to this frame
             if (p.index >= 3) {
-                p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), 0, 1);
+                p.currentValue = clamp(p.currentValue + (frameDelta / (2 * Math.PI)), 0, 1);
             } else {
                 p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
             }
