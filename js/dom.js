@@ -24,7 +24,7 @@ export const knobs = [
     { wrap: document.getElementById('knob-3'), indicator: document.querySelector('#knob-3 .knob-indicator'), reset: document.querySelector('#knob-3 .knob-reset') },
     { wrap: document.getElementById('knob-4'), indicator: document.querySelector('#knob-4 .knob-indicator'), reset: document.querySelector('#knob-4 .knob-reset') },
     { wrap: document.getElementById('knob-5'), indicator: document.querySelector('#knob-5 .knob-indicator'), reset: document.querySelector('#knob-5 .knob-reset') },
-    { wrap: document.getElementById('knob-6'), indicator: document.querySelector('#knob-6 .knob-indicator'), reset: document.querySelector('#knob-6 .reset-wrap') }
+    { wrap: document.getElementById('knob-6'), indicator: document.getElementById('master-knob-center'), reset: document.querySelector('#knob-6 .reset-wrap') }
 ];
 
 // Sliders

@@ -20,7 +20,7 @@
     z-index: var(--z-knob);
 }
 
-/* Master knob: dial 100px, base 130px (15px ring), track 170px (20px gap) */
+/* Master knob: well 130px, center 100px, track 170px */
 .knob-wrap.master-knob {
     --size-knob-base: 130px;
     --size-knob-dial: 100px;
@@ -30,12 +30,8 @@
 
 .knob-wrap.master-knob .knob-track {
     top: 65px;
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 170'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='85' cy='2.5' r='1.5'/%3E%3Ccircle cx='126.3' cy='13.6' r='1.5'/%3E%3Ccircle cx='156.4' cy='43.8' r='1.5'/%3E%3Ccircle cx='167.5' cy='85' r='1.5'/%3E%3Ccircle cx='156.4' cy='126.3' r='1.5'/%3E%3Ccircle cx='13.6' cy='126.3' r='1.5'/%3E%3Ccircle cx='2.5' cy='85' r='1.5'/%3E%3Ccircle cx='13.6' cy='43.8' r='1.5'/%3E%3Ccircle cx='43.8' cy='13.6' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 170'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='85' cy='2.5' r='1.5'/%3E%3Ccircle cx='126.3' cy='13.6' r='1.5'/%3E%3Ccircle cx='156.4' cy='43.8' r='1.5'/%3E%3Ccircle cx='167.5' cy='85' r='1.5'/%3E%3Ccircle cx='156.4' cy='126.3' r='1.5'/%3E%3Ccircle cx='13.6' cy='126.3' r='1.5'/%3E%3Ccircle cx='2.5' cy='85' r='1.5'/%3E%3Ccircle cx='13.6' cy='43.8' r='1.5'/%3E%3Ccircle cx='43.8' cy='13.6' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
-}
-
-.knob-wrap.master-knob .knob-indicator {
-    transform-origin: 50% 42px;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 170'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='26.7' cy='143.3' r='1.5'/%3E%3Ccircle cx='5.3' cy='106.4' r='1.5'/%3E%3Ccircle cx='5.3' cy='63.6' r='1.5'/%3E%3Ccircle cx='26.7' cy='26.7' r='1.5'/%3E%3Ccircle cx='63.6' cy='5.3' r='1.5'/%3E%3Ccircle cx='106.4' cy='5.3' r='1.5'/%3E%3Ccircle cx='143.3' cy='26.7' r='1.5'/%3E%3Ccircle cx='164.7' cy='63.6' r='1.5'/%3E%3Ccircle cx='164.7' cy='106.4' r='1.5'/%3E%3Ccircle cx='143.3' cy='143.3' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 170'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='26.7' cy='143.3' r='1.5'/%3E%3Ccircle cx='5.3' cy='106.4' r='1.5'/%3E%3Ccircle cx='5.3' cy='63.6' r='1.5'/%3E%3Ccircle cx='26.7' cy='26.7' r='1.5'/%3E%3Ccircle cx='63.6' cy='5.3' r='1.5'/%3E%3Ccircle cx='106.4' cy='5.3' r='1.5'/%3E%3Ccircle cx='143.3' cy='26.7' r='1.5'/%3E%3Ccircle cx='164.7' cy='63.6' r='1.5'/%3E%3Ccircle cx='164.7' cy='106.4' r='1.5'/%3E%3Ccircle cx='143.3' cy='143.3' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
 }
 
 .knob-wrap.master-knob .reset-wrap {
@@ -43,6 +39,52 @@
     top: -41px;
     left: calc(50% - 106px);
     transform: none;
+}
+
+/* Diagonal machine line on the outer ring (knob-base) */
+.knob-wrap.master-knob .knob-base::after {
+    content: '';
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 1.5px;
+    height: 50%;
+    background: var(--color-bg-main);
+    transform-origin: bottom center;
+    transform: translateX(-50%) rotate(45deg);
+    z-index: 1;
+}
+
+.knob-wrap.master-knob .knob-dial {
+    z-index: 2; /* Keep dial above the diagonal line */
+}
+
+/* Master knob center rotating container */
+.master-ticks-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-round);
+}
+
+/* HTML Dot Indicator for Master Knob */
+.master-dot {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-round);
+    background-color: var(--color-yaw-indicator);
+    box-shadow: var(--shadow-yaw-indicator);
+    top: 15px; /* Inward from the edge */
+    left: calc(50% - 5px);
+    transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+    z-index: 5;
+}
+
+.knob-wrap.master-knob.active .master-dot {
+    background-color: var(--color-puck-center-active-1);
+    box-shadow: var(--shadow-knob-indicator-active);
 }
 
 
@@ -74,8 +116,8 @@
     height: var(--size-knob-track);
     border-radius: var(--radius-round);
     background: var(--color-console-label);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='2.5' r='1.5'/%3E%3Ccircle cx='88.8' cy='10.2' r='1.5'/%3E%3Ccircle cx='109.8' cy='31.3' r='1.5'/%3E%3Ccircle cx='117.5' cy='60' r='1.5'/%3E%3Ccircle cx='109.8' cy='88.8' r='1.5'/%3E%3Ccircle cx='10.2' cy='88.8' r='1.5'/%3E%3Ccircle cx='2.5' cy='60' r='1.5'/%3E%3Ccircle cx='10.2' cy='31.3' r='1.5'/%3E%3Ccircle cx='31.3' cy='10.2' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='60' cy='2.5' r='1.5'/%3E%3Ccircle cx='88.8' cy='10.2' r='1.5'/%3E%3Ccircle cx='109.8' cy='31.3' r='1.5'/%3E%3Ccircle cx='117.5' cy='60' r='1.5'/%3E%3Ccircle cx='109.8' cy='88.8' r='1.5'/%3E%3Ccircle cx='10.2' cy='88.8' r='1.5'/%3E%3Ccircle cx='2.5' cy='60' r='1.5'/%3E%3Ccircle cx='10.2' cy='31.3' r='1.5'/%3E%3Ccircle cx='31.3' cy='10.2' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='19.3' cy='100.7' r='1.5'/%3E%3Ccircle cx='4.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='4.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='19.3' cy='19.3' r='1.5'/%3E%3Ccircle cx='45.1' cy='4.5' r='1.5'/%3E%3Ccircle cx='74.9' cy='4.5' r='1.5'/%3E%3Ccircle cx='100.7' cy='19.3' r='1.5'/%3E%3Ccircle cx='115.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='115.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='100.7' cy='100.7' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='19.3' cy='100.7' r='1.5'/%3E%3Ccircle cx='4.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='4.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='19.3' cy='19.3' r='1.5'/%3E%3Ccircle cx='45.1' cy='4.5' r='1.5'/%3E%3Ccircle cx='74.9' cy='4.5' r='1.5'/%3E%3Ccircle cx='100.7' cy='19.3' r='1.5'/%3E%3Ccircle cx='115.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='115.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='100.7' cy='100.7' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
     pointer-events: none;
     z-index: 1;
     transition: opacity var(--transition-fast);
