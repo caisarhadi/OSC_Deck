@@ -21,15 +21,12 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                if (idx >= 3) {
-                    s[`k${idx + 1}`] = 1;
-                } else {
-                    s[`k${idx + 1}`] = 0;
-                }
+                const resetValues = [-1, 0, 0, 0, 1, 1];
+                s[`k${idx + 1}`] = resetValues[idx];
 
-                const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE', 'MASTER RATE'];
+                const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'ND', 'T-RATE', 'MASTER RATE'];
                 globalState.activeLabel = labels[idx];
-                globalState.activeValue = idx >= 3 ? '1.00' : '0.00';
+                globalState.activeValue = resetValues[idx].toFixed(2);
                 updateState();
             });
         }
@@ -57,7 +54,7 @@ export function initInput() {
                 prevAngle: startAngle,
                 currentValue: startVal  // clamped accumulator
             });
-            const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'T-RATE', 'R-RATE', 'MASTER RATE'];
+            const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'ND', 'T-RATE', 'MASTER RATE'];
             globalState.activeLabel = labels[idx];
             globalState.activeValue = fmtUnsigned(startVal);
             updateState();
