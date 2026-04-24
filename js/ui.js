@@ -1,6 +1,6 @@
 import { getActiveCamState, globalState } from './state.js';
 import { SLIDER_PIXELS_TO_MAX } from './state.js';
-import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV } from './dom.js';
+import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle } from './dom.js';
 import { throttleOSC } from './osc.js';
 
 // --- Visual & Data Update ---
@@ -57,6 +57,14 @@ export function updateState() {
             sv.track.style.maskPositionY = offsetV;
         }
     });
+
+    if (afToggle) {
+        if (s.afOn) {
+            afToggle.classList.add('is-active');
+        } else {
+            afToggle.classList.remove('is-active');
+        }
+    }
 
     throttleOSC();
 }

@@ -1,5 +1,5 @@
 import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX } from './state.js';
-import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn } from './dom.js';
+import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn, afToggle } from './dom.js';
 import { clamp, fmt, fmtUnsigned } from './utils.js';
 import { updateState } from './ui.js';
 
@@ -11,6 +11,20 @@ export function initInput() {
         s.rz = 0;
         globalState.activeLabel = 'PITCH / YAW';
         globalState.activeValue = '0.00 / 0.00';
+        updateState();
+    });
+
+    // --- Autofocus Toggle ---
+    afToggle.addEventListener('click', () => {
+        const s = getActiveCamState();
+        s.afOn = !s.afOn;
+        if (s.afOn) {
+            afToggle.classList.add('is-active');
+        } else {
+            afToggle.classList.remove('is-active');
+        }
+        globalState.activeLabel = 'AUTOFOCUS';
+        globalState.activeValue = s.afOn ? 'ON' : 'OFF';
         updateState();
     });
 
