@@ -18,7 +18,9 @@ export function throttleOSC() {
         const ry = f(s.ry * s.k5 * s.k6);
         const rz = f(s.rz * s.k5 * s.k6);
 
-        const msg = `ws.send: ${prefix}/5axis [${tx}, ${ty}, ${tz}, ${ry}, ${rz}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.slider * s.k6)}, ${f(s.sliderV * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV3 * s.k6)}]`;
+        const af = s.afOn ? 1 : 0;
+
+        const msg = `ws.send: ${prefix}/5axis [${tx}, ${ty}, ${tz}, ${ry}, ${rz}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.slider * s.k6)}, ${f(s.sliderV * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV3 * s.k6)}] | ${prefix}/af [${af}]`;
         logBuffer.push(msg);
         if (logBuffer.length > 4) logBuffer.shift();
         
