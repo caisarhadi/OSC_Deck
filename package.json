@@ -1,0 +1,24 @@
+{
+  "name": "osc_deck",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caisarhadi/OSC_Deck.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/caisarhadi/OSC_Deck/issues"
+  },
+  "homepage": "https://github.com/caisarhadi/OSC_Deck#readme",
+  "dependencies": {
+    "ws": "^8.20.0"
+  }
+}

@@ -18,7 +18,7 @@ export function updateState() {
     
     if (outerRing.classList.contains('active')) {
         const shadowX = s.ry * 20;
-        const shadowY = -s.tz * 20;
+        const shadowY = -s.rx * 20;
         outerRing.style.boxShadow = `
             ${shadowX}px ${shadowY}px 30px rgba(255, 255, 255, 0.08), 
             inset ${-shadowX}px ${-shadowY}px 20px rgba(255, 255, 255, 0.05),
@@ -31,15 +31,15 @@ export function updateState() {
     yawRing.style.transform = `rotateZ(${visYaw}deg)`;
     
     // Knob rotation mapping: -1.0 to 1.0 maps to -135 to 135 degrees
+    // Rate knobs go from 0 to 1, mapped to -135deg to +135deg
     // We rotate the indicator instead of the dial so the dial's asymmetric shadow stays static!
     const KNOB_MAX_DEG = 135;
-    knobs[0].indicator.style.transform = `rotateZ(${s.k1 * KNOB_MAX_DEG}deg)`;
-    knobs[1].indicator.style.transform = `rotateZ(${s.k2 * KNOB_MAX_DEG}deg)`;
-    knobs[2].indicator.style.transform = `rotateZ(${s.k3 * KNOB_MAX_DEG}deg)`;
-    // Rate knobs go from 0 to 1, mapped to -135deg to +135deg
-    knobs[3].indicator.style.transform = `rotateZ(${(s.k4 * 270) - 135}deg)`;
-    knobs[4].indicator.style.transform = `rotateZ(${(s.k5 * 270) - 135}deg)`;
-    knobs[5].indicator.style.transform = `rotateZ(${(s.k6 * 270) - 135}deg)`;
+    knobs[0].indicator.style.transform = `rotateZ(${s.k1 * KNOB_MAX_DEG}deg)`; // SHUTTER
+    knobs[1].indicator.style.transform = `rotateZ(${s.k2 * KNOB_MAX_DEG}deg)`; // EI
+    knobs[2].indicator.style.transform = `rotateZ(${(s.k3 * 270) - 135}deg)`;  // ND (0-1)
+    knobs[3].indicator.style.transform = `rotateZ(${s.k4 * KNOB_MAX_DEG}deg)`; // WB
+    knobs[4].indicator.style.transform = `rotateZ(${(s.k5 * 270) - 135}deg)`;  // T-RATE (0-1)
+    knobs[5].indicator.style.transform = `rotateZ(${(s.k6 * 270) - 135}deg)`;  // MASTER (0-1)
 
     // Visual offset = value * SLIDER_PIXELS_TO_MAX — matches the physical drag range 1:1
     if (sliderTrack) {

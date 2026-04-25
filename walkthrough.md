@@ -95,7 +95,7 @@ pixelStreaming.emitCommand({ "ConsoleCommand": "stat fps" });
 ```
 
 > [!NOTE]
-> `emitUIInteraction()` internally calls `JSON.stringify()` on the descriptor, then sends it as a `string` field via message type `UIInteraction` (ID 50). On the UE side, this arrives at the Blueprint-exposed `OnPixelStreamingInputEvent` or can be handled in C++ via `FPixelStreamingInputProtocol`.
+> `emitUIInteraction()` internally calls `JSON.stringify()` on the descriptor, then sends it as a `string` field via message type `UIInteraction` (ID 50). On the UE side, this arrives at the Blueprint-exposed **`OnPixelStreamingInputEvent`** — all UE-side logic will be handled in Blueprints using the PS2 library.
 
 ### Receiving Data from UE
 
@@ -219,10 +219,11 @@ pixelStreaming.addResponseEventListener("oled_feed", (response) => {
 });
 ```
 
-On the UE side (Blueprint or C++):
+On the UE side (Blueprint only):
 ```
-// Blueprint: Use "Send Pixel Streaming Response" node
-// C++: UPixelStreamingDelegates::SendPixelStreamingResponse(FString JsonPayload)
+• "Bind Event to OnPixelStreamingInputEvent" — receive OSC Deck JSON payloads
+• "Send Pixel Streaming Response" node — push telemetry JSON back to browser
+• All parsing and camera control logic handled in Blueprint graphs
 ```
 
 ---
@@ -250,4 +251,8 @@ On the UE side (Blueprint or C++):
 | **Custom binary** | `registerMessageHandler()` | Typed binary fields | Optional: high-perf binary protocol for 30fps updates |
 
 > [!TIP]
-> The PixelStreaming library also supports **dynamic protocol extension** — UE can send a `Protocol` message (ID 255) at runtime to register new custom message types with specific binary structures. This means you could define an optimized binary format for the 5-axis + knobs + sliders payload without JSON overhead, but `emitUIInteraction` is the simplest starting point.
+> **Both protocols will be tested:**
+> - **JSON path** — `emitUIInteraction()` / `addResponseEventListener()` — simplest, human-readable, easy to debug in Blueprints.
+> - **Custom binary path** — `registerMessageHandler()` with typed `float`/`uint8` fields — lower latency, less GC, ideal for 30fps streaming.
+>
+> The PixelStreaming library supports **dynamic protocol extension** — UE can send a `Protocol` message (ID 255) at runtime to register new custom message types with specific binary structures. This enables defining an optimized wire format for the 5-axis + knobs + sliders payload without JSON serialization overhead.

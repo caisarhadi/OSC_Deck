@@ -9,7 +9,7 @@ export function initInput() {
         const s = getActiveCamState();
         s.ty = 0;
         s.rz = 0;
-        globalState.activeLabel = 'PITCH / YAW';
+        globalState.activeLabel = 'TILT / YAW';
         globalState.activeValue = '0.00 / 0.00';
         updateState();
     });
@@ -35,10 +35,10 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const resetValues = [-1, 0, 0, 0, 1, 1];
+                const resetValues = [0, -1, 0, 0, 1, 1];
                 s[`k${idx + 1}`] = resetValues[idx];
 
-                const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'ND', 'T-RATE', 'MASTER RATE'];
+                const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
                 globalState.activeLabel = labels[idx];
                 globalState.activeValue = resetValues[idx].toFixed(2);
                 updateState();
@@ -68,7 +68,7 @@ export function initInput() {
                 prevAngle: startAngle,
                 currentValue: startVal  // clamped accumulator
             });
-            const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'ND', 'T-RATE', 'MASTER RATE'];
+            const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
             globalState.activeLabel = labels[idx];
             globalState.activeValue = fmtUnsigned(startVal);
             updateState();
@@ -87,7 +87,7 @@ export function initInput() {
             startX: e.clientX,
             startValue: startVal
         });
-        globalState.activeLabel = 'SLIDER H';
+        globalState.activeLabel = 'CUSTOM';
         globalState.activeValue = fmtUnsigned(startVal * s.k6);
         updateState();
     });
@@ -139,7 +139,7 @@ export function initInput() {
         panBoundary.classList.add('active');
         activePointers.set(e.pointerId, { zone: 'inner', startX: e.clientX, startY: e.clientY });
         const s = getActiveCamState();
-        globalState.activeLabel = 'INNER PUCK';
+        globalState.activeLabel = 'PAN / TILT';
         globalState.activeValue = `X:${fmt(s.tx * s.k5 * s.k6)} Y:${fmt(s.ty * s.k5 * s.k6)}`;
         updateState();
     });
@@ -164,8 +164,8 @@ export function initInput() {
 
         activePointers.set(e.pointerId, { zone: 'outer', startX: e.clientX, startY: e.clientY, lockedAxis: null });
         const s = getActiveCamState();
-        globalState.activeLabel = 'OUTER RING';
-        globalState.activeValue = `Z:${fmt(s.tz * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
+        globalState.activeLabel = 'PITCH / ROLL';
+        globalState.activeValue = `P:${fmt(s.rx * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
         updateState();
     });
 
@@ -181,7 +181,7 @@ export function initInput() {
         const startAngle = Math.atan2(e.clientY - cy, e.clientX - cx);
         const s = getActiveCamState();
         activePointers.set(e.pointerId, { zone: 'yaw', cx, cy, startAngle, baseRz: s.rz });
-        globalState.activeLabel = 'YAW RING';
+        globalState.activeLabel = 'YAW';
         globalState.activeValue = `YAW:${fmt(s.rz * s.k5 * s.k6)}`;
         updateState();
     });
@@ -209,7 +209,7 @@ export function initInput() {
             const mag = Math.sqrt(cleanTx ** 2 + cleanTy ** 2);
             s.tx = mag > 1 ? cleanTx / mag : cleanTx;
             s.ty = mag > 1 ? cleanTy / mag : cleanTy;
-            globalState.activeLabel = 'INNER PUCK';
+            globalState.activeLabel = 'PAN / TILT';
             globalState.activeValue = `X:${fmt(s.tx * s.k5 * s.k6)} Y:${fmt(s.ty * s.k5 * s.k6)}`;
         }
         else if (p.zone === 'outer') {
@@ -217,12 +217,12 @@ export function initInput() {
             const dY = e.clientY - p.startY;
             if (!p.lockedAxis) {
                 if (Math.abs(dX) > 10) p.lockedAxis = 'roll';
-                else if (Math.abs(dY) > 10) p.lockedAxis = 'heave';
+                else if (Math.abs(dY) > 10) p.lockedAxis = 'pitch';
             }
-            if (p.lockedAxis === 'roll') { s.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); s.tz = 0; }
-            else if (p.lockedAxis === 'heave') { s.tz = clamp(-dY / PIXELS_TO_MAX, -1, 1); s.ry = 0; }
-            globalState.activeLabel = 'OUTER RING';
-            globalState.activeValue = `Z:${fmt(s.tz * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
+            if (p.lockedAxis === 'roll') { s.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); s.rx = 0; }
+            else if (p.lockedAxis === 'pitch') { s.rx = clamp(-dY / PIXELS_TO_MAX, -1, 1); s.ry = 0; }
+            globalState.activeLabel = 'PITCH / ROLL';
+            globalState.activeValue = `P:${fmt(s.rx * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
         }
         else if (p.zone === 'yaw') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -230,7 +230,7 @@ export function initInput() {
             if (deltaAngle > Math.PI) deltaAngle -= 2 * Math.PI;
             if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
             s.rz = clamp(p.baseRz + (deltaAngle / Math.PI), -1, 1);
-            globalState.activeLabel = 'YAW RING';
+            globalState.activeLabel = 'YAW';
             globalState.activeValue = `YAW:${fmt(s.rz * s.k5 * s.k6)}`;
         }
         else if (p.zone === 'knob') {
@@ -240,13 +240,14 @@ export function initInput() {
             if (frameDelta > Math.PI) frameDelta -= 2 * Math.PI;
             if (frameDelta < -Math.PI) frameDelta += 2 * Math.PI;
             p.prevAngle = currentAngle;  // advance reference to this frame
-            if (p.index >= 3) {
+            const isZeroToOne = [false, false, true, false, true, true]; // ND, T-RATE, MASTER RATE are 0 to 1
+            if (isZeroToOne[p.index]) {
                 p.currentValue = clamp(p.currentValue + (frameDelta / (2 * Math.PI)), 0, 1);
             } else {
                 p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
             }
             s[`k${p.index + 1}`] = p.currentValue;
-            const labels = ['EI', 'SHUTTER', 'WHITE BALANCE', 'ND', 'T-RATE', 'MASTER RATE'];
+            const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
             globalState.activeLabel = labels[p.index];
             globalState.activeValue = fmtUnsigned(p.currentValue);
         }
@@ -254,7 +255,7 @@ export function initInput() {
             const dX = e.clientX - p.startX;
             const deltaValue = dX / SLIDER_PIXELS_TO_MAX;
             s.slider = clamp(p.startValue + deltaValue, -1, 1);
-            globalState.activeLabel = 'SLIDER H';
+            globalState.activeLabel = 'CUSTOM';
             globalState.activeValue = fmtUnsigned(s.slider * s.k6);
         }
         else if (p.zone === 'sliderV') {
@@ -275,7 +276,7 @@ export function initInput() {
         const p = activePointers.get(e.pointerId);
         const s = getActiveCamState();
         if (p.zone === 'inner') { s.tx = 0; s.ty = 0; innerPuck.classList.remove('active'); panBoundary.classList.remove('active'); }
-        else if (p.zone === 'outer') { s.tz = 0; s.ry = 0; outerRing.classList.remove('active'); }
+        else if (p.zone === 'outer') { s.rx = 0; s.ry = 0; outerRing.classList.remove('active'); }
         else if (p.zone === 'yaw') { s.rz = 0; yawRing.classList.remove('active'); }
         else if (p.zone === 'knob') { knobs[p.index].wrap.classList.remove('active'); }
         else if (p.zone === 'slider') { slider.classList.remove('active'); }

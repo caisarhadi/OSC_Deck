@@ -52,5 +52,9 @@ function generateEngravedKnob(containerId, dotClass, config) {
 initInput();
 initConsole();
 
+// Start OSC WebSocket connection
+import { connectOSC } from './osc.js';
+connectOSC();
+
 // Initial render
 updateState();
