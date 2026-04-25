@@ -5,17 +5,36 @@ import { updateState } from './ui.js';
 
 export function initInput() {
     // --- Reset Button ---
-    resetBtn.addEventListener('click', () => {
+    resetBtn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const s = getActiveCamState();
         s.ty = 0;
+        s.ry = 0;
         s.rz = 0;
-        globalState.activeLabel = 'TILT / YAW';
-        globalState.activeValue = '0.00 / 0.00';
+        s.resetOn = true;
+        resetBtn.classList.add('is-active');
+        globalState.activeLabel = 'ROTATION';
+        globalState.activeValue = '0.00';
         updateState();
     });
 
+    const handleResetRelease = () => {
+        const s = getActiveCamState();
+        if (!s.resetOn) return; // Prevent redundant updates
+        s.resetOn = false;
+        resetBtn.classList.remove('is-active');
+        updateState();
+    };
+
+    resetBtn.addEventListener('pointerup', handleResetRelease);
+    resetBtn.addEventListener('pointercancel', handleResetRelease);
+    resetBtn.addEventListener('pointerleave', handleResetRelease);
+
     // --- Autofocus Toggle ---
-    afToggle.addEventListener('click', () => {
+    afToggle.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         const s = getActiveCamState();
         s.afOn = !s.afOn;
         if (s.afOn) {
@@ -275,12 +294,36 @@ export function initInput() {
         if (!activePointers.has(e.pointerId)) return;
         const p = activePointers.get(e.pointerId);
         const s = getActiveCamState();
-        if (p.zone === 'inner') { s.tx = 0; s.ty = 0; innerPuck.classList.remove('active'); panBoundary.classList.remove('active'); }
-        else if (p.zone === 'outer') { s.rx = 0; s.ry = 0; outerRing.classList.remove('active'); }
-        else if (p.zone === 'yaw') { s.rz = 0; yawRing.classList.remove('active'); }
-        else if (p.zone === 'knob') { knobs[p.index].wrap.classList.remove('active'); }
-        else if (p.zone === 'slider') { slider.classList.remove('active'); }
-        else if (p.zone === 'sliderV') { slidersV[p.index].wrap.classList.remove('active'); }
+        if (p.zone === 'inner') { 
+            s.tx = 0; s.ty = 0; 
+            innerPuck.classList.remove('active'); panBoundary.classList.remove('active'); 
+            globalState.activeLabel = 'PAN / TILT';
+            globalState.activeValue = 'X:0.00 Y:0.00';
+        }
+        else if (p.zone === 'outer') { 
+            s.rx = 0; s.ry = 0; 
+            outerRing.classList.remove('active'); 
+            globalState.activeLabel = 'PITCH / ROLL';
+            globalState.activeValue = 'P:0.00 R:0.00';
+        }
+        else if (p.zone === 'yaw') { 
+            s.rz = 0; 
+            yawRing.classList.remove('active'); 
+            globalState.activeLabel = 'YAW';
+            globalState.activeValue = 'YAW:0.00';
+        }
+        else if (p.zone === 'knob') { 
+            knobs[p.index].wrap.classList.remove('active'); 
+        }
+        else if (p.zone === 'slider') { 
+            s.slider = 0;
+            slider.classList.remove('active'); 
+            globalState.activeLabel = 'CUSTOM';
+            globalState.activeValue = '0.00';
+        }
+        else if (p.zone === 'sliderV') { 
+            slidersV[p.index].wrap.classList.remove('active'); 
+        }
         activePointers.delete(e.pointerId);
         updateState();
     };

@@ -1,7 +1,7 @@
 import { getActiveCamState, globalState } from './state.js';
 import { SLIDER_PIXELS_TO_MAX } from './state.js';
 import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle } from './dom.js';
-import { throttleOSC } from './osc.js';
+import { sendOSC } from './osc.js';
 
 // --- Visual & Data Update ---
 export function updateState() {
@@ -66,5 +66,5 @@ export function updateState() {
         }
     }
 
-    throttleOSC();
+    sendOSC();
 }

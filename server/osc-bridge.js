@@ -68,11 +68,11 @@ wss.on('connection', (ws, req) => {
 });
 
 // Start the dual server
-server.listen(PORT, () => {
+server.listen(PORT, '0.0.0.0', () => {
     console.log(`\n  ┌──────────────────────────────────────────┐`);
     console.log(`  │  API Bridge Server                       │`);
     console.log(`  ├──────────────────────────────────────────┤`);
-    console.log(`  │  WebSocket : ws://localhost:${PORT}         │`);
-    console.log(`  │  REST API  : http://localhost:${PORT}/state   │`);
+    console.log(`  │  WebSocket : ws://0.0.0.0:${PORT}           │`);
+    console.log(`  │  REST API  : http://0.0.0.0:${PORT}/state     │`);
     console.log(`  └──────────────────────────────────────────┘\n`);
 });
