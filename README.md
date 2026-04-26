@@ -11,6 +11,26 @@ Browser UI  ──ws://──▶  Node.js Bridge  ◀──GET /state──  Unr
 
 The browser pushes a JSON state object over WebSocket on every input change. The Node bridge aggregates these updates by camera ID (`A`, `B`, `C`, `D`). Unreal polls `GET /state` to read a JSON array containing the latest state for all cameras simultaneously, allowing for multi-device concurrency.
 
+## Project Structure
+
+```
+├── index.html              UI layout
+├── style.css               CSS imports
+├── css/                    Component stylesheets
+├── js/
+│   ├── main.js             Entry point, knob tick generation
+│   ├── input.js            Pointer event handling for all controls
+│   ├── ui.js               Visual state rendering
+│   ├── osc.js              WebSocket client, payload construction
+│   ├── console.js          Camera selector and log panel
+│   ├── dom.js              DOM element references
+│   ├── state.js            Shared state and tuning constants
+│   └── utils.js            Math helpers (clamp, format)
+├── server/
+│   └── osc-bridge.js       WebSocket + REST bridge server
+└── package.json            ws dependency
+```
+
 ## Quick Start
 
 ```bash
@@ -104,24 +124,4 @@ A `GET` request to `/state` returns a JSON array containing the latest known sta
   { "cam": "C", "tx": 0.00, "ty": 0.00, "shutter": 0.00, ... },
   { "cam": "D", "tx": 0.00, "ty": 0.00, "shutter": 0.00, ... }
 ]
-```
-
-## Project Structure
-
-```
-├── index.html              UI layout
-├── style.css               CSS imports
-├── css/                    Component stylesheets
-├── js/
-│   ├── main.js             Entry point, knob tick generation
-│   ├── input.js            Pointer event handling for all controls
-│   ├── ui.js               Visual state rendering
-│   ├── osc.js              WebSocket client, payload construction
-│   ├── console.js          Camera selector and log panel
-│   ├── dom.js              DOM element references
-│   ├── state.js            Shared state and tuning constants
-│   └── utils.js            Math helpers (clamp, format)
-├── server/
-│   └── osc-bridge.js       WebSocket + REST bridge server
-└── package.json            ws dependency
 ```
