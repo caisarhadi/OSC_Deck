@@ -16,7 +16,7 @@ The browser pushes a JSON state object over WebSocket on every input change. The
 ```bash
 npm install
 node server/osc-bridge.js       # starts bridge on port 9000
-npx -y serve -l 8080            # serve UI (separate terminal)
+npx -y serve -l 8080            # serve UI
 ```
 
 Open `http://localhost:8080`. For remote devices, use your LAN IP instead.
