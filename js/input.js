@@ -59,17 +59,32 @@ export function initInput() {
     knobs.forEach((k, idx) => {
         const config = KNOB_CONFIGS[idx];
         if (k.reset) {
-            k.reset.addEventListener('pointerdown', (e) => {
+            const handleKnobResetPress = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const defaultVal = idx >= 4 ? 1 : 0; // tRate and masterRate default to 1
+                const defaultVal = (idx === 0 || idx === 3) ? 0.5 : (idx >= 4 ? 1 : 0);
                 s[config.key] = defaultVal;
+                if (config.resetKey) s[config.resetKey] = true;
+                k.reset.classList.add('is-active');
 
                 globalState.activeLabel = config.label;
                 globalState.activeValue = defaultVal.toFixed(2);
                 updateState();
-            });
+            };
+
+            const handleKnobResetRelease = () => {
+                const s = getActiveCamState();
+                if (config.resetKey && !s[config.resetKey]) return;
+                if (config.resetKey) s[config.resetKey] = false;
+                k.reset.classList.remove('is-active');
+                updateState();
+            };
+
+            k.reset.addEventListener('pointerdown', handleKnobResetPress);
+            k.reset.addEventListener('pointerup', handleKnobResetRelease);
+            k.reset.addEventListener('pointercancel', handleKnobResetRelease);
+            k.reset.addEventListener('pointerleave', handleKnobResetRelease);
         }
 
         k.wrap.addEventListener('pointerdown', (e) => {
@@ -137,15 +152,30 @@ export function initInput() {
         });
 
         if (sv.reset) {
-            sv.reset.addEventListener('pointerdown', (e) => {
+            const handleSliderResetPress = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                s[config.key] = 0;
+                s[config.key] = 0.5;
+                if (config.resetKey) s[config.resetKey] = true;
+                sv.reset.classList.add('is-active');
                 globalState.activeLabel = config.label;
-                globalState.activeValue = '0.00';
+                globalState.activeValue = '0.50';
                 updateState();
-            });
+            };
+
+            const handleSliderResetRelease = () => {
+                const s = getActiveCamState();
+                if (config.resetKey && !s[config.resetKey]) return;
+                if (config.resetKey) s[config.resetKey] = false;
+                sv.reset.classList.remove('is-active');
+                updateState();
+            };
+
+            sv.reset.addEventListener('pointerdown', handleSliderResetPress);
+            sv.reset.addEventListener('pointerup', handleSliderResetRelease);
+            sv.reset.addEventListener('pointercancel', handleSliderResetRelease);
+            sv.reset.addEventListener('pointerleave', handleSliderResetRelease);
         }
     });
 
@@ -271,7 +301,11 @@ export function initInput() {
             const dY = e.clientY - p.startY;
             const deltaValue = -dY / SLIDER_PIXELS_TO_MAX;
             const config = SLIDER_V_CONFIGS[p.index];
-            s[config.key] = clamp(p.startValue + deltaValue, -1, 1);
+            if (config.zeroToOne) {
+                s[config.key] = clamp(p.startValue + deltaValue, 0, 1);
+            } else {
+                s[config.key] = clamp(p.startValue + deltaValue, -1, 1);
+            }
             globalState.activeLabel = config.label;
             globalState.activeValue = fmtUnsigned(s[config.key] * s.k6);
         }

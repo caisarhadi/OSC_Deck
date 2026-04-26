@@ -52,7 +52,11 @@ export function updateState() {
     SLIDER_V_CONFIGS.forEach((config, idx) => {
         const sv = slidersV[idx];
         if (sv && sv.track) {
-            const offsetV = `${s[config.key] * SLIDER_PIXELS_TO_MAX}px`;
+            let visualValue = s[config.key];
+            if (config.zeroToOne) {
+                visualValue = (visualValue - 0.5) * 2;
+            }
+            const offsetV = `${visualValue * SLIDER_PIXELS_TO_MAX}px`;
             sv.track.style.backgroundPositionY = offsetV;
             sv.track.style.WebkitMaskPositionY = offsetV;
             sv.track.style.maskPositionY = offsetV;

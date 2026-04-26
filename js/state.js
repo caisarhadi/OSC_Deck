@@ -1,4 +1,4 @@
-const createCamState = () => ({ tx: 0, ty: 0, rx: 0, ry: 0, rz: 0, k1: 0, k2: 0, k3: 0, k4: 0, k5: 1, k6: 1, slider: 0, sliderV: 0, sliderV2: 0, sliderV3: 0, afOn: false, resetOn: false });
+const createCamState = () => ({ tx: 0, ty: 0, rx: 0, ry: 0, rz: 0, k1: 0.5, k2: 0, k3: 0, k4: 0.5, k5: 1, k6: 1, slider: 0, sliderV: 0.5, sliderV2: 0.5, sliderV3: 0.5, afOn: false, resetOn: false, resetFcs: false, resetIris: false, resetFcl: false, resetShutter: false, resetEi: false, resetNd: false, resetWb: false });
 
 export const cameras = {
     'A': createCamState(),
@@ -27,16 +27,16 @@ export const SLIDER_PIXELS_TO_MAX = 270;
 export const logBuffer = [];
 
 export const KNOB_CONFIGS = [
-    { key: 'k1', label: 'SHUTTER', zeroToOne: false },
-    { key: 'k2', label: 'EI', zeroToOne: true },
-    { key: 'k3', label: 'ND', zeroToOne: true },
-    { key: 'k4', label: 'WB', zeroToOne: false },
+    { key: 'k1', label: 'SHUTTER', zeroToOne: true, resetKey: 'resetShutter' },
+    { key: 'k2', label: 'EI', zeroToOne: true, resetKey: 'resetEi' },
+    { key: 'k3', label: 'ND', zeroToOne: true, resetKey: 'resetNd' },
+    { key: 'k4', label: 'WB', zeroToOne: true, resetKey: 'resetWb' },
     { key: 'k5', label: 'T-RATE', zeroToOne: true },
     { key: 'k6', label: 'MASTER RATE', zeroToOne: true }
 ];
 
 export const SLIDER_V_CONFIGS = [
-    { key: 'sliderV', label: 'FCS' },
-    { key: 'sliderV2', label: 'IRIS' },
-    { key: 'sliderV3', label: 'FCL' }
+    { key: 'sliderV', label: 'FCS', zeroToOne: true, resetKey: 'resetFcs' },
+    { key: 'sliderV2', label: 'IRIS', zeroToOne: true, resetKey: 'resetIris' },
+    { key: 'sliderV3', label: 'FCL', zeroToOne: true, resetKey: 'resetFcl' }
 ];
