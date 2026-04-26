@@ -336,6 +336,11 @@ export function initInput() {
             globalState.activeValue = 'YAW:0.00';
         }
         else if (p.zone === 'knob') { 
+            if (p.index === 3) {
+                s.k4 = 0;
+                globalState.activeLabel = 'WB';
+                globalState.activeValue = '0.00';
+            }
             knobs[p.index].wrap.classList.remove('active'); 
         }
         else if (p.zone === 'slider') { 
@@ -345,6 +350,11 @@ export function initInput() {
             globalState.activeValue = '0.00';
         }
         else if (p.zone === 'sliderV') { 
+            if (p.index === 0) {
+                s.sliderV = 0;
+                globalState.activeLabel = 'FCS';
+                globalState.activeValue = '0.00';
+            }
             slidersV[p.index].wrap.classList.remove('active'); 
         }
         activePointers.delete(e.pointerId);
