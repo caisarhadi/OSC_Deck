@@ -1,5 +1,5 @@
 import { globalState, getActiveCamState, logBuffer } from './state.js';
-import { logContent } from './dom.js';
+import { logContent, oledLabel, oledValue } from './dom.js';
 import { fmtUnsigned } from './utils.js';
 
 let ws = null;
@@ -23,7 +23,35 @@ export function connectOSC() {
     };
     ws.onerror = () => {};
     ws.onmessage = (e) => {
-        console.log('[OSC←]', e.data);
+        try {
+            const msg = JSON.parse(e.data);
+            if (msg.type === 'ue_update' && msg.data) {
+                if (msg.data.fcl !== undefined) {
+                    globalState.ueFcl = Number(msg.data.fcl).toFixed(2);
+                    if (globalState.activeLabel === 'FCL') {
+                        globalState.activeValue = globalState.ueFcl;
+                        oledLabel.textContent = globalState.activeLabel;
+                        oledValue.textContent = globalState.activeValue;
+                    }
+                }
+                if (msg.data.iris !== undefined) {
+                    globalState.ueIris = Number(msg.data.iris).toFixed(2);
+                    if (globalState.activeLabel === 'IRIS') {
+                        globalState.activeValue = globalState.ueIris;
+                        oledLabel.textContent = globalState.activeLabel;
+                        oledValue.textContent = globalState.activeValue;
+                    }
+                }
+                if (msg.data.fcs !== undefined) {
+                    globalState.ueFcs = Number(msg.data.fcs).toFixed(2);
+                    if (globalState.activeLabel === 'FCS') {
+                        globalState.activeValue = globalState.ueFcs;
+                        oledLabel.textContent = globalState.activeLabel;
+                        oledValue.textContent = globalState.activeValue;
+                    }
+                }
+            }
+        } catch (err) {}
     };
 }
 

@@ -34,6 +34,30 @@ const server = http.createServer((req, res) => {
         return;
     }
 
+    if (req.method === 'POST' && req.url === '/state') {
+        let body = '';
+        req.on('data', chunk => body += chunk.toString());
+        req.on('end', () => {
+            try {
+                const data = JSON.parse(body);
+                console.log('[+] Received from UE:', data);
+                // Broadcast to all WS clients
+                wss.clients.forEach(client => {
+                    if (client.readyState === 1) { // WebSocket.OPEN
+                        client.send(JSON.stringify({ type: 'ue_update', data: data }));
+                    }
+                });
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ status: 'ok' }));
+            } catch (e) {
+                console.error('[!] Bad JSON from UE:', e.message);
+                res.writeHead(400);
+                res.end('Bad Request');
+            }
+        });
+        return;
+    }
+
     if (req.method === 'GET' && req.url === '/state') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify([latestState]));

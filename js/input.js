@@ -147,7 +147,10 @@ export function initInput() {
                 startValue: startVal
             });
             globalState.activeLabel = config.label;
-            globalState.activeValue = fmtUnsigned(startVal * getActiveCamState().k6);
+            if (config.label === 'FCL') globalState.activeValue = globalState.ueFcl;
+            else if (config.label === 'IRIS') globalState.activeValue = globalState.ueIris;
+            else if (config.label === 'FCS') globalState.activeValue = globalState.ueFcs;
+            else globalState.activeValue = fmtUnsigned(startVal * getActiveCamState().k6);
             updateState();
         });
 
@@ -161,7 +164,10 @@ export function initInput() {
                 if (config.resetKey) s[config.resetKey] = true;
                 sv.reset.classList.add('is-active');
                 globalState.activeLabel = config.label;
-                globalState.activeValue = defaultVal.toFixed(2);
+                if (config.label === 'FCL') globalState.activeValue = globalState.ueFcl;
+                else if (config.label === 'IRIS') globalState.activeValue = globalState.ueIris;
+                else if (config.label === 'FCS') globalState.activeValue = globalState.ueFcs;
+                else globalState.activeValue = defaultVal.toFixed(2);
                 updateState();
             };
 
@@ -308,7 +314,10 @@ export function initInput() {
                 s[config.key] = clamp(p.startValue + deltaValue, -1, 1);
             }
             globalState.activeLabel = config.label;
-            globalState.activeValue = fmtUnsigned(s[config.key] * s.k6);
+            if (config.label === 'FCL') globalState.activeValue = globalState.ueFcl;
+            else if (config.label === 'IRIS') globalState.activeValue = globalState.ueIris;
+            else if (config.label === 'FCS') globalState.activeValue = globalState.ueFcs;
+            else globalState.activeValue = fmtUnsigned(s[config.key] * s.k6);
         }
         updateState();
     });

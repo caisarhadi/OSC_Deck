@@ -11,7 +11,10 @@ export const globalState = {
     activeCam: 'A',
     activeLabel: 'CAM.CTRL',
     activeValue: 'STANDBY',
-    powerOn: true
+    powerOn: true,
+    ueFcl: '0.00',
+    ueIris: '0.00',
+    ueFcs: '0.00'
 };
 
 export const getActiveCamState = () => cameras[globalState.activeCam];

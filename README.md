@@ -46,7 +46,8 @@ Open `http://localhost:8080`. For remote devices, use your LAN IP instead.
 | Protocol | Address | Direction |
 |----------|---------|-----------|
 | WebSocket | `ws://0.0.0.0:9000` | Browser → Server |
-| HTTP | `http://0.0.0.0:9000/state` | Server → Unreal |
+| HTTP | `GET http://0.0.0.0:9000/state` | Server → Unreal |
+| HTTP | `POST http://0.0.0.0:9000/state` | Unreal → Server → Browser |
 
 ## JSON Payload
 
