@@ -15,10 +15,11 @@ The browser pushes JSON state over WebSocket on every input change. Unreal polls
 
 ```bash
 npm install
-node server/osc-bridge.js
+node server/osc-bridge.js       # starts bridge on port 9000
+npx -y serve -l 8080            # serve UI (separate terminal)
 ```
 
-Open `index.html` in a browser on the same network. The deck connects to `ws://<host>:9000` automatically.
+Open `http://localhost:8080`. For remote devices, use your LAN IP instead.
 
 ## Endpoints
 
