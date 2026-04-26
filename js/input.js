@@ -63,7 +63,7 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const defaultVal = (idx === 0 || idx === 3) ? 0.5 : (idx >= 4 ? 1 : 0);
+                const defaultVal = (idx === 0) ? 0.5 : (idx >= 4 ? 1 : 0);
                 s[config.key] = defaultVal;
                 if (config.resetKey) s[config.resetKey] = true;
                 k.reset.classList.add('is-active');
@@ -156,11 +156,12 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                s[config.key] = 0.5;
+                const defaultVal = config.zeroToOne ? 0.5 : 0;
+                s[config.key] = defaultVal;
                 if (config.resetKey) s[config.resetKey] = true;
                 sv.reset.classList.add('is-active');
                 globalState.activeLabel = config.label;
-                globalState.activeValue = '0.50';
+                globalState.activeValue = defaultVal.toFixed(2);
                 updateState();
             };
 

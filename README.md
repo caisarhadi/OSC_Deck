@@ -78,7 +78,7 @@ All axis values are multiplied by their applicable rate knobs before transmissio
 | `shutter` | `float` | 0.0 – 1.0 | Shutter angle |
 | `ei` | `float` | 0.0 – 1.0 | Exposure index |
 | `nd` | `float` | 0.0 – 1.0 | ND filter |
-| `wb` | `float` | 0.0 – 1.0 | White balance |
+| `wb` | `float` | -1.0 – 1.0 | White balance |
 | `tRate` | `float` | 0.0 – 1.0 | Translation rate multiplier (default: 1) |
 | `masterRate` | `float` | 0.0 – 1.0 | Master rate multiplier (default: 1) |
 
@@ -90,7 +90,7 @@ All slider values are multiplied by masterRate before transmission.
 |-----|------|-------|---------|
 | `fcl` | `float` | 0.0 – 1.0 | Focal length |
 | `iris` | `float` | 0.0 – 1.0 | Aperture |
-| `fcs` | `float` | 0.0 – 1.0 | Focus distance |
+| `fcs` | `float` | -1.0 – 1.0 | Focus distance |
 
 ### Toggles
 
@@ -113,8 +113,8 @@ All slider values are multiplied by masterRate before transmission.
   "cam": "A",
   "power": 1,
   "tx": 0.00, "ty": 0.45, "rx": 0.00, "ry": 0.00, "rz": -0.12, "custom": 0.00,
-  "shutter": 0.50, "ei": 0.00, "nd": 0.00, "wb": 0.50, "tRate": 1.00, "masterRate": 0.75,
-  "fcl": 0.50, "iris": 0.60, "fcs": 0.50,
+  "shutter": 0.50, "ei": 0.00, "nd": 0.00, "wb": 0.00, "tRate": 1.00, "masterRate": 0.75,
+  "fcl": 0.50, "iris": 0.60, "fcs": 0.00,
   "resetFcl": 0, "resetIris": 0, "resetFcs": 0,
   "resetShutter": 0, "resetEi": 0, "resetNd": 0, "resetWb": 0,
   "af": 0, "reset": 0
