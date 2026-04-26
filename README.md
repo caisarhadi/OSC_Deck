@@ -9,7 +9,7 @@ Browser UI  ──ws://──▶  Node.js Bridge  ◀──GET /state──  Unr
  (index.html)           (osc-bridge.js)
 ```
 
-The browser pushes JSON state over WebSocket on every input change. Unreal polls `GET /state` to read the latest values.
+The browser pushes a JSON state object over WebSocket on every input change. The Node bridge aggregates these updates by camera ID (`A`, `B`, `C`, `D`). Unreal polls `GET /state` to read a JSON array containing the latest state for all cameras simultaneously, allowing for multi-device concurrency.
 
 ## Quick Start
 
@@ -79,7 +79,10 @@ All slider values are multiplied by masterRate before transmission.
 | `af` | `int` | `0` / `1` | Autofocus on/off |
 | `reset` | `int` | `0` / `1` | Rotation reset (momentary) |
 
-### Example Payload
+### Payload Structures
+
+#### WebSocket Push (Browser → Server)
+Every WebSocket frame contains a single flat JSON object for the camera currently being adjusted:
 
 ```json
 {
@@ -89,6 +92,18 @@ All slider values are multiplied by masterRate before transmission.
   "fcl": 0.00, "iris": 0.60, "fcs": 0.00,
   "af": 0, "reset": 0
 }
+```
+
+#### REST Response (Server → Unreal)
+A `GET` request to `/state` returns a JSON array containing the latest known state for all four cameras, allowing multiple operators to control different cameras simultaneously without overwriting each other.
+
+```json
+[
+  { "cam": "A", "tx": 0.00, "ty": 0.45, "shutter": 0.30, ... },
+  { "cam": "B", "tx": 0.00, "ty": 0.00, "shutter": 0.00, ... },
+  { "cam": "C", "tx": 0.00, "ty": 0.00, "shutter": 0.00, ... },
+  { "cam": "D", "tx": 0.00, "ty": 0.00, "shutter": 0.00, ... }
+]
 ```
 
 ## Project Structure

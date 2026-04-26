@@ -24,3 +24,18 @@ export const PIXELS_TO_MAX = 100;
 export const SLIDER_PIXELS_TO_MAX = 270;
 
 export const logBuffer = [];
+
+export const KNOB_CONFIGS = [
+    { key: 'k1', label: 'SHUTTER', zeroToOne: false },
+    { key: 'k2', label: 'EI', zeroToOne: true },
+    { key: 'k3', label: 'ND', zeroToOne: true },
+    { key: 'k4', label: 'WB', zeroToOne: false },
+    { key: 'k5', label: 'T-RATE', zeroToOne: true },
+    { key: 'k6', label: 'MASTER RATE', zeroToOne: true }
+];
+
+export const SLIDER_V_CONFIGS = [
+    { key: 'sliderV', label: 'FCS' },
+    { key: 'sliderV2', label: 'IRIS' },
+    { key: 'sliderV3', label: 'FCL' }
+];

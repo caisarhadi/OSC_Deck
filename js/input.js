@@ -1,6 +1,6 @@
-import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX } from './state.js';
+import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
 import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn, afToggle } from './dom.js';
-import { clamp, fmt, fmtUnsigned } from './utils.js';
+import { clamp, fmt, fmtUnsigned, applyDeadzone } from './utils.js';
 import { updateState } from './ui.js';
 
 export function initInput() {
@@ -46,17 +46,17 @@ export function initInput() {
     });
 
     knobs.forEach((k, idx) => {
+        const config = KNOB_CONFIGS[idx];
         if (k.reset) {
             k.reset.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const resetValues = [0, 0, 0, 0, 1, 1];
-                s[`k${idx + 1}`] = resetValues[idx];
+                const defaultVal = idx >= 4 ? 1 : 0; // tRate and masterRate default to 1
+                s[config.key] = defaultVal;
 
-                const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
-                globalState.activeLabel = labels[idx];
-                globalState.activeValue = resetValues[idx].toFixed(2);
+                globalState.activeLabel = config.label;
+                globalState.activeValue = defaultVal.toFixed(2);
                 updateState();
             });
         }
@@ -73,7 +73,7 @@ export function initInput() {
             const cy = rect.top + rect.height / 2;
             const startAngle = Math.atan2(e.clientY - cy, e.clientX - cx);
 
-            const startVal = getActiveCamState()[`k${idx + 1}`];
+            const startVal = getActiveCamState()[config.key];
             activePointers.set(e.pointerId, {
                 zone: 'knob',
                 index: idx,
@@ -81,8 +81,7 @@ export function initInput() {
                 prevAngle: startAngle,
                 currentValue: startVal
             });
-            const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
-            globalState.activeLabel = labels[idx];
+            globalState.activeLabel = config.label;
             globalState.activeValue = fmtUnsigned(startVal);
             updateState();
         });
@@ -105,6 +104,7 @@ export function initInput() {
     });
 
     slidersV.forEach((sv, idx) => {
+        const config = SLIDER_V_CONFIGS[idx];
         if (!sv.wrap) return;
         sv.wrap.addEventListener('pointerdown', (e) => {
             e.preventDefault();
@@ -112,9 +112,7 @@ export function initInput() {
             sv.wrap.setPointerCapture(e.pointerId);
             sv.wrap.classList.add('active');
 
-            const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
-            const labels = ['FCS', 'IRIS', 'FCL'];
-            const startVal = getActiveCamState()[stateKeys[idx]];
+            const startVal = getActiveCamState()[config.key];
 
             activePointers.set(e.pointerId, {
                 zone: 'sliderV',
@@ -122,7 +120,7 @@ export function initInput() {
                 startY: e.clientY,
                 startValue: startVal
             });
-            globalState.activeLabel = labels[idx];
+            globalState.activeLabel = config.label;
             globalState.activeValue = fmtUnsigned(startVal * getActiveCamState().k6);
             updateState();
         });
@@ -131,11 +129,9 @@ export function initInput() {
             sv.reset.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
-                const labels = ['FCS', 'IRIS', 'FCL'];
                 const s = getActiveCamState();
-                s[stateKeys[idx]] = 0;
-                globalState.activeLabel = labels[idx];
+                s[config.key] = 0;
+                globalState.activeLabel = config.label;
                 globalState.activeValue = '0.00';
                 updateState();
             });
@@ -208,14 +204,8 @@ export function initInput() {
             const rawTy = -deltaY / PIXELS_TO_MAX;
             const AXIS_DEADZONE = 0.12;
 
-            const applyFluidDeadzone = (val) => {
-                const absVal = Math.abs(val);
-                if (absVal < AXIS_DEADZONE) return 0;
-                return Math.sign(val) * ((absVal - AXIS_DEADZONE) / (1 - AXIS_DEADZONE));
-            };
-
-            let cleanTx = applyFluidDeadzone(rawTx);
-            let cleanTy = applyFluidDeadzone(rawTy);
+            let cleanTx = applyDeadzone(rawTx, AXIS_DEADZONE);
+            let cleanTy = applyDeadzone(rawTy, AXIS_DEADZONE);
             const mag = Math.sqrt(cleanTx ** 2 + cleanTy ** 2);
             s.tx = mag > 1 ? cleanTx / mag : cleanTx;
             s.ty = mag > 1 ? cleanTy / mag : cleanTy;
@@ -249,15 +239,14 @@ export function initInput() {
             if (frameDelta > Math.PI) frameDelta -= 2 * Math.PI;
             if (frameDelta < -Math.PI) frameDelta += 2 * Math.PI;
             p.prevAngle = currentAngle;
-            const isZeroToOne = [false, true, true, false, true, true]; // EI, ND, T-RATE, MASTER RATE are 0 to 1
-            if (isZeroToOne[p.index]) {
+            const config = KNOB_CONFIGS[p.index];
+            if (config.zeroToOne) {
                 p.currentValue = clamp(p.currentValue + (frameDelta / (2 * Math.PI)), 0, 1);
             } else {
                 p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
             }
-            s[`k${p.index + 1}`] = p.currentValue;
-            const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
-            globalState.activeLabel = labels[p.index];
+            s[config.key] = p.currentValue;
+            globalState.activeLabel = config.label;
             globalState.activeValue = fmtUnsigned(p.currentValue);
         }
         else if (p.zone === 'slider') {
@@ -270,12 +259,10 @@ export function initInput() {
         else if (p.zone === 'sliderV') {
             const dY = e.clientY - p.startY;
             const deltaValue = -dY / SLIDER_PIXELS_TO_MAX;
-            const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
-            const labels = ['FCS', 'IRIS', 'FCL'];
-            const key = stateKeys[p.index];
-            s[key] = clamp(p.startValue + deltaValue, -1, 1);
-            globalState.activeLabel = labels[p.index];
-            globalState.activeValue = fmtUnsigned(s[key] * s.k6);
+            const config = SLIDER_V_CONFIGS[p.index];
+            s[config.key] = clamp(p.startValue + deltaValue, -1, 1);
+            globalState.activeLabel = config.label;
+            globalState.activeValue = fmtUnsigned(s[config.key] * s.k6);
         }
         updateState();
     });

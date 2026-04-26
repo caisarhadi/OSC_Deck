@@ -16,12 +16,19 @@ const { WebSocketServer } = require('ws');
 
 const PORT = 9000;
 
-let latestState = {
-    cam: 'A',
+const createInitialState = (camId) => ({
+    cam: camId,
     tx: 0, ty: 0, rx: 0, ry: 0, rz: 0, custom: 0,
     shutter: 0, ei: 0, nd: 0, wb: 0, tRate: 1, masterRate: 1,
     fcl: 0, iris: 0, fcs: 0,
     af: 0, reset: 0
+});
+
+const latestStates = {
+    'A': createInitialState('A'),
+    'B': createInitialState('B'),
+    'C': createInitialState('C'),
+    'D': createInitialState('D')
 };
 
 const server = http.createServer((req, res) => {
@@ -36,7 +43,7 @@ const server = http.createServer((req, res) => {
 
     if (req.method === 'GET' && req.url === '/state') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify([latestState]));
+        res.end(JSON.stringify(Object.values(latestStates)));
     } else {
         res.writeHead(404);
         res.end('Not Found');
@@ -52,7 +59,9 @@ wss.on('connection', (ws, req) => {
     ws.on('message', (raw) => {
         try {
             const data = JSON.parse(raw);
-            latestState = data;
+            if (data && data.cam && latestStates[data.cam]) {
+                latestStates[data.cam] = data;
+            }
         } catch (e) {
             console.error('[!] Bad JSON from browser:', e.message);
         }

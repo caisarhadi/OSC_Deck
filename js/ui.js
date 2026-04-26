@@ -1,5 +1,4 @@
-import { getActiveCamState, globalState } from './state.js';
-import { SLIDER_PIXELS_TO_MAX } from './state.js';
+import { getActiveCamState, globalState, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
 import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle } from './dom.js';
 import { sendOSC } from './osc.js';
 
@@ -33,12 +32,15 @@ export function updateState() {
     // Rate knobs go from 0 to 1, mapped to -135deg to +135deg
     // We rotate the indicator instead of the dial so the dial's asymmetric shadow stays static!
     const KNOB_MAX_DEG = 135;
-    knobs[0].indicator.style.transform = `rotateZ(${s.k1 * KNOB_MAX_DEG}deg)`; // SHUTTER
-    knobs[1].indicator.style.transform = `rotateZ(${(s.k2 * 270) - 135}deg)`;  // EI (0-1)
-    knobs[2].indicator.style.transform = `rotateZ(${(s.k3 * 270) - 135}deg)`;  // ND (0-1)
-    knobs[3].indicator.style.transform = `rotateZ(${s.k4 * KNOB_MAX_DEG}deg)`; // WB
-    knobs[4].indicator.style.transform = `rotateZ(${(s.k5 * 270) - 135}deg)`;  // T-RATE (0-1)
-    knobs[5].indicator.style.transform = `rotateZ(${(s.k6 * 270) - 135}deg)`;  // MASTER (0-1)
+    KNOB_CONFIGS.forEach((config, idx) => {
+        if (knobs[idx] && knobs[idx].indicator) {
+            if (config.zeroToOne) {
+                knobs[idx].indicator.style.transform = `rotateZ(${(s[config.key] * 270) - 135}deg)`;
+            } else {
+                knobs[idx].indicator.style.transform = `rotateZ(${s[config.key] * KNOB_MAX_DEG}deg)`;
+            }
+        }
+    });
 
     // Visual offset = value * SLIDER_PIXELS_TO_MAX — matches the physical drag range 1:1
     if (sliderTrack) {
@@ -47,10 +49,10 @@ export function updateState() {
         sliderTrack.style.WebkitMaskPositionX = offset;
         sliderTrack.style.maskPositionX = offset;
     }
-    const stateKeys = ['sliderV', 'sliderV2', 'sliderV3'];
-    slidersV.forEach((sv, idx) => {
-        if (sv.track) {
-            const offsetV = `${s[stateKeys[idx]] * SLIDER_PIXELS_TO_MAX}px`;
+    SLIDER_V_CONFIGS.forEach((config, idx) => {
+        const sv = slidersV[idx];
+        if (sv && sv.track) {
+            const offsetV = `${s[config.key] * SLIDER_PIXELS_TO_MAX}px`;
             sv.track.style.backgroundPositionY = offsetV;
             sv.track.style.WebkitMaskPositionY = offsetV;
             sv.track.style.maskPositionY = offsetV;

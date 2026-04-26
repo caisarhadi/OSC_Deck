@@ -15,19 +15,32 @@ export const logContent = document.getElementById('log-content');
 export const camBtns = document.querySelectorAll('.keycap');
 export const camMetas = document.querySelectorAll('.key-meta');
 
+const createKnob = (id, hasCustomIndicator = null, hasCustomReset = null) => ({
+    wrap: document.getElementById(id),
+    indicator: hasCustomIndicator ? document.getElementById(hasCustomIndicator) : document.querySelector(`#${id} .knob-indicator`),
+    reset: hasCustomReset ? document.getElementById(hasCustomReset) : document.querySelector(`#${id} .knob-reset`)
+});
+
 export const knobs = [
-    { wrap: document.getElementById('knob-1'), indicator: document.querySelector('#knob-1 .knob-indicator'), reset: document.querySelector('#knob-1 .knob-reset') },
-    { wrap: document.getElementById('knob-2'), indicator: document.querySelector('#knob-2 .knob-indicator'), reset: document.querySelector('#knob-2 .knob-reset') },
-    { wrap: document.getElementById('knob-3'), indicator: document.querySelector('#knob-3 .knob-indicator'), reset: document.querySelector('#knob-3 .knob-reset') },
-    { wrap: document.getElementById('knob-4'), indicator: document.querySelector('#knob-4 .knob-indicator'), reset: document.querySelector('#knob-4 .knob-reset') },
-    { wrap: document.getElementById('knob-5'), indicator: document.getElementById('t-rate-knob-center'), reset: document.querySelector('#knob-5 .knob-reset') },
-    { wrap: document.getElementById('knob-6'), indicator: document.getElementById('master-knob-center'), reset: document.getElementById('master-rate-reset') }
+    createKnob('knob-1'),
+    createKnob('knob-2'),
+    createKnob('knob-3'),
+    createKnob('knob-4'),
+    createKnob('knob-5', 't-rate-knob-center'),
+    createKnob('knob-6', 'master-knob-center', 'master-rate-reset')
 ];
 
-export const slider = document.getElementById('neumorphic-slider');
-export const sliderTrack = document.querySelector('#neumorphic-slider .ribbon-slider-track');
+export const slider = document.getElementById('slider-horizontal');
+export const sliderTrack = document.querySelector('#slider-horizontal .ribbon-slider-track');
+
+const createSliderV = (id, wrapperClass) => ({
+    wrap: document.getElementById(id),
+    track: document.querySelector(`#${id} .ribbon-slider-track`),
+    reset: document.querySelector(`.vertical-slider-wrap.${wrapperClass} .slider-v-reset`)
+});
+
 export const slidersV = [
-    { wrap: document.getElementById('neumorphic-slider-vertical'), track: document.querySelector('#neumorphic-slider-vertical .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v3 .slider-v-reset') },
-    { wrap: document.getElementById('neumorphic-slider-vertical-2'), track: document.querySelector('#neumorphic-slider-vertical-2 .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v2 .slider-v-reset') },
-    { wrap: document.getElementById('neumorphic-slider-vertical-3'), track: document.querySelector('#neumorphic-slider-vertical-3 .ribbon-slider-track'), reset: document.querySelector('.vertical-slider-wrap.v1 .slider-v-reset') }
+    createSliderV('slider-vertical', 'v3'),
+    createSliderV('slider-vertical-2', 'v2'),
+    createSliderV('slider-vertical-3', 'v1')
 ];
