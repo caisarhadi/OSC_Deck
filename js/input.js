@@ -1,5 +1,5 @@
 import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
-import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn, afToggle } from './dom.js';
+import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn, afToggle, powerToggle } from './dom.js';
 import { clamp, fmt, fmtUnsigned, applyDeadzone } from './utils.js';
 import { updateState } from './ui.js';
 
@@ -44,6 +44,17 @@ export function initInput() {
         globalState.activeValue = s.afOn ? 'ON' : 'OFF';
         updateState();
     });
+
+    if (powerToggle) {
+        powerToggle.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            globalState.powerOn = !globalState.powerOn;
+            globalState.activeLabel = 'POWER';
+            globalState.activeValue = globalState.powerOn ? 'ON' : 'OFF';
+            updateState();
+        });
+    }
 
     knobs.forEach((k, idx) => {
         const config = KNOB_CONFIGS[idx];

@@ -1,5 +1,5 @@
 import { getActiveCamState, globalState, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
-import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle } from './dom.js';
+import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle, powerToggle } from './dom.js';
 import { sendOSC } from './osc.js';
 
 export function updateState() {
@@ -64,6 +64,14 @@ export function updateState() {
             afToggle.classList.add('is-active');
         } else {
             afToggle.classList.remove('is-active');
+        }
+    }
+
+    if (powerToggle) {
+        if (globalState.powerOn) {
+            powerToggle.classList.add('is-active');
+        } else {
+            powerToggle.classList.remove('is-active');
         }
     }
 

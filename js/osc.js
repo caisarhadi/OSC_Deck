@@ -45,6 +45,7 @@ export function sendOSC() {
         if (wsReady) {
             const payload = {
                 cam: globalState.activeCam,
+                power: globalState.powerOn ? 1 : 0,
                 tx: +tx,
                 ty: +ty,
                 rx: +rx,
@@ -69,7 +70,7 @@ export function sendOSC() {
             ws.send(JSON.stringify(payload));
         }
 
-        const msg = `${prefix}/6axis [${tx}, ${ty}, ${rx}, ${ry}, ${rz}, ${custom}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.sliderV3 * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV * s.k6)}] | ${prefix}/toggles [AF:${af} RESET:${resetToggle}]`;
+        const msg = `${prefix}/6axis [${tx}, ${ty}, ${rx}, ${ry}, ${rz}, ${custom}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.sliderV3 * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV * s.k6)}] | ${prefix}/toggles [AF:${af} RESET:${resetToggle} POWER:${globalState.powerOn ? 1 : 0}]`;
         logBuffer.push(msg);
         if (logBuffer.length > 4) logBuffer.shift();
         

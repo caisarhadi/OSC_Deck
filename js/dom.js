@@ -6,6 +6,7 @@ export const spaceContainer = document.getElementById('space-container');
 export const outerIndicator = document.getElementById('outer-indicator');
 export const resetBtn = document.getElementById('reset-btn');
 export const afToggle = document.getElementById('af-toggle');
+export const powerToggle = document.getElementById('power-toggle');
 
 export const oledLabel = document.getElementById('oled-label');
 export const oledValue = document.getElementById('oled-value');

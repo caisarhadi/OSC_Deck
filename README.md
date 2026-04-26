@@ -104,6 +104,7 @@ All slider values are multiplied by masterRate before transmission.
 ```json
 {
   "cam": "A",
+  "power": 1,
   "tx": 0.00, "ty": 0.45, "rx": 0.00, "ry": 0.00, "rz": -0.12, "custom": 0.00,
   "shutter": 0.30, "ei": 0.50, "nd": 0.00, "wb": 0.00, "tRate": 1.00, "masterRate": 0.75,
   "fcl": 0.00, "iris": 0.60, "fcs": 0.00,
