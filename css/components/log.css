@@ -22,7 +22,7 @@
 }
 
 .osc-log-panel.collapsed {
-    width: auto;       /* shrinks to fit the header tab content */
+    width: auto;
     height: 2.5rem;
     border-top-color: transparent;
     box-shadow: none;

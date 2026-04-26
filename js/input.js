@@ -4,7 +4,6 @@ import { clamp, fmt, fmtUnsigned } from './utils.js';
 import { updateState } from './ui.js';
 
 export function initInput() {
-    // --- Reset Button ---
     resetBtn.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -21,7 +20,7 @@ export function initInput() {
 
     const handleResetRelease = () => {
         const s = getActiveCamState();
-        if (!s.resetOn) return; // Prevent redundant updates
+        if (!s.resetOn) return;
         s.resetOn = false;
         resetBtn.classList.remove('is-active');
         updateState();
@@ -31,7 +30,6 @@ export function initInput() {
     resetBtn.addEventListener('pointercancel', handleResetRelease);
     resetBtn.addEventListener('pointerleave', handleResetRelease);
 
-    // --- Autofocus Toggle ---
     afToggle.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -47,14 +45,13 @@ export function initInput() {
         updateState();
     });
 
-    // --- Knob Event Listeners ---
     knobs.forEach((k, idx) => {
         if (k.reset) {
             k.reset.addEventListener('pointerdown', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const resetValues = [0, -1, 0, 0, 1, 1];
+                const resetValues = [0, 0, 0, 0, 1, 1];
                 s[`k${idx + 1}`] = resetValues[idx];
 
                 const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
@@ -70,7 +67,6 @@ export function initInput() {
             k.wrap.setPointerCapture(e.pointerId);
             k.wrap.classList.add('active');
 
-            // Use the knob dial center for angular rotation (same mechanic as yaw ring)
             const dial = k.wrap.querySelector('.knob-dial') || k.wrap;
             const rect = dial.getBoundingClientRect();
             const cx = rect.left + rect.width / 2;
@@ -82,10 +78,8 @@ export function initInput() {
                 zone: 'knob',
                 index: idx,
                 cx, cy,
-                // Frame-by-frame accumulation: prevAngle updates every move event
-                // so each delta is a tiny arc — safe to wrap, no boundary jumps
                 prevAngle: startAngle,
-                currentValue: startVal  // clamped accumulator
+                currentValue: startVal
             });
             const labels = ['SHUTTER', 'EI', 'ND', 'WB', 'T-RATE', 'MASTER RATE'];
             globalState.activeLabel = labels[idx];
@@ -94,7 +88,6 @@ export function initInput() {
         });
     });
 
-    // --- Slider Event Listener ---
     slider.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -107,7 +100,7 @@ export function initInput() {
             startValue: startVal
         });
         globalState.activeLabel = 'CUSTOM';
-        globalState.activeValue = fmtUnsigned(startVal * s.k6);
+        globalState.activeValue = fmtUnsigned(startVal * getActiveCamState().k6);
         updateState();
     });
 
@@ -149,7 +142,6 @@ export function initInput() {
         }
     });
 
-    // --- Pointer Event Listeners ---
     innerPuck.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -168,7 +160,6 @@ export function initInput() {
         outerRing.setPointerCapture(e.pointerId);
         outerRing.classList.add('active');
 
-        // Calculate snap indicator position
         const rect = outerRing.getBoundingClientRect();
         const cx = rect.width / 2;
         const cy = rect.height / 2;
@@ -254,12 +245,11 @@ export function initInput() {
         }
         else if (p.zone === 'knob') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
-            // Per-frame micro-delta — always < half revolution, wrap is always correct
             let frameDelta = currentAngle - p.prevAngle;
             if (frameDelta > Math.PI) frameDelta -= 2 * Math.PI;
             if (frameDelta < -Math.PI) frameDelta += 2 * Math.PI;
-            p.prevAngle = currentAngle;  // advance reference to this frame
-            const isZeroToOne = [false, false, true, false, true, true]; // ND, T-RATE, MASTER RATE are 0 to 1
+            p.prevAngle = currentAngle;
+            const isZeroToOne = [false, true, true, false, true, true]; // EI, ND, T-RATE, MASTER RATE are 0 to 1
             if (isZeroToOne[p.index]) {
                 p.currentValue = clamp(p.currentValue + (frameDelta / (2 * Math.PI)), 0, 1);
             } else {

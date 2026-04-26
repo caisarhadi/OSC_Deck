@@ -15,8 +15,6 @@
 
 <body class="app-body">
 
-    <!-- Header Removed -->
-    <!-- Main Interaction Area -->
     <main id="space-container">
 
         <!-- OLED Display -->
@@ -122,10 +120,10 @@
             </div>
         </div>
 
-        <!-- Outermost Rotary Ring: Controls Yaw -->
+        <!-- Yaw Ring -->
         <div id="yaw-ring"></div>
 
-        <!-- Outer Zone: Controls Heave Z and Roll -->
+        <!-- Pitch / Roll Ring -->
         <div id="outer-ring">
             <div class="ring-indicator" id="outer-indicator"></div>
         </div>
@@ -133,7 +131,7 @@
         <!-- Pan Limit Boundary -->
         <div id="pan-boundary"></div>
 
-        <!-- Reset Button (bottom-right of joystick) -->
+        <!-- Reset -->
         <div id="reset-btn" class="reset-wrap" title="Reset Camera">
             <div class="reset-inner">
                 <svg class="reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -143,7 +141,7 @@
             </div>
         </div>
 
-        <!-- Master Rate Reset Button (bottom-left of joystick, mirrors reset-btn) -->
+        <!-- Master Rate Reset -->
         <div id="master-rate-reset" class="reset-wrap master-reset" title="Reset MASTER RATE">
             <div class="reset-inner">
                 <svg class="reset-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -212,7 +210,7 @@
             <div class="slider-label">FCS</div>
         </div>
 
-        <!-- Inner Zone: Controls Pan X and Pan Y (The Jog) -->
+        <!-- Joystick Puck -->
         <div id="inner-puck">
             <div class="puck-arrow p-up"></div>
             <div class="puck-arrow p-down"></div>

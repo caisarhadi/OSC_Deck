@@ -164,8 +164,6 @@
     text-transform: uppercase;
     transition: color var(--transition-fast);
 }
-
-
 .vertical-slider-wrap.v1 {
     left: calc(50% + calc(var(--size-yaw) / 2) + 40px);
 }
@@ -180,12 +178,11 @@
 
 .af-toggle {
     left: 50%;
-    top: -48px; /* Position it above the vertical slider */
+    top: -48px;
     transform: translateX(-50%);
-    border-color: transparent; /* Optional: if we want it to look flush, but let's stick to existing style */
+    border-color: transparent;
 }
 
-/* Optional active state for autofocus toggle to stay pressed */
 .af-toggle.is-active .reset-inner {
     background: var(--grad-keycap-glow-green), linear-gradient(145deg, var(--color-puck-center-grad-1), var(--color-puck-center-grad-2));
     box-shadow: var(--shadow-keycap-lit-green-active);
@@ -195,8 +192,6 @@
 .af-toggle.is-active .reset-icon {
     filter: drop-shadow(0 0 6px rgba(34, 197, 94, 0.8)) drop-shadow(0 0 10px rgba(34, 197, 94, 0.5));
 }
-
-
 .FCL-label {
     position: absolute;
     left: 100%;

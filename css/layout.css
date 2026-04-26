@@ -1,4 +1,3 @@
-/* Application Layout Structure */
 .app-body {
     background-color: var(--color-bg-main);
     color: #fff;
@@ -11,8 +10,6 @@
 .app-body ::selection {
     background-color: rgba(100, 116, 139, 0.3);
 }
-
-/* Header Removed */
 
 #space-container {
     flex: 1;
@@ -28,5 +25,3 @@
     position: relative;
     overflow: hidden;
 }
-
-

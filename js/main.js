@@ -2,7 +2,6 @@ import { initInput } from './input.js';
 import { initConsole } from './console.js';
 import { updateState } from './ui.js';
 
-// --- Generate Engraved Knob Ticks ---
 function generateEngravedKnob(containerId, dotClass, config) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -26,7 +25,6 @@ function generateEngravedKnob(containerId, dotClass, config) {
     }
     svg += `</svg>`;
 
-    // Add HTML dot indicator for accurate styling mapping
     svg += `<div class="${dotClass}"></div>`;
 
     container.innerHTML = svg;
@@ -48,13 +46,10 @@ function generateEngravedKnob(containerId, dotClass, config) {
     });
 })();
 
-// Initialize pointer events and UI interactions
 initInput();
 initConsole();
 
-// Start OSC WebSocket connection
 import { connectOSC } from './osc.js';
 connectOSC();
 
-// Initial render
 updateState();

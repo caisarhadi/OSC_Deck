@@ -3,7 +3,6 @@ import { SLIDER_PIXELS_TO_MAX } from './state.js';
 import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle } from './dom.js';
 import { sendOSC } from './osc.js';
 
-// --- Visual & Data Update ---
 export function updateState() {
     oledLabel.textContent = globalState.activeLabel;
     oledValue.textContent = globalState.activeValue;
@@ -35,7 +34,7 @@ export function updateState() {
     // We rotate the indicator instead of the dial so the dial's asymmetric shadow stays static!
     const KNOB_MAX_DEG = 135;
     knobs[0].indicator.style.transform = `rotateZ(${s.k1 * KNOB_MAX_DEG}deg)`; // SHUTTER
-    knobs[1].indicator.style.transform = `rotateZ(${s.k2 * KNOB_MAX_DEG}deg)`; // EI
+    knobs[1].indicator.style.transform = `rotateZ(${(s.k2 * 270) - 135}deg)`;  // EI (0-1)
     knobs[2].indicator.style.transform = `rotateZ(${(s.k3 * 270) - 135}deg)`;  // ND (0-1)
     knobs[3].indicator.style.transform = `rotateZ(${s.k4 * KNOB_MAX_DEG}deg)`; // WB
     knobs[4].indicator.style.transform = `rotateZ(${(s.k5 * 270) - 135}deg)`;  // T-RATE (0-1)

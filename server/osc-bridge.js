@@ -1,15 +1,14 @@
 /**
- * API Server
+ * API Bridge Server
  * 
  * WebSocket server that receives JSON from the browser and
  * exposes it as a REST API endpoint for Unreal Engine (VaRest).
  * 
- * Usage:
- *   node server/osc-bridge.js
+ * Usage:  node server/osc-bridge.js
  * 
  * Endpoints:
- *   GET ws://localhost:9000      (Browser pushes state here)
- *   GET http://localhost:9000/state (Unreal fetches state here)
+ *   ws://localhost:9000        Browser pushes state here
+ *   http://localhost:9000/state  Unreal fetches state here
  */
 
 const http = require('http');
@@ -17,18 +16,15 @@ const { WebSocketServer } = require('ws');
 
 const PORT = 9000;
 
-// Global state buffer (defaults)
 let latestState = {
-    prefix: '/cam/A',
-    axis: [0, 0, 0, 0, 0],
-    knobs: [0, 0, 0, 0, 0, 0],
-    sliders: [0, 0, 0, 0],
-    af: 0
+    cam: 'A',
+    tx: 0, ty: 0, rx: 0, ry: 0, rz: 0, custom: 0,
+    shutter: 0, ei: 0, nd: 0, wb: 0, tRate: 1, masterRate: 1,
+    fcl: 0, iris: 0, fcs: 0,
+    af: 0, reset: 0
 };
 
-// ─── HTTP Server for Unreal Engine (VaRest) ───────
 const server = http.createServer((req, res) => {
-    // Add CORS headers so we can query from anywhere
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     
@@ -47,7 +43,6 @@ const server = http.createServer((req, res) => {
     }
 });
 
-// ─── WebSocket Server for Browser UI ──────────────
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', (ws, req) => {
@@ -56,7 +51,6 @@ wss.on('connection', (ws, req) => {
 
     ws.on('message', (raw) => {
         try {
-            // Browser pushed new state, update the global buffer
             const data = JSON.parse(raw);
             latestState = data;
         } catch (e) {
@@ -67,7 +61,6 @@ wss.on('connection', (ws, req) => {
     ws.on('close', () => console.log(`[-] Browser disconnected: ${ip}`));
 });
 
-// Start the dual server
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`\n  ┌──────────────────────────────────────────┐`);
     console.log(`  │  API Bridge Server                       │`);

@@ -1,9 +1,7 @@
-// DOM Elements
 export const innerPuck = document.getElementById('inner-puck');
 export const outerRing = document.getElementById('outer-ring');
 export const yawRing = document.getElementById('yaw-ring');
 export const panBoundary = document.getElementById('pan-boundary');
-export const oscLog = document.getElementById('osc-log');
 export const spaceContainer = document.getElementById('space-container');
 export const outerIndicator = document.getElementById('outer-indicator');
 export const resetBtn = document.getElementById('reset-btn');
@@ -14,11 +12,9 @@ export const oledValue = document.getElementById('oled-value');
 export const logToggle = document.getElementById('log-toggle');
 export const logContent = document.getElementById('log-content');
 
-// Camera Selector Buttons
 export const camBtns = document.querySelectorAll('.keycap');
 export const camMetas = document.querySelectorAll('.key-meta');
 
-// Knobs
 export const knobs = [
     { wrap: document.getElementById('knob-1'), indicator: document.querySelector('#knob-1 .knob-indicator'), reset: document.querySelector('#knob-1 .knob-reset') },
     { wrap: document.getElementById('knob-2'), indicator: document.querySelector('#knob-2 .knob-indicator'), reset: document.querySelector('#knob-2 .knob-reset') },
@@ -28,7 +24,6 @@ export const knobs = [
     { wrap: document.getElementById('knob-6'), indicator: document.getElementById('master-knob-center'), reset: document.getElementById('master-rate-reset') }
 ];
 
-// Sliders
 export const slider = document.getElementById('neumorphic-slider');
 export const sliderTrack = document.querySelector('#neumorphic-slider .ribbon-slider-track');
 export const slidersV = [
