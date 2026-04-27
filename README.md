@@ -5,11 +5,13 @@ Browser-based camera control surface that streams real-time state to Unreal Engi
 ## Architecture
 
 ```
-Browser UI  ──ws://──▶  Node.js Bridge  ◀──GET /state──  Unreal Engine (VaRest)
- (index.html)           (osc-bridge.js)
+Browser UI  ──ws://──▶  Node.js Bridge  ◀──GET /state──   Unreal Engine (VaRest)
+ (index.html)           (osc-bridge.js)  ◀──POST /state──
 ```
 
-The browser pushes JSON state over WebSocket on every input change. Unreal polls `GET /state` to read the latest values.
+The browser pushes JSON state over WebSocket on every input change. Unreal polls `GET /state` to read the latest values and can POST telemetry back for OLED display.
+
+See [ARCHITECTURE.md](ARCHITECTURE.md) for module dependency graphs, data flow diagrams, and coding conventions.
 
 ## Project Structure
 
@@ -97,6 +99,7 @@ All slider values are multiplied by masterRate before transmission.
 
 | Key | Type | Values | Control |
 |-----|------|--------|---------|
+| `power` | `int` | `0` / `1` | System power on/off |
 | `af` | `int` | `0` / `1` | Autofocus on/off |
 | `reset` | `int` | `0` / `1` | Rotation reset (momentary) |
 | `resetFcl` | `int` | `0` / `1` | Focal length reset (momentary) |

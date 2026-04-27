@@ -1,25 +1,5 @@
 # OSC Deck — Architecture & Conventions
 
-## Architecture
-
-```mermaid
-graph LR
-    subgraph Browser
-        UI["index.html + JS Modules"]
-    end
-    subgraph Server
-        BRIDGE["osc-bridge.js"]
-    end
-    UE["Unreal Engine<br/>(VaRest)"]
-
-    UI -->|"WebSocket<br/>JSON state"| BRIDGE
-    UE -->|"GET /state<br/>polling"| BRIDGE
-    UE -->|"POST /state<br/>telemetry"| BRIDGE
-    BRIDGE -->|"WS broadcast<br/>ue_update"| UI
-```
-
-The browser pushes a flat JSON state object over WebSocket on every input change. Unreal polls `GET /state` to read the latest values and can POST telemetry back for OLED display.
-
 ## Data Flow
 
 ```mermaid
