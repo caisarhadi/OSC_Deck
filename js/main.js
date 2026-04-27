@@ -1,6 +1,7 @@
 import { initInput } from './input.js';
 import { initConsole } from './console.js';
-import { updateState } from './ui.js';
+import { renderUI } from './ui.js';
+import { connectOSC, sendOSC } from './osc.js';
 
 // Prevent pinch-to-zoom on iOS Safari
 document.addEventListener('gesturestart', function (e) {
@@ -61,10 +62,12 @@ function generateEngravedKnob(containerId, dotClass, config) {
     });
 })();
 
+export function updateState() {
+    renderUI();
+    sendOSC();
+}
+
 initInput();
 initConsole();
-
-import { connectOSC } from './osc.js';
-connectOSC();
-
+connectOSC(renderUI);
 updateState();

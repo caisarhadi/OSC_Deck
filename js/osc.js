@@ -1,14 +1,12 @@
 import { globalState, getActiveCamState, logBuffer, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
-import { logContent } from './dom.js';
 import { fmtUnsigned } from './utils.js';
-import { renderUI } from './ui.js';
 
 let ws = null;
 let wsReady = false;
 
 const WS_URL = `ws://${window.location.hostname}:9000`;
 
-export function connectOSC() {
+export function connectOSC(onRender) {
     if (ws && ws.readyState <= 1) return;
     
     ws = new WebSocket(WS_URL);
@@ -20,9 +18,9 @@ export function connectOSC() {
     ws.onclose = () => {
         wsReady = false;
         console.log('[OSC] Disconnected — retrying in 3s…');
-        setTimeout(connectOSC, 3000);
+        setTimeout(() => connectOSC(onRender), 3000);
     };
-    ws.onerror = () => {};
+    ws.onerror = (err) => { console.warn('[OSC] WebSocket error:', err.message); };
     ws.onmessage = (e) => {
         try {
             const msg = JSON.parse(e.data);
@@ -36,9 +34,9 @@ export function connectOSC() {
 
             if (globalState.ueTelemetry[globalState.activeLabel] !== undefined) {
                 globalState.activeValue = globalState.ueTelemetry[globalState.activeLabel];
-                renderUI();
+                if (onRender) onRender();
             }
-        } catch (err) {}
+        } catch (err) { console.warn('[OSC] Bad message:', err.message); }
     };
 }
 
@@ -97,7 +95,4 @@ export function sendOSC() {
         const msg = `${prefix}/6axis [${tx}, ${ty}, ${rx}, ${ry}, ${rz}, ${custom}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.sliderV3 * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV * s.k6)}] | ${prefix}/toggles [AF:${af} RESET:${resetToggle} POWER:${globalState.powerOn ? 1 : 0} FCL-R:${s.resetFcl ? 1 : 0} IRIS-R:${s.resetIris ? 1 : 0} FCS-R:${s.resetFcs ? 1 : 0} SHT-R:${s.resetShutter ? 1 : 0} EI-R:${s.resetEi ? 1 : 0} ND-R:${s.resetNd ? 1 : 0} WB-R:${s.resetWb ? 1 : 0}]`;
         logBuffer.push(msg);
         if (logBuffer.length > 4) logBuffer.shift();
-        
-        logContent.innerHTML = logBuffer.map(l => `> ${l}`).join('<br>');
-        logContent.scrollTop = logContent.scrollHeight;
 }

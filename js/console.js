@@ -1,10 +1,11 @@
 import { camBtns, camMetas, logToggle } from './dom.js';
 import { logBuffer, globalState } from './state.js';
-import { updateState } from './ui.js';
+import { updateState } from './main.js';
 
 export function initConsole() {
     camBtns.forEach((btn, idx) => {
-        btn.addEventListener('click', () => {
+        btn.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
             camBtns.forEach((b, j) => { 
                 b.classList.remove('lit-green'); 
                 camMetas[j].classList.remove('active'); 

@@ -1,7 +1,7 @@
-import { getActiveCamState, globalState, activePointers, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
+import { getActiveCamState, globalState, activePointers, DEFAULT_CAM_STATE, PIXELS_TO_MAX, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
 import { innerPuck, outerRing, yawRing, panBoundary, outerIndicator, spaceContainer, knobs, slider, slidersV, resetBtn, afToggle, powerToggle } from './dom.js';
 import { clamp, fmt, fmtUnsigned, applyDeadzone } from './utils.js';
-import { updateState } from './ui.js';
+import { updateState } from './main.js';
 
 export function initInput() {
     resetBtn.addEventListener('pointerdown', (e) => {
@@ -63,7 +63,7 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const defaultVal = (idx === 0) ? 0.6 : (idx === 3 ? 0.4 : (idx >= 4 ? 1 : 0));
+                const defaultVal = DEFAULT_CAM_STATE[config.key];
                 s[config.key] = defaultVal;
                 if (config.resetKey) s[config.resetKey] = true;
                 k.reset.classList.add('is-active');
@@ -156,7 +156,7 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const defaultVal = config.zeroToOne ? (idx === 1 ? 0.6 : 0.5) : 0;
+                const defaultVal = DEFAULT_CAM_STATE[config.key];
                 s[config.key] = defaultVal;
                 if (config.resetKey) s[config.resetKey] = true;
                 sv.reset.classList.add('is-active');

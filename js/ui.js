@@ -1,6 +1,5 @@
-import { getActiveCamState, globalState, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
-import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle, powerToggle } from './dom.js';
-import { sendOSC } from './osc.js';
+import { getActiveCamState, globalState, logBuffer, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
+import { innerPuck, outerRing, yawRing, oledLabel, oledValue, logContent, knobs, sliderTrack, slidersV, afToggle, powerToggle } from './dom.js';
 
 export function renderUI() {
     oledLabel.textContent = globalState.activeLabel;
@@ -78,9 +77,8 @@ export function renderUI() {
             powerToggle.classList.remove('is-active');
         }
     }
-}
 
-export function updateState() {
-    renderUI();
-    sendOSC();
+    // Log panel
+    logContent.innerHTML = logBuffer.map(l => `> ${l}`).join('<br>');
+    logContent.scrollTop = logContent.scrollHeight;
 }
