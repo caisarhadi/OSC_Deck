@@ -2,6 +2,21 @@ import { initInput } from './input.js';
 import { initConsole } from './console.js';
 import { updateState } from './ui.js';
 
+// Prevent pinch-to-zoom on iOS Safari
+document.addEventListener('gesturestart', function (e) {
+    e.preventDefault();
+});
+
+// Prevent double-tap-to-zoom on iOS Safari
+let lastTouchEnd = 0;
+document.addEventListener('touchend', function (e) {
+    let now = (new Date()).getTime();
+    if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+    }
+    lastTouchEnd = now;
+}, { passive: false });
+
 function generateEngravedKnob(containerId, dotClass, config) {
     const container = document.getElementById(containerId);
     if (!container) return;

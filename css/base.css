@@ -1,9 +1,23 @@
+* {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-drag: none;
+}
+
+input, textarea {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
+
 body { 
     font-family: var(--font-main);
     overscroll-behavior: none; 
     touch-action: none; 
-    user-select: none;
-    -webkit-user-select: none;
     background-color: var(--color-bg-main);
 }
 
