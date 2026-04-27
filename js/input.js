@@ -156,7 +156,7 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const defaultVal = config.zeroToOne ? 0.5 : 0;
+                const defaultVal = config.zeroToOne ? (idx === 1 ? 0.6 : 0.5) : 0;
                 s[config.key] = defaultVal;
                 if (config.resetKey) s[config.resetKey] = true;
                 sv.reset.classList.add('is-active');

@@ -232,9 +232,9 @@
 }
 
 .iris-closed {
-    top: 35%;
+    top: 65%;
 }
 
 .iris-open {
-    top: 65%;
+    top: 35%;
 }
