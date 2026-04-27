@@ -69,7 +69,7 @@ export function initInput() {
                 k.reset.classList.add('is-active');
 
                 globalState.activeLabel = config.label;
-                globalState.activeValue = defaultVal.toFixed(2);
+                globalState.activeValue = globalState.ueTelemetry[config.label] ?? defaultVal.toFixed(2);
                 updateState();
             };
 
