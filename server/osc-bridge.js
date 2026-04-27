@@ -1,15 +1,15 @@
 /**
  * API Bridge Server
- * 
+ *
  * WebSocket server that receives JSON from the browser and:
  *   1. Exposes it as a REST API endpoint for Unreal Engine (VaRest)
  *   2. Sends individual OSC messages over UDP to Unreal Engine (OSC Plugin)
- * 
+ *
  * Unreal Engine can send telemetry back as OSC messages on the UDP listen port,
  * which are converted to JSON and broadcast to all WebSocket clients.
- * 
+ *
  * Usage:  node server/osc-bridge.js
- * 
+ *
  * Ports:
  *   9000  WebSocket + HTTP   (Browser <-> Node)
  *   9001  UDP send           (Node -> Unreal)
@@ -20,37 +20,23 @@ const http = require('http');
 const { WebSocketServer } = require('ws');
 const osc = require('osc');
 
-const PORT = 9000;
-const UE_OSC_HOST = '127.0.0.1';
-const UE_OSC_PORT = 9001;
+// ── Config ──────────────────────────────────────────────────────────
+
+const PORT          = 9000;
+const UE_OSC_HOST   = '127.0.0.1';
+const UE_OSC_PORT   = 9001;
 const LOCAL_OSC_PORT = 9002;
 
-// ── OSC address mapping ─────────────────────────────────────────────
+// ── OSC key sets ────────────────────────────────────────────────────
 
-const KEY_TO_OSC = {
-    tx:           '/cam/axis/tx',
-    ty:           '/cam/axis/ty',
-    rx:           '/cam/axis/rx',
-    ry:           '/cam/axis/ry',
-    rz:           '/cam/axis/rz',
-    custom:       '/cam/axis/custom',
-    shutter:      '/cam/knob/shutter',
-    ei:           '/cam/knob/ei',
-    nd:           '/cam/knob/nd',
-    wb:           '/cam/knob/wb',
-    fcl:          '/cam/slider/fcl',
-    iris:         '/cam/slider/iris',
-    fcs:          '/cam/slider/fcs',
-    af:           '/cam/toggle/af',
-    reset:        '/cam/toggle/reset',
-    resetFcl:     '/cam/toggle/resetFcl',
-    resetIris:    '/cam/toggle/resetIris',
-    resetFcs:     '/cam/toggle/resetFcs',
-    resetShutter: '/cam/toggle/resetShutter',
-    resetEi:      '/cam/toggle/resetEi',
-    resetNd:      '/cam/toggle/resetNd',
-    resetWb:      '/cam/toggle/resetWb',
-};
+const ALLOWED_OSC_KEYS = new Set([
+    'tx', 'ty', 'rx', 'ry', 'rz', 'custom',
+    'shutter', 'ei', 'nd', 'wb',
+    'fcl', 'iris', 'fcs',
+    'af', 'reset',
+    'resetFcl', 'resetIris', 'resetFcs',
+    'resetShutter', 'resetEi', 'resetNd', 'resetWb',
+]);
 
 const BOOLEAN_KEYS = new Set([
     'af', 'reset',
@@ -58,7 +44,8 @@ const BOOLEAN_KEYS = new Set([
     'resetShutter', 'resetEi', 'resetNd', 'resetWb',
 ]);
 
-// Reverse map: OSC telemetry address -> JSON key
+const NON_OSC_KEYS = new Set(['cam', 'tRate', 'masterRate']);
+
 const TELEMETRY_OSC_TO_KEY = {
     '/telemetry/shutter': 'shutter',
     '/telemetry/ei':      'ei',
@@ -69,106 +56,17 @@ const TELEMETRY_OSC_TO_KEY = {
     '/telemetry/fcs':     'fcs',
 };
 
-// ── State (per-camera, seeded from first browser message) ───────────
+// ── Per-camera state ────────────────────────────────────────────────
 
 const camStates = { A: null, B: null, C: null, D: null };
+let activeCam  = 'A';
 
-let activeCam = 'A';
-let latestRaw = null;
-
-// ── UDP / OSC Port ───────────────────────────────────────────────────
-
-const udpPort = new osc.UDPPort({
-    localAddress: '0.0.0.0',
-    localPort: LOCAL_OSC_PORT,
-    remoteAddress: UE_OSC_HOST,
-    remotePort: UE_OSC_PORT,
-    metadata: false,
-});
-
-udpPort.on('ready', () => {
-    console.log(`[+] UDP OSC listening on 0.0.0.0:${LOCAL_OSC_PORT}, sending to ${UE_OSC_HOST}:${UE_OSC_PORT}`);
-});
-
-udpPort.on('message', (oscMsg) => {
-    const key = TELEMETRY_OSC_TO_KEY[oscMsg.address];
-    if (!key) return;
-
-    const value = oscMsg.args && oscMsg.args.length > 0 ? oscMsg.args[0] : 0;
-    const data = { [key]: value };
-
-    wss.clients.forEach(client => {
-        if (client.readyState === 1) {
-            client.send(JSON.stringify({ type: 'ue_update', data }));
-        }
-    });
-});
-
-udpPort.on('error', (err) => {
-    console.error('[!] UDP OSC error:', err.message);
-});
-
-udpPort.open();
-
-// ── Send individual OSC messages ─────────────────────────────────────
-
-function seedCamState(camLetter, state) {
-    const seeded = {};
-    for (const [key, value] of Object.entries(state)) {
-        if (key !== 'cam' && key !== 'tRate' && key !== 'masterRate') {
-            seeded[key] = value;
-        }
-    }
-    camStates[camLetter] = seeded;
-}
-
-function sendOSCFromState(newState) {
-    const camLetter = newState.cam !== undefined ? newState.cam : activeCam;
-
-    // First message for this camera — seed state, don't send
-    if (camStates[camLetter] === null) {
-        seedCamState(camLetter, newState);
-        activeCam = camLetter;
-        return;
-    }
-
-    const prevCamState = camStates[camLetter];
-    const powerState = newState.power !== undefined ? newState.power : (prevCamState.power || 0);
-
-    // Camera select — only send when the active camera actually changes
-    if (camLetter !== activeCam) {
-        udpPort.send({ address: `/cam/${camLetter}/${powerState}/select`, args: [camLetter] }, UE_OSC_HOST, UE_OSC_PORT);
-    }
-
-    for (const [key, value] of Object.entries(newState)) {
-        const baseAddress = KEY_TO_OSC[key];
-        if (!baseAddress) continue;
-
-        // Skip boolean toggles unless they are active (1)
-        if (BOOLEAN_KEYS.has(key) && value !== 1) continue;
-
-        // Only send if the value has changed for THIS camera
-        if (prevCamState[key] === value) continue;
-
-        const dynamicAddress = baseAddress.replace('/cam/', `/cam/${camLetter}/${powerState}/`);
-        udpPort.send({ address: dynamicAddress, args: [value] }, UE_OSC_HOST, UE_OSC_PORT);
-    }
-
-    // Update per-camera state
-    for (const [key, value] of Object.entries(newState)) {
-        if (key !== 'cam' && key !== 'tRate' && key !== 'masterRate') {
-            prevCamState[key] = value;
-        }
-    }
-    activeCam = camLetter;
-}
-
-// ── HTTP Server (legacy REST kept for side-by-side) ──────────────────
+// ── HTTP server + WebSocket ─────────────────────────────────────────
 
 const server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+
     if (req.method === 'OPTIONS') {
         res.writeHead(200);
         res.end();
@@ -182,12 +80,7 @@ const server = http.createServer((req, res) => {
             try {
                 const data = JSON.parse(body);
                 console.log('[+] Received from UE:', data);
-                // Broadcast to all WS clients
-                wss.clients.forEach(client => {
-                    if (client.readyState === 1) { // WebSocket.OPEN
-                        client.send(JSON.stringify({ type: 'ue_update', data: data }));
-                    }
-                });
+                broadcastToClients({ type: 'ue_update', data });
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ status: 'ok' }));
             } catch (e) {
@@ -202,13 +95,12 @@ const server = http.createServer((req, res) => {
     if (req.method === 'GET' && req.url === '/state') {
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify([{ cam: activeCam, ...(camStates[activeCam] || {}) }]));
-    } else {
-        res.writeHead(404);
-        res.end('Not Found');
+        return;
     }
-});
 
-// ── WebSocket ────────────────────────────────────────────────────────
+    res.writeHead(404);
+    res.end('Not Found');
+});
 
 const wss = new WebSocketServer({ server });
 
@@ -220,7 +112,6 @@ wss.on('connection', (ws, req) => {
         try {
             const data = JSON.parse(raw);
             sendOSCFromState(data);
-            latestRaw = data;
         } catch (e) {
             console.error('[!] Bad JSON from browser:', e.message);
         }
@@ -229,7 +120,104 @@ wss.on('connection', (ws, req) => {
     ws.on('close', () => console.log(`[-] Browser disconnected: ${ip}`));
 });
 
-// ── Start ────────────────────────────────────────────────────────────
+// ── UDP / OSC ───────────────────────────────────────────────────────
+
+const udpPort = new osc.UDPPort({
+    localAddress:  '0.0.0.0',
+    localPort:     LOCAL_OSC_PORT,
+    remoteAddress: UE_OSC_HOST,
+    remotePort:    UE_OSC_PORT,
+    metadata:      false,
+});
+
+udpPort.on('ready', () => {
+    console.log(`[+] UDP OSC listening on 0.0.0.0:${LOCAL_OSC_PORT}, sending to ${UE_OSC_HOST}:${UE_OSC_PORT}`);
+});
+
+udpPort.on('message', (oscMsg) => {
+    const key = TELEMETRY_OSC_TO_KEY[oscMsg.address];
+    if (!key) return;
+
+    const value = oscMsg.args && oscMsg.args.length > 0 ? oscMsg.args[0] : 0;
+    broadcastToClients({ type: 'ue_update', data: { [key]: value } });
+});
+
+udpPort.on('error', (err) => {
+    console.error('[!] UDP OSC error:', err.message);
+});
+
+udpPort.open();
+
+// ── OSC send logic ──────────────────────────────────────────────────
+
+function seedCamState(camLetter, state) {
+    const seeded = {};
+    for (const [key, value] of Object.entries(state)) {
+        if (!NON_OSC_KEYS.has(key)) {
+            seeded[key] = value;
+        }
+    }
+    camStates[camLetter] = seeded;
+}
+
+function sendOSCFromState(newState) {
+    const camLetter = newState.cam !== undefined ? newState.cam : activeCam;
+
+    if (!camStates.hasOwnProperty(camLetter)) return;
+
+    const power = newState.power !== undefined ? newState.power : ((camStates[camLetter] && camStates[camLetter].power) || 0);
+
+    if (camLetter !== activeCam) {
+        udpPort.send(
+            { address: `/${power}/${camLetter}/select`, args: [1] },
+            UE_OSC_HOST, UE_OSC_PORT
+        );
+    }
+
+    if (camStates[camLetter] === null) {
+        seedCamState(camLetter, newState);
+        activeCam = camLetter;
+        return;
+    }
+
+    const prev = camStates[camLetter];
+
+    if (newState.power !== undefined && newState.power !== prev.power) {
+        udpPort.send(
+            { address: `/${power}/${camLetter}/power`, args: [power] },
+            UE_OSC_HOST, UE_OSC_PORT
+        );
+    }
+
+    for (const [key, value] of Object.entries(newState)) {
+        if (!ALLOWED_OSC_KEYS.has(key)) continue;
+
+        if (BOOLEAN_KEYS.has(key) && value !== 1) continue;
+
+        if (prev[key] === value) continue;
+
+        const address = `/${power}/${camLetter}/${key}`;
+        udpPort.send({ address, args: [value] }, UE_OSC_HOST, UE_OSC_PORT);
+    }
+
+    for (const [key, value] of Object.entries(newState)) {
+        if (!NON_OSC_KEYS.has(key)) {
+            prev[key] = value;
+        }
+    }
+    activeCam = camLetter;
+}
+
+// ── Helpers ─────────────────────────────────────────────────────────
+
+function broadcastToClients(payload) {
+    const json = JSON.stringify(payload);
+    wss.clients.forEach(client => {
+        if (client.readyState === 1) client.send(json);
+    });
+}
+
+// ── Start ───────────────────────────────────────────────────────────
 
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`\n  ┌──────────────────────────────────────────┐`);
