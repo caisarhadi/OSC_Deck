@@ -2,7 +2,7 @@ import { getActiveCamState, globalState, SLIDER_PIXELS_TO_MAX, KNOB_CONFIGS, SLI
 import { innerPuck, outerRing, yawRing, oledLabel, oledValue, knobs, sliderTrack, slidersV, afToggle, powerToggle } from './dom.js';
 import { sendOSC } from './osc.js';
 
-export function updateState() {
+export function renderUI() {
     oledLabel.textContent = globalState.activeLabel;
     oledValue.textContent = globalState.activeValue;
 
@@ -78,6 +78,9 @@ export function updateState() {
             powerToggle.classList.remove('is-active');
         }
     }
+}
 
+export function updateState() {
+    renderUI();
     sendOSC();
 }

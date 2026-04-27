@@ -1,6 +1,7 @@
-import { globalState, getActiveCamState, logBuffer } from './state.js';
-import { logContent, oledLabel, oledValue } from './dom.js';
+import { globalState, getActiveCamState, logBuffer, KNOB_CONFIGS, SLIDER_V_CONFIGS } from './state.js';
+import { logContent } from './dom.js';
 import { fmtUnsigned } from './utils.js';
+import { renderUI } from './ui.js';
 
 let ws = null;
 let wsReady = false;
@@ -25,31 +26,17 @@ export function connectOSC() {
     ws.onmessage = (e) => {
         try {
             const msg = JSON.parse(e.data);
-            if (msg.type === 'ue_update' && msg.data) {
-                if (msg.data.fcl !== undefined) {
-                    globalState.ueFcl = Number(msg.data.fcl).toFixed(2);
-                    if (globalState.activeLabel === 'FCL') {
-                        globalState.activeValue = globalState.ueFcl;
-                        oledLabel.textContent = globalState.activeLabel;
-                        oledValue.textContent = globalState.activeValue;
-                    }
-                }
-                if (msg.data.iris !== undefined) {
-                    globalState.ueIris = Number(msg.data.iris).toFixed(2);
-                    if (globalState.activeLabel === 'IRIS') {
-                        globalState.activeValue = globalState.ueIris;
-                        oledLabel.textContent = globalState.activeLabel;
-                        oledValue.textContent = globalState.activeValue;
-                    }
-                }
-                if (msg.data.fcs !== undefined) {
-                    globalState.ueFcs = Number(msg.data.fcs).toFixed(2);
-                    if (globalState.activeLabel === 'FCS') {
-                        globalState.activeValue = globalState.ueFcs;
-                        oledLabel.textContent = globalState.activeLabel;
-                        oledValue.textContent = globalState.activeValue;
-                    }
-                }
+            if (msg.type !== 'ue_update' || !msg.data) return;
+
+            const ALL_CONFIGS = [...KNOB_CONFIGS, ...SLIDER_V_CONFIGS];
+            for (const config of ALL_CONFIGS) {
+                if (!config.ueKey || msg.data[config.ueKey] === undefined) continue;
+                globalState.ueTelemetry[config.label] = Number(msg.data[config.ueKey]).toFixed(2);
+            }
+
+            if (globalState.ueTelemetry[globalState.activeLabel] !== undefined) {
+                globalState.activeValue = globalState.ueTelemetry[globalState.activeLabel];
+                renderUI();
             }
         } catch (err) {}
     };

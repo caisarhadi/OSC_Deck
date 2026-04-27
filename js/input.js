@@ -63,7 +63,7 @@ export function initInput() {
                 e.preventDefault();
                 e.stopPropagation();
                 const s = getActiveCamState();
-                const defaultVal = (idx === 0) ? 0.5 : (idx >= 4 ? 1 : 0);
+                const defaultVal = (idx === 0) ? 0.6 : (idx === 3 ? 0.4 : (idx >= 4 ? 1 : 0));
                 s[config.key] = defaultVal;
                 if (config.resetKey) s[config.resetKey] = true;
                 k.reset.classList.add('is-active');
@@ -108,7 +108,7 @@ export function initInput() {
                 currentValue: startVal
             });
             globalState.activeLabel = config.label;
-            globalState.activeValue = fmtUnsigned(startVal);
+            globalState.activeValue = globalState.ueTelemetry[config.label] ?? fmtUnsigned(startVal);
             updateState();
         });
     });
@@ -147,10 +147,7 @@ export function initInput() {
                 startValue: startVal
             });
             globalState.activeLabel = config.label;
-            if (config.label === 'FCL') globalState.activeValue = globalState.ueFcl;
-            else if (config.label === 'IRIS') globalState.activeValue = globalState.ueIris;
-            else if (config.label === 'FCS') globalState.activeValue = globalState.ueFcs;
-            else globalState.activeValue = fmtUnsigned(startVal * getActiveCamState().k6);
+            globalState.activeValue = globalState.ueTelemetry[config.label] ?? fmtUnsigned(startVal * getActiveCamState().k6);
             updateState();
         });
 
@@ -164,10 +161,7 @@ export function initInput() {
                 if (config.resetKey) s[config.resetKey] = true;
                 sv.reset.classList.add('is-active');
                 globalState.activeLabel = config.label;
-                if (config.label === 'FCL') globalState.activeValue = globalState.ueFcl;
-                else if (config.label === 'IRIS') globalState.activeValue = globalState.ueIris;
-                else if (config.label === 'FCS') globalState.activeValue = globalState.ueFcs;
-                else globalState.activeValue = defaultVal.toFixed(2);
+                globalState.activeValue = globalState.ueTelemetry[config.label] ?? defaultVal.toFixed(2);
                 updateState();
             };
 
@@ -293,9 +287,15 @@ export function initInput() {
             } else {
                 p.currentValue = clamp(p.currentValue + (frameDelta / Math.PI), -1, 1);
             }
-            s[config.key] = p.currentValue;
+            
+            let finalValue = p.currentValue;
+            if (config.steps) {
+                finalValue = Math.round(finalValue * config.steps) / config.steps;
+            }
+            
+            s[config.key] = finalValue;
             globalState.activeLabel = config.label;
-            globalState.activeValue = fmtUnsigned(p.currentValue);
+            globalState.activeValue = globalState.ueTelemetry[config.label] ?? fmtUnsigned(finalValue);
         }
         else if (p.zone === 'slider') {
             const dX = e.clientX - p.startX;
@@ -314,10 +314,7 @@ export function initInput() {
                 s[config.key] = clamp(p.startValue + deltaValue, -1, 1);
             }
             globalState.activeLabel = config.label;
-            if (config.label === 'FCL') globalState.activeValue = globalState.ueFcl;
-            else if (config.label === 'IRIS') globalState.activeValue = globalState.ueIris;
-            else if (config.label === 'FCS') globalState.activeValue = globalState.ueFcs;
-            else globalState.activeValue = fmtUnsigned(s[config.key] * s.k6);
+            globalState.activeValue = globalState.ueTelemetry[config.label] ?? fmtUnsigned(s[config.key] * s.k6);
         }
         updateState();
     });
@@ -345,11 +342,6 @@ export function initInput() {
             globalState.activeValue = 'YAW:0.00';
         }
         else if (p.zone === 'knob') { 
-            if (p.index === 3) {
-                s.k4 = 0;
-                globalState.activeLabel = 'WB';
-                globalState.activeValue = '0.00';
-            }
             knobs[p.index].wrap.classList.remove('active'); 
         }
         else if (p.zone === 'slider') { 

@@ -79,7 +79,7 @@ All axis values are multiplied by their applicable rate knobs before transmissio
 | `shutter` | `float` | 0.0 – 1.0 | Shutter angle |
 | `ei` | `float` | 0.0 – 1.0 | Exposure index |
 | `nd` | `float` | 0.0 – 1.0 | ND filter |
-| `wb` | `float` | -1.0 – 1.0 | White balance |
+| `wb` | `float` | 0.0 – 1.0 | White balance |
 | `tRate` | `float` | 0.0 – 1.0 | Translation rate multiplier (default: 1) |
 | `masterRate` | `float` | 0.0 – 1.0 | Master rate multiplier (default: 1) |
 
@@ -119,5 +119,37 @@ All slider values are multiplied by masterRate before transmission.
   "resetFcl": 0, "resetIris": 0, "resetFcs": 0,
   "resetShutter": 0, "resetEi": 0, "resetNd": 0, "resetWb": 0,
   "af": 0, "reset": 0
+}
+```
+
+## Unreal Engine Telemetry (POST)
+
+Unreal Engine can POST telemetry data to the bridge server, which will be forwarded to the browser UI to display real-time values on the OLED screen. 
+
+The payload should be a flat JSON object containing any subset of the following keys:
+
+| Key | Type | Description |
+|-----|------|-------------|
+| `shutter` | `float` | Shutter value to display |
+| `ei` | `float` | Exposure index to display |
+| `nd` | `float` | ND filter value to display |
+| `wb` | `float` | White balance to display |
+| `fcl` | `float` | Focal length to display |
+| `iris` | `float` | Aperture to display |
+| `fcs` | `float` | Focus distance to display |
+
+If a key is omitted, the UI will automatically fall back to displaying its internal state value for that control.
+
+### Example Telemetry Payload
+
+```json
+{
+  "shutter": 180.0,
+  "ei": 800.0,
+  "nd": 0.6,
+  "wb": 5600.0,
+  "fcl": 24.0,
+  "iris": 2.8,
+  "fcs": 3.5
 }
 ```
