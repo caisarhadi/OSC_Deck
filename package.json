@@ -18,7 +18,11 @@
     "url": "https://github.com/caisarhadi/OSC_Deck/issues"
   },
   "homepage": "https://github.com/caisarhadi/OSC_Deck#readme",
+  "overrides": {
+    "serialport": "npm:empty-npm-package@1.0.0"
+  },
   "dependencies": {
+    "osc": "^2.4.5",
     "ws": "^8.20.0"
   }
 }
