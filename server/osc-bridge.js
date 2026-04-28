@@ -22,9 +22,9 @@ const osc = require('osc');
 
 // ── Config ──────────────────────────────────────────────────────────
 
-const PORT          = 9000;
-const UE_OSC_HOST   = '127.0.0.1';
-const UE_OSC_PORT   = 9001;
+const PORT = 9000;
+const UE_OSC_HOST = '127.0.0.1';
+const UE_OSC_PORT = 9001;
 const LOCAL_OSC_PORT = 9002;
 
 // ── OSC key sets ────────────────────────────────────────────────────
@@ -46,20 +46,29 @@ const BOOLEAN_KEYS = new Set([
 
 const NON_OSC_KEYS = new Set(['cam', 'tRate', 'masterRate']);
 
-const TELEMETRY_OSC_TO_KEY = {
-    '/telemetry/shutter': 'shutter',
-    '/telemetry/ei':      'ei',
-    '/telemetry/nd':      'nd',
-    '/telemetry/wb':      'wb',
-    '/telemetry/fcl':     'fcl',
-    '/telemetry/iris':    'iris',
-    '/telemetry/fcs':     'fcs',
+// Valid telemetry keys (address format: /telemetry/{cam}/{key})
+const TELEMETRY_KEYS = new Set(['shutter', 'ei', 'nd', 'wb', 'fcl', 'iris', 'fcs']);
+
+// ── Rate multiplier map ─────────────────────────────────────────────
+// Client sends raw values; server multiplies before OSC send.
+
+const RATE_MULTIPLIERS = {
+    tx: ['tRate', 'masterRate'],
+    ty: ['tRate', 'masterRate'],
+    custom: ['tRate', 'masterRate'],
+    rx: ['masterRate'],
+    ry: ['masterRate'],
+    rz: ['masterRate'],
+    fcl: ['masterRate'],
+    iris: ['masterRate'],
+    fcs: ['masterRate'],
 };
 
 // ── Per-camera state ────────────────────────────────────────────────
 
 const camStates = { A: null, B: null, C: null, D: null };
-let activeCam  = 'A';
+let activeCam = 'A';
+let currentRates = { tRate: 1, masterRate: 1 };
 
 // ── HTTP server + WebSocket ─────────────────────────────────────────
 
@@ -93,8 +102,13 @@ const server = http.createServer((req, res) => {
     }
 
     if (req.method === 'GET' && req.url === '/state') {
+        const raw = camStates[activeCam] || {};
+        const multiplied = { cam: activeCam };
+        for (const [key, value] of Object.entries(raw)) {
+            multiplied[key] = applyRateMultipliers(key, value);
+        }
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify([{ cam: activeCam, ...(camStates[activeCam] || {}) }]));
+        res.end(JSON.stringify([multiplied]));
         return;
     }
 
@@ -123,11 +137,11 @@ wss.on('connection', (ws, req) => {
 // ── UDP / OSC ───────────────────────────────────────────────────────
 
 const udpPort = new osc.UDPPort({
-    localAddress:  '0.0.0.0',
-    localPort:     LOCAL_OSC_PORT,
+    localAddress: '0.0.0.0',
+    localPort: LOCAL_OSC_PORT,
     remoteAddress: UE_OSC_HOST,
-    remotePort:    UE_OSC_PORT,
-    metadata:      false,
+    remotePort: UE_OSC_PORT,
+    metadata: false,
 });
 
 udpPort.on('ready', () => {
@@ -135,10 +149,22 @@ udpPort.on('ready', () => {
 });
 
 udpPort.on('message', (oscMsg) => {
-    const key = TELEMETRY_OSC_TO_KEY[oscMsg.address];
-    if (!key) return;
+    const args = oscMsg.args || [];
+    // Parse /telemetry/{cam}/{key}
+    const parts = oscMsg.address.split('/');
+    // Expected: ['', 'telemetry', cam, key]
+    if (parts.length !== 4 || parts[1] !== 'telemetry') return;
+    const cam = parts[2];
+    const key = parts[3];
+    if (!TELEMETRY_KEYS.has(key)) return;
 
-    const value = oscMsg.args && oscMsg.args.length > 0 ? oscMsg.args[0] : 0;
+    // Take the last arg — UE's OSCMessage may accumulate floats across sends
+    const value = args.length > 0 ? args[args.length - 1] : 0;
+    console.log(`[+] OSC from UE: ${oscMsg.address} = ${value}`);
+
+    // Only forward telemetry for the currently active camera
+    if (cam !== activeCam) return;
+
     broadcastToClients({ type: 'ue_update', data: { [key]: value } });
 });
 
@@ -164,6 +190,10 @@ function sendOSCFromState(newState) {
     const camLetter = newState.cam !== undefined ? newState.cam : activeCam;
 
     if (!camStates.hasOwnProperty(camLetter)) return;
+
+    // Update current rates from incoming state
+    if (newState.tRate !== undefined) currentRates.tRate = newState.tRate;
+    if (newState.masterRate !== undefined) currentRates.masterRate = newState.masterRate;
 
     const power = newState.power !== undefined ? newState.power : ((camStates[camLetter] && camStates[camLetter].power) || 0);
 
@@ -197,7 +227,7 @@ function sendOSCFromState(newState) {
         if (prev[key] === value) continue;
 
         const address = `/${power}/${camLetter}/${key}`;
-        udpPort.send({ address, args: [value] }, UE_OSC_HOST, UE_OSC_PORT);
+        udpPort.send({ address, args: [applyRateMultipliers(key, value)] }, UE_OSC_HOST, UE_OSC_PORT);
     }
 
     for (const [key, value] of Object.entries(newState)) {
@@ -209,6 +239,15 @@ function sendOSCFromState(newState) {
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────
+
+function applyRateMultipliers(key, value) {
+    if (!RATE_MULTIPLIERS[key]) return value;
+    let result = value;
+    for (const rateKey of RATE_MULTIPLIERS[key]) {
+        result *= currentRates[rateKey];
+    }
+    return result;
+}
 
 function broadcastToClients(payload) {
     const json = JSON.stringify(payload);

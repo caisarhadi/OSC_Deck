@@ -43,56 +43,58 @@ export function connectOSC(onRender) {
 export function sendOSC() {
     const s = getActiveCamState();
     const prefix = `/cam/${globalState.activeCam}`;
-    
     const f = fmtUnsigned;
-        const tx = f(s.tx * s.k5 * s.k6);
-        const ty = f(s.ty * s.k5 * s.k6);
-        const rx = f(s.rx * s.k6);
-        const ry = f(s.ry * s.k6);
-        const rz = f(s.rz * s.k6);
-        const custom = f(s.slider * s.k5 * s.k6);
 
-        const af = s.afOn ? 1 : 0;
-        const resetToggle = s.resetOn ? 1 : 0;
+    // Multiplied values for local display/log only
+    const txDisp = f(s.tx * s.k5 * s.k6);
+    const tyDisp = f(s.ty * s.k5 * s.k6);
+    const rxDisp = f(s.rx * s.k6);
+    const ryDisp = f(s.ry * s.k6);
+    const rzDisp = f(s.rz * s.k6);
+    const customDisp = f(s.slider * s.k5 * s.k6);
 
-        if (wsReady) {
-            const payload = {
-                cam: globalState.activeCam,
-                power: globalState.powerOn ? 1 : 0,
-                tx: +tx,
-                ty: +ty,
-                rx: +rx,
-                ry: +ry,
-                rz: +rz,
-                custom: +custom,
+    const af = s.afOn ? 1 : 0;
+    const resetToggle = s.resetOn ? 1 : 0;
 
-                shutter: +f(s.k1),
-                ei: +f(s.k2),
-                nd: +f(s.k3),
-                wb: +f(s.k4),
-                tRate: +f(s.k5),
-                masterRate: +f(s.k6),
+    if (wsReady) {
+        // Raw values — server applies rate multipliers before OSC send
+        const payload = {
+            cam: globalState.activeCam,
+            power: globalState.powerOn ? 1 : 0,
+            tx: +f(s.tx),
+            ty: +f(s.ty),
+            rx: +f(s.rx),
+            ry: +f(s.ry),
+            rz: +f(s.rz),
+            custom: +f(s.slider),
 
-                fcl: +f(s.sliderV3 * s.k6),
-                iris: +f(s.sliderV2 * s.k6),
-                fcs: +f(s.sliderV * s.k6),
+            shutter: +f(s.k1),
+            ei: +f(s.k2),
+            nd: +f(s.k3),
+            wb: +f(s.k4),
+            tRate: +f(s.k5),
+            masterRate: +f(s.k6),
 
-                resetFcl: s.resetFcl ? 1 : 0,
-                resetIris: s.resetIris ? 1 : 0,
-                resetFcs: s.resetFcs ? 1 : 0,
+            fcl: +f(s.sliderV3),
+            iris: +f(s.sliderV2),
+            fcs: +f(s.sliderV),
 
-                resetShutter: s.resetShutter ? 1 : 0,
-                resetEi: s.resetEi ? 1 : 0,
-                resetNd: s.resetNd ? 1 : 0,
-                resetWb: s.resetWb ? 1 : 0,
+            resetFcl: s.resetFcl ? 1 : 0,
+            resetIris: s.resetIris ? 1 : 0,
+            resetFcs: s.resetFcs ? 1 : 0,
 
-                af: af,
-                reset: resetToggle
-            };
-            ws.send(JSON.stringify(payload));
-        }
+            resetShutter: s.resetShutter ? 1 : 0,
+            resetEi: s.resetEi ? 1 : 0,
+            resetNd: s.resetNd ? 1 : 0,
+            resetWb: s.resetWb ? 1 : 0,
 
-        const msg = `${prefix}/6axis [${tx}, ${ty}, ${rx}, ${ry}, ${rz}, ${custom}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.sliderV3 * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV * s.k6)}] | ${prefix}/toggles [AF:${af} RESET:${resetToggle} POWER:${globalState.powerOn ? 1 : 0} FCL-R:${s.resetFcl ? 1 : 0} IRIS-R:${s.resetIris ? 1 : 0} FCS-R:${s.resetFcs ? 1 : 0} SHT-R:${s.resetShutter ? 1 : 0} EI-R:${s.resetEi ? 1 : 0} ND-R:${s.resetNd ? 1 : 0} WB-R:${s.resetWb ? 1 : 0}]`;
-        logBuffer.push(msg);
-        if (logBuffer.length > 4) logBuffer.shift();
+            af: af,
+            reset: resetToggle
+        };
+        ws.send(JSON.stringify(payload));
+    }
+
+    const msg = `${prefix}/6axis [${txDisp}, ${tyDisp}, ${rxDisp}, ${ryDisp}, ${rzDisp}, ${customDisp}] | ${prefix}/knobs [${f(s.k1)}, ${f(s.k2)}, ${f(s.k3)}, ${f(s.k4)}, ${f(s.k5)}, ${f(s.k6)}] | ${prefix}/sliders [${f(s.sliderV3 * s.k6)}, ${f(s.sliderV2 * s.k6)}, ${f(s.sliderV * s.k6)}] | ${prefix}/toggles [AF:${af} RESET:${resetToggle} POWER:${globalState.powerOn ? 1 : 0} FCL-R:${s.resetFcl ? 1 : 0} IRIS-R:${s.resetIris ? 1 : 0} FCS-R:${s.resetFcs ? 1 : 0} SHT-R:${s.resetShutter ? 1 : 0} EI-R:${s.resetEi ? 1 : 0} ND-R:${s.resetNd ? 1 : 0} WB-R:${s.resetWb ? 1 : 0}]`;
+    logBuffer.push(msg);
+    if (logBuffer.length > 4) logBuffer.shift();
 }

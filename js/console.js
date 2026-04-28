@@ -14,6 +14,7 @@ export function initConsole() {
             camMetas[idx].classList.add('active');
             
             globalState.activeCam = btn.dataset.cam;
+            globalState.ueTelemetry = {};  // Clear stale telemetry from previous camera
             globalState.activeLabel = 'SELECTED';
             globalState.activeValue = 'CAM ' + btn.dataset.cam;
 
