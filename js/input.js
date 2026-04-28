@@ -58,6 +58,7 @@ export function initInput() {
 
     knobs.forEach((k, idx) => {
         const config = KNOB_CONFIGS[idx];
+        if (!config) return;
         if (k.reset) {
             const handleKnobResetPress = (e) => {
                 e.preventDefault();
@@ -118,7 +119,7 @@ export function initInput() {
         e.stopPropagation();
         slider.setPointerCapture(e.pointerId);
         slider.classList.add('active');
-        const startVal = getActiveCamState().slider;
+        const startVal = getActiveCamState().sliderh1;
         activePointers.set(e.pointerId, {
             zone: 'slider',
             startX: e.clientX,
@@ -131,7 +132,7 @@ export function initInput() {
 
     slidersV.forEach((sv, idx) => {
         const config = SLIDER_V_CONFIGS[idx];
-        if (!sv.wrap) return;
+        if (!config || !sv.wrap) return;
         sv.wrap.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -213,7 +214,7 @@ export function initInput() {
         activePointers.set(e.pointerId, { zone: 'outer', startX: e.clientX, startY: e.clientY, lockedAxis: null });
         const s = getActiveCamState();
         globalState.activeLabel = 'PITCH / ROLL';
-        globalState.activeValue = `P:${fmt(s.rx * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
+        globalState.activeValue = `P:${fmt(s.rx * s.k6)} R:${fmt(s.ry * s.k6)}`;
         updateState();
     });
 
@@ -230,7 +231,7 @@ export function initInput() {
         const s = getActiveCamState();
         activePointers.set(e.pointerId, { zone: 'yaw', cx, cy, startAngle, baseRz: s.rz });
         globalState.activeLabel = 'YAW';
-        globalState.activeValue = `YAW:${fmt(s.rz * s.k5 * s.k6)}`;
+        globalState.activeValue = `YAW:${fmt(s.rz * s.k6)}`;
         updateState();
     });
 
@@ -264,7 +265,7 @@ export function initInput() {
             if (p.lockedAxis === 'roll') { s.ry = clamp(dX / PIXELS_TO_MAX, -1, 1); s.rx = 0; }
             else if (p.lockedAxis === 'pitch') { s.rx = clamp(-dY / PIXELS_TO_MAX, -1, 1); s.ry = 0; }
             globalState.activeLabel = 'PITCH / ROLL';
-            globalState.activeValue = `P:${fmt(s.rx * s.k5 * s.k6)} R:${fmt(s.ry * s.k5 * s.k6)}`;
+            globalState.activeValue = `P:${fmt(s.rx * s.k6)} R:${fmt(s.ry * s.k6)}`;
         }
         else if (p.zone === 'yaw') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -273,7 +274,7 @@ export function initInput() {
             if (deltaAngle < -Math.PI) deltaAngle += 2 * Math.PI;
             s.rz = clamp(p.baseRz + (deltaAngle / Math.PI), -1, 1);
             globalState.activeLabel = 'YAW';
-            globalState.activeValue = `YAW:${fmt(s.rz * s.k5 * s.k6)}`;
+            globalState.activeValue = `YAW:${fmt(s.rz * s.k6)}`;
         }
         else if (p.zone === 'knob') {
             const currentAngle = Math.atan2(e.clientY - p.cy, e.clientX - p.cx);
@@ -300,9 +301,9 @@ export function initInput() {
         else if (p.zone === 'slider') {
             const dX = e.clientX - p.startX;
             const deltaValue = dX / SLIDER_PIXELS_TO_MAX;
-            s.slider = clamp(p.startValue + deltaValue, -1, 1);
+            s.sliderh1 = clamp(p.startValue + deltaValue, -1, 1);
             globalState.activeLabel = 'CUSTOM';
-            globalState.activeValue = fmtUnsigned(s.slider * s.k6);
+            globalState.activeValue = fmtUnsigned(s.sliderh1 * s.k6);
         }
         else if (p.zone === 'sliderV') {
             const dY = e.clientY - p.startY;
@@ -345,15 +346,16 @@ export function initInput() {
             knobs[p.index].wrap.classList.remove('active'); 
         }
         else if (p.zone === 'slider') { 
-            s.slider = 0;
+            s.sliderh1 = 0;
             slider.classList.remove('active'); 
             globalState.activeLabel = 'CUSTOM';
             globalState.activeValue = '0.00';
         }
         else if (p.zone === 'sliderV') { 
-            if (p.index === 0) {
-                s.sliderV = 0;
-                globalState.activeLabel = 'FCS';
+            const config = SLIDER_V_CONFIGS[p.index];
+            if (config && !config.zeroToOne) {
+                s[config.key] = 0;
+                globalState.activeLabel = config.label;
                 globalState.activeValue = '0.00';
             }
             slidersV[p.index].wrap.classList.remove('active'); 

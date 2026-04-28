@@ -48,6 +48,8 @@ const NON_OSC_KEYS = new Set(['cam', 'tRate', 'masterRate']);
 // Valid telemetry keys (address format: /telemetry/{cam}/{key})
 const TELEMETRY_KEYS = new Set(['shutter', 'ei', 'nd', 'wb', 'fcl', 'iris', 'fcs']);
 
+const VALID_CAMS = new Set(['A', 'B', 'C', 'D']);
+
 // ── Rate multiplier map ─────────────────────────────────────────────
 // Client sends raw values; server multiplies before OSC send.
 
@@ -149,7 +151,7 @@ function seedCamState(camLetter, state) {
 function sendOSCFromState(newState) {
     const camLetter = newState.cam !== undefined ? newState.cam : activeCam;
 
-    if (!camStates.hasOwnProperty(camLetter)) return;
+    if (!VALID_CAMS.has(camLetter)) return;
 
     // Update current rates from incoming state
     if (newState.tRate !== undefined) currentRates.tRate = newState.tRate;

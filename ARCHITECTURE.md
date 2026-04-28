@@ -68,7 +68,7 @@ No circular imports exist. `main.js` owns `updateState()` which calls `renderUI(
 | `dom.js` | DOM element references (queried once at load, never re-queried) |
 | `input.js` | All pointer event wiring (knobs, sliders, joystick, yaw, toggles, resets) |
 | `ui.js` | Pure rendering: state → DOM visual updates + log panel rendering |
-| `osc.js` | WebSocket client, payload construction, telemetry ingestion (no DOM deps) |
+| `osc.js` | WebSocket client, config-driven payload construction, telemetry ingestion (no DOM deps) |
 | `console.js` | Camera selector buttons + log panel toggle |
 | `utils.js` | Pure math helpers: `clamp`, `fmt`, `fmtUnsigned`, `applyDeadzone` |
 | `main.js` | Entry point, `updateState()` orchestrator, knob tick SVG generation, iOS touch hardening |
@@ -115,6 +115,10 @@ Movement axes (pan, tilt, pitch, roll, yaw, FCS, custom slider) snap to zero on 
 ### Telemetry Callback Pattern
 
 `connectOSC(onRender)` accepts a render callback, keeping the network layer free of UI/DOM imports. On UE telemetry updates, the callback triggers a re-render without any circular dependencies. Follow this pattern when adding new server-to-client communication.
+
+### Config-Driven Payload
+
+`sendOSC()` builds the WebSocket payload from `KNOB_CONFIGS` and `SLIDER_V_CONFIGS` using each config's `ueKey` (or `key` as fallback) for the OSC field name. Adding a new knob or slider only requires a config entry — zero changes to the payload builder. Rate multipliers are applied **server-side** by the bridge, not in the client.
 
 ### OLED Telemetry Fallback
 

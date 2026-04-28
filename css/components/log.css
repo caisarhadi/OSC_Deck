@@ -58,6 +58,7 @@
     overflow-y: auto;
     flex: 1;
     pointer-events: none;
+    white-space: pre-line;
 }
 
 .osc-log-panel.collapsed .log-content {

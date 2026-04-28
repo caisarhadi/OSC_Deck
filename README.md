@@ -63,7 +63,7 @@ Every WebSocket frame contains a single flat JSON object with the following keys
 
 ### Axes (Joystick)
 
-All axis values are multiplied by their applicable rate knobs before transmission.
+All axis values are sent raw over WebSocket. The bridge applies rate multipliers before OSC transmission to Unreal Engine.
 
 | Key | Type | Range | Rate Multipliers | Control |
 |-----|------|-------|-------------------|---------|
@@ -87,7 +87,7 @@ All axis values are multiplied by their applicable rate knobs before transmissio
 
 ### Sliders
 
-All slider values are multiplied by masterRate before transmission.
+All slider values are sent raw over WebSocket. The bridge applies masterRate before OSC transmission to Unreal Engine.
 
 | Key | Type | Range | Control |
 |-----|------|-------|---------|

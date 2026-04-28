@@ -12,6 +12,7 @@ export const oledLabel = document.getElementById('oled-label');
 export const oledValue = document.getElementById('oled-value');
 export const logToggle = document.getElementById('log-toggle');
 export const logContent = document.getElementById('log-content');
+export const oscLogPanel = document.getElementById('osc-log');
 
 export const camBtns = document.querySelectorAll('.keycap');
 export const camMetas = document.querySelectorAll('.key-meta');
@@ -41,7 +42,7 @@ const createSliderV = (id, wrapperClass) => ({
 });
 
 export const slidersV = [
-    createSliderV('slider-vertical', 'v3'),
-    createSliderV('slider-vertical-2', 'v2'),
-    createSliderV('slider-vertical-3', 'v1')
+    createSliderV('slider-v1', 'v3'),
+    createSliderV('slider-v2', 'v2'),
+    createSliderV('slider-v3', 'v1')
 ];

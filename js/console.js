@@ -1,4 +1,4 @@
-import { camBtns, camMetas, logToggle } from './dom.js';
+import { camBtns, camMetas, logToggle, logContent, oscLogPanel } from './dom.js';
 import { logBuffer, globalState } from './state.js';
 import { updateState } from './main.js';
 
@@ -25,11 +25,9 @@ export function initConsole() {
     });
 
     logToggle.addEventListener('click', () => {
-        const panel = document.getElementById('osc-log');
-        panel.classList.toggle('collapsed');
-        if (!panel.classList.contains('collapsed')) {
-            const content = document.getElementById('log-content');
-            content.scrollTop = content.scrollHeight;
+        oscLogPanel.classList.toggle('collapsed');
+        if (!oscLogPanel.classList.contains('collapsed')) {
+            logContent.scrollTop = logContent.scrollHeight;
         }
     });
 }

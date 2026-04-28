@@ -43,7 +43,7 @@ export function renderUI() {
 
     // Visual offset = value * SLIDER_PIXELS_TO_MAX — matches the physical drag range 1:1
     if (sliderTrack) {
-        const offset = `${s.slider * SLIDER_PIXELS_TO_MAX}px`;
+        const offset = `${s.sliderh1 * SLIDER_PIXELS_TO_MAX}px`;
         sliderTrack.style.backgroundPositionX = offset;
         sliderTrack.style.WebkitMaskPositionX = offset;
         sliderTrack.style.maskPositionX = offset;
@@ -79,6 +79,6 @@ export function renderUI() {
     }
 
     // Log panel
-    logContent.innerHTML = logBuffer.map(l => `> ${l}`).join('<br>');
+    logContent.textContent = logBuffer.map(l => `> ${l}`).join('\n');
     logContent.scrollTop = logContent.scrollHeight;
 }

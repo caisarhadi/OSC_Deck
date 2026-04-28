@@ -1,4 +1,4 @@
-export const DEFAULT_CAM_STATE = Object.freeze({ tx: 0, ty: 0, rx: 0, ry: 0, rz: 0, k1: 0.6, k2: 0, k3: 0, k4: 0.4, k5: 1, k6: 1, slider: 0, sliderV: 0, sliderV2: 0.6, sliderV3: 0.5, afOn: false, resetOn: false, resetFcs: false, resetIris: false, resetFcl: false, resetShutter: false, resetEi: false, resetNd: false, resetWb: false });
+export const DEFAULT_CAM_STATE = Object.freeze({ tx: 0, ty: 0, rx: 0, ry: 0, rz: 0, k1: 0.6, k2: 0, k3: 0, k4: 0.4, k5: 1, k6: 1, sliderh1: 0, sliderv1: 0, sliderv2: 0.6, sliderv3: 0.5, afOn: false, resetOn: false, resetFcs: false, resetIris: false, resetFcl: false, resetShutter: false, resetEi: false, resetNd: false, resetWb: false });
 
 const createCamState = () => ({ ...DEFAULT_CAM_STATE });
 
@@ -34,12 +34,13 @@ export const KNOB_CONFIGS = [
     { key: 'k2', label: 'EI', ueKey: 'ei', zeroToOne: true, resetKey: 'resetEi' },
     { key: 'k3', label: 'ND', ueKey: 'nd', zeroToOne: true, resetKey: 'resetNd' },
     { key: 'k4', label: 'WB', ueKey: 'wb', zeroToOne: true, resetKey: 'resetWb' },
-    { key: 'k5', label: 'T-RATE', zeroToOne: true },
-    { key: 'k6', label: 'MASTER RATE', zeroToOne: true }
+    { key: 'k5', label: 'T-RATE', ueKey: 'tRate', zeroToOne: true },
+    { key: 'k6', label: 'MASTER RATE', ueKey: 'masterRate', zeroToOne: true }
 ];
 
 export const SLIDER_V_CONFIGS = [
-    { key: 'sliderV', label: 'FCS', ueKey: 'fcs', zeroToOne: false, resetKey: 'resetFcs' },
-    { key: 'sliderV2', label: 'IRIS', ueKey: 'iris', zeroToOne: true, resetKey: 'resetIris' },
-    { key: 'sliderV3', label: 'FCL', ueKey: 'fcl', zeroToOne: true, resetKey: 'resetFcl' }
+    { key: 'sliderv1', label: 'FCS', ueKey: 'fcs', zeroToOne: false, resetKey: 'resetFcs' },
+    { key: 'sliderv2', label: 'IRIS', ueKey: 'iris', zeroToOne: true, resetKey: 'resetIris' },
+    { key: 'sliderv3', label: 'FCL', ueKey: 'fcl', zeroToOne: true, resetKey: 'resetFcl' }
 ];
+
