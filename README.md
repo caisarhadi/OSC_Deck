@@ -1,15 +1,15 @@
 # OSC Deck
 
-Browser-based camera control surface that streams real-time state to Unreal Engine via a Node.js WebSocket-to-REST bridge.
+Browser-based camera control surface that streams real-time state to Unreal Engine via a Node.js WebSocket + OSC/UDP bridge.
 
 ## Architecture
 
 ```
-Browser UI  ──ws://──▶  Node.js Bridge  ◀──GET /state──   Unreal Engine (VaRest)
- (index.html)           (osc-bridge.js)  ◀──POST /state──
+Browser UI  ──ws://──▶  Node.js Bridge  ──OSC/UDP──▶  Unreal Engine (OSC Plugin)
+ (index.html)           (osc-bridge.js)  ◀──OSC/UDP──
 ```
 
-The browser pushes JSON state over WebSocket on every input change. Unreal polls `GET /state` to read the latest values and can POST telemetry back for OLED display.
+The browser pushes JSON state over WebSocket on every input change. The bridge converts diffs into individual OSC messages sent via UDP. Unreal sends telemetry back as OSC messages which the bridge broadcasts to all WebSocket clients for OLED display.
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for module dependency graphs, data flow diagrams, and coding conventions.
 
@@ -29,7 +29,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for module dependency graphs, data flow d
 │   ├── state.js            Shared state and tuning constants
 │   └── utils.js            Math helpers (clamp, format)
 ├── server/
-│   └── osc-bridge.js       WebSocket + REST bridge server
+│   └── osc-bridge.js       WebSocket + OSC/UDP bridge server
 └── package.json            ws dependency
 ```
 
@@ -47,9 +47,9 @@ Open `http://localhost:8080`. For remote devices, use your LAN IP instead.
 
 | Protocol | Address | Direction |
 |----------|---------|-----------|
-| WebSocket | `ws://0.0.0.0:9000` | Browser → Server |
-| HTTP | `GET http://0.0.0.0:9000/state` | Server → Unreal |
-| HTTP | `POST http://0.0.0.0:9000/state` | Unreal → Server → Browser |
+| WebSocket | `ws://0.0.0.0:9000` | Browser ↔ Server |
+| OSC/UDP | `127.0.0.1:9001` | Server → Unreal |
+| OSC/UDP | `0.0.0.0:9002` | Unreal → Server |
 
 ## JSON Payload
 
@@ -125,11 +125,17 @@ All slider values are multiplied by masterRate before transmission.
 }
 ```
 
-## Unreal Engine Telemetry (POST)
+## Unreal Engine Telemetry (OSC/UDP)
 
-Unreal Engine can POST telemetry data to the bridge server, which will be forwarded to the browser UI to display real-time values on the OLED screen. 
+Unreal Engine sends telemetry back to the bridge via OSC messages on UDP port `9002`.
 
-The payload should be a flat JSON object containing any subset of the following keys:
+The OSC address format is:
+
+```
+/telemetry/{cam}/{key}
+```
+
+Where `{cam}` is `A`, `B`, `C`, or `D` and `{key}` is one of the following:
 
 | Key | Type | Description |
 |-----|------|-------------|
@@ -141,18 +147,12 @@ The payload should be a flat JSON object containing any subset of the following 
 | `iris` | `float` | Aperture to display |
 | `fcs` | `float` | Focus distance to display |
 
-If a key is omitted, the UI will automatically fall back to displaying its internal state value for that control.
+The bridge only forwards telemetry for the currently active camera. If a key is omitted, the UI falls back to displaying its internal state value.
 
-### Example Telemetry Payload
+### Example OSC Telemetry Messages
 
-```json
-{
-  "shutter": 180.0,
-  "ei": 800.0,
-  "nd": 0.6,
-  "wb": 5600.0,
-  "fcl": 24.0,
-  "iris": 2.8,
-  "fcs": 3.5
-}
+```
+/telemetry/A/fcl    [24.0]
+/telemetry/A/iris   [2.8]
+/telemetry/A/wb     [5600.0]
 ```

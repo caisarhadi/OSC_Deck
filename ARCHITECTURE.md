@@ -53,8 +53,8 @@ graph LR
     CONSOLE -->|calls| MAIN
 
     OSC -->|"WebSocket"| BRIDGE
-    UE -->|"GET /state"| BRIDGE
-    UE -->|"POST /state"| BRIDGE
+    UE -->|"OSC/UDP (9002)"| BRIDGE
+    BRIDGE -->|"OSC/UDP (9001)"| UE
     BRIDGE -->|"WS broadcast"| OSC
 ```
 
@@ -137,12 +137,11 @@ All `getElementById` / `querySelector` calls execute once at module load via fac
 
 ## Server Architecture
 
-A single-file Node.js server (`server/osc-bridge.js`) with one dependency (`ws`):
+A single-file Node.js server (`server/osc-bridge.js`) with two dependencies (`ws`, `osc`):
 
-- **WebSocket**: Receives JSON state from browser, stores as `latestState`
-- **GET /state**: Returns `latestState` as JSON array (Unreal polling)
-- **POST /state**: Receives UE telemetry, broadcasts to all WS clients as `ue_update`
-- **CORS**: Enabled for cross-origin access
+- **WebSocket**: Receives JSON state from browser, stores as per-camera state, diffs and sends OSC
+- **OSC/UDP Send (9001)**: Sends individual OSC messages to Unreal Engine on state changes
+- **OSC/UDP Listen (9002)**: Receives telemetry from Unreal Engine, broadcasts to all WS clients as `ue_update`
 
 ## CSS Architecture
 

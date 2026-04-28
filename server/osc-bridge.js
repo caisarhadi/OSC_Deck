@@ -1,9 +1,8 @@
 /**
- * API Bridge Server
+ * OSC Bridge Server
  *
  * WebSocket server that receives JSON from the browser and:
- *   1. Exposes it as a REST API endpoint for Unreal Engine (VaRest)
- *   2. Sends individual OSC messages over UDP to Unreal Engine (OSC Plugin)
+ *   1. Sends individual OSC messages over UDP to Unreal Engine (OSC Plugin)
  *
  * Unreal Engine can send telemetry back as OSC messages on the UDP listen port,
  * which are converted to JSON and broadcast to all WebSocket clients.
@@ -11,9 +10,9 @@
  * Usage:  node server/osc-bridge.js
  *
  * Ports:
- *   9000  WebSocket + HTTP   (Browser <-> Node)
- *   9001  UDP send           (Node -> Unreal)
- *   9002  UDP listen         (Unreal -> Node)
+ *   9000  WebSocket           (Browser <-> Node)
+ *   9001  UDP send            (Node -> Unreal)
+ *   9002  UDP listen          (Unreal -> Node)
  */
 
 const http = require('http');
@@ -70,48 +69,9 @@ const camStates = { A: null, B: null, C: null, D: null };
 let activeCam = 'A';
 let currentRates = { tRate: 1, masterRate: 1 };
 
-// ── HTTP server + WebSocket ─────────────────────────────────────────
+// ── HTTP server (WebSocket upgrade only) ────────────────────────────
 
 const server = http.createServer((req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-
-    if (req.method === 'OPTIONS') {
-        res.writeHead(200);
-        res.end();
-        return;
-    }
-
-    if (req.method === 'POST' && req.url === '/state') {
-        let body = '';
-        req.on('data', chunk => body += chunk.toString());
-        req.on('end', () => {
-            try {
-                const data = JSON.parse(body);
-                console.log('[+] Received from UE:', data);
-                broadcastToClients({ type: 'ue_update', data });
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ status: 'ok' }));
-            } catch (e) {
-                console.error('[!] Bad JSON from UE:', e.message);
-                res.writeHead(400);
-                res.end('Bad Request');
-            }
-        });
-        return;
-    }
-
-    if (req.method === 'GET' && req.url === '/state') {
-        const raw = camStates[activeCam] || {};
-        const multiplied = { cam: activeCam };
-        for (const [key, value] of Object.entries(raw)) {
-            multiplied[key] = applyRateMultipliers(key, value);
-        }
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify([multiplied]));
-        return;
-    }
-
     res.writeHead(404);
     res.end('Not Found');
 });
@@ -260,10 +220,9 @@ function broadcastToClients(payload) {
 
 server.listen(PORT, '0.0.0.0', () => {
     console.log(`\n  ┌──────────────────────────────────────────┐`);
-    console.log(`  │  API Bridge Server                       │`);
+    console.log(`  │  OSC Bridge Server                       │`);
     console.log(`  ├──────────────────────────────────────────┤`);
     console.log(`  │  WebSocket : ws://0.0.0.0:${PORT}           │`);
-    console.log(`  │  REST API  : http://0.0.0.0:${PORT}/state     │`);
     console.log(`  │  OSC Send  : ${UE_OSC_HOST}:${UE_OSC_PORT}            │`);
     console.log(`  │  OSC Listen: 0.0.0.0:${LOCAL_OSC_PORT}              │`);
     console.log(`  └──────────────────────────────────────────┘\n`);
