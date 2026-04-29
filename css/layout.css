@@ -1,14 +1,14 @@
 .app-body {
     background-color: var(--color-bg-main);
-    color: #fff;
-    height: 100vh;
+    color: var(--color-text-primary);
+    height: var(--h-screen);
     display: flex;
     flex-direction: column;
     margin: 0;
 }
 
 .app-body ::selection {
-    background-color: rgba(100, 116, 139, 0.3);
+    background-color: var(--color-selection);
 }
 
 #space-container {
@@ -16,12 +16,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    width: var(--pos-full);
+    height: var(--pos-full);
     background-image: 
-        linear-gradient(var(--color-bg-grid) 1px, transparent 1px),
-        linear-gradient(90deg, var(--color-bg-grid) 1px, transparent 1px);
-    background-size: 40px 40px;
+        linear-gradient(var(--color-bg-grid) var(--space-px), transparent var(--space-px)),
+        linear-gradient(90deg, var(--color-bg-grid) var(--space-px), transparent var(--space-px));
+    background-size: var(--space-10) var(--space-10);
     position: relative;
     overflow: hidden;
 }

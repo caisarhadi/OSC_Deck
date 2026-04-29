@@ -22,20 +22,20 @@ body {
 }
 
 .font-mono {
-    font-family: var(--font-roboto-mono) !important;
+    font-family: var(--font-roboto-mono);
 }
 
 ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: var(--size-scrollbar);
+    height: var(--size-scrollbar);
 }
 ::-webkit-scrollbar-track {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    background: var(--color-scrollbar);
+    border-radius: var(--radius-scrollbar);
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--color-scrollbar-hover);
 }

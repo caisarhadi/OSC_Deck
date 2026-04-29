@@ -11,7 +11,7 @@ Browser UI  ──ws://──▶  Node.js Bridge  ──OSC/UDP──▶  Unreal
 
 The browser pushes JSON state over WebSocket on every input change. The bridge converts diffs into individual OSC messages sent via UDP. Unreal sends telemetry back as OSC messages which the bridge broadcasts to all WebSocket clients for OLED display.
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for module dependency graphs, data flow diagrams, and coding conventions.
+See [ARCHITECTURE.md](doc/ARCHITECTURE.md) for module dependency graphs, data flow diagrams, and coding conventions, and [STYLEGUIDE.md](doc/STYLEGUIDE.md) for CSS architecture and visual development standards.
 
 ## Project Structure
 

@@ -1,157 +1,363 @@
 :root {
+    /* ========================================================= */
+    /* TIER 1 - BASE TOKENS (Foundation)                         */
+    /* ========================================================= */
+
+    /* Typography Scale */
+    --size-font-micro: 8px;
+    --size-font-xs: 11px;
+    --size-font-sm: 12px;
+    --size-font-base: 14px;
+    --size-font-lg: 16px;
+    --size-font-xl: 18px;
+
+    /* Letter Spacing Scale */
+    --tracking-tight: 0.05em;
+    --tracking-normal: 0.1em;
+    --tracking-wide: 0.15em;
+
+    /* Font Weight Scale */
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* Opacity Scale */
+    --opacity-muted: 0.35;
+    --opacity-secondary: 0.7;
+
+    /* Border Radius Scale */
+    --size-radius-xs: 2px;
+    --size-radius-sm: 4px;
+    --size-radius-md: 6px;
+    --size-radius-lg: 8px;
+    --size-radius-full: 50%;
+
+    /* Spacing / Sizing Scale (4px Grid) */
+    --space-px: 1px;
+    --space-0-5: 2px;
+    --space-1: 4px;
+    --space-1-5: 6px;
+    --space-2: 8px;
+    --space-2-5: 10px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-7: 28px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-11: 44px;
+    --space-12: 48px;
+    --space-15: 60px;
+    --space-16: 64px;
+    --space-25: 100px;
+    --space-26: 104px;
+    --space-28: 112px;
+    --space-30: 120px;
+    --space-40: 160px;
+    --space-45: 180px;
+
+    /* Viewport & Percentages */
+    --h-screen: 100vh;
+    --pct-35: 35%;
+    --pct-50: 50%;
+    --pct-65: 65%;
+    --pct-100: 100%;
+    --rem-2-5: 2.5rem;
+    --rem-8: 8rem;
+
+    /* Color Palette (Merged) */
+    --base-black: #000;
+    --base-white: #fff;
+    --gray-900: #050505;
+    --gray-800: #111;
+    --gray-700: #181818;
+    --gray-600: #222;
+    --gray-500: #333;
+    --gray-400: #525252;
+    --gray-300: #737373;
+    --gray-200: #a3a3a3;
+
+    --red-400: #f87171;
+    --red-500: #ef4444;
+    --red-700: #991b1b;
+    --green-500: #22c55e;
+
+    /* Alpha Palette (Merged to steps of 5/10) */
+    --white-a05: rgba(255, 255, 255, 0.05);
+    --white-a10: rgba(255, 255, 255, 0.1);
+    --white-a15: rgba(255, 255, 255, 0.15);
+    --white-a20: rgba(255, 255, 255, 0.2);
+    --white-a30: rgba(255, 255, 255, 0.3);
+    --white-a40: rgba(255, 255, 255, 0.4);
+    --white-a50: rgba(255, 255, 255, 0.5);
+    --white-a60: rgba(255, 255, 255, 0.6);
+    --white-a80: rgba(255, 255, 255, 0.8);
+
+    --black-a10: rgba(0, 0, 0, 0.1);
+    --black-a30: rgba(0, 0, 0, 0.3);
+    --black-a40: rgba(0, 0, 0, 0.4);
+    --black-a50: rgba(0, 0, 0, 0.5);
+    --black-a60: rgba(0, 0, 0, 0.6);
+    --black-a70: rgba(0, 0, 0, 0.7);
+    --black-a80: rgba(0, 0, 0, 0.8);
+    --black-a90: rgba(0, 0, 0, 0.9);
+    --black-a95: rgba(0, 0, 0, 0.95);
+
+    /* Colored Alphas */
+    --red-a20: rgba(239, 68, 68, 0.2);
+    --red-a40: rgba(239, 68, 68, 0.4);
+    --red-a50: rgba(239, 68, 68, 0.5);
+    --red-a60: rgba(239, 68, 68, 0.6);
+    --red-a80: rgba(239, 68, 68, 0.8);
+    
+    --green-a20: rgba(34, 197, 94, 0.2);
+    --green-a40: rgba(34, 197, 94, 0.4);
+    --green-a50: rgba(34, 197, 94, 0.5);
+    --green-a60: rgba(34, 197, 94, 0.6);
+    --green-a70: rgba(34, 197, 94, 0.7);
+    --green-a80: rgba(34, 197, 94, 0.8);
+
+    --slate-a30: rgba(100, 116, 139, 0.3);
+
+    /* ========================================================= */
+    /* TIER 2 - SEMANTIC TOKENS (Contextual)                     */
+    /* ========================================================= */
+
     /* Fonts */
     --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, "Liberation Mono", monospace;
     --font-roboto-mono: 'Roboto Mono', monospace;
 
     /* Base Colors */
-    --color-bg-main: #050505;
-    --color-bg-grid: rgba(255, 255, 255, 0.03);
+    --color-bg-main: var(--gray-900);
+    --color-bg-grid: var(--white-a05);
+    --color-text-primary: var(--base-white);
+    --color-selection: var(--slate-a30);
+
+    /* Scrollbar */
+    --color-scrollbar: var(--white-a10);
+    --color-scrollbar-hover: var(--white-a20);
+    --size-scrollbar: var(--space-1-5);
+    --radius-scrollbar: var(--size-radius-lg);
 
     /* Typography */
-    --font-size-micro: 8px;
-    --font-size-label: 12px;
-    --font-size-base: 14px;
-    --font-size-large: 16px;
+    --font-size-micro: var(--size-font-micro);
+    --font-size-label: var(--size-font-sm);
+    --font-size-base: var(--size-font-base);
+    --font-size-large: var(--size-font-lg);
+    --font-size-oled-label: var(--size-font-xs);
+    --font-size-oled-value: var(--size-font-xl);
+    --font-size-log: var(--size-font-sm);
+    --font-size-log-icon: var(--size-font-lg);
+
+    /* Typography - Letter Spacing */
+    --letter-spacing-label: var(--tracking-wide);
+    --letter-spacing-sub: var(--tracking-normal);
+    --letter-spacing-mono: var(--tracking-tight);
+
+    /* Typography - Font Weight */
+    --font-weight-label: var(--weight-bold);
+    --font-weight-body: var(--weight-semibold);
 
     /* Border Radius */
-    --radius-base: 8px;
-    --radius-inner: 6px;
-    --radius-small: 4px;
-    --radius-tiny: 2px;
-    --radius-round: 50%;
+    --radius-base: var(--size-radius-lg);
+    --radius-inner: var(--size-radius-md);
+    --radius-small: var(--size-radius-sm);
+    --radius-tiny: var(--size-radius-xs);
+    --radius-round: var(--size-radius-full);
 
-    /* Layout */
+    /* Layout & Spacing */
     --layout-console-offset: 240px;
+    --spacing-xs: var(--space-1);
+    --spacing-sm: var(--space-2);
+    --spacing-md: var(--space-4);
+    --spacing-lg: var(--space-6);
+    --spacing-xl: var(--space-8);
+    
+    --pos-center: var(--pct-50);
+    --pos-full: var(--pct-100);
+    --pos-tele: var(--pct-35);
+    --pos-wide: var(--pct-65);
+    
+    --offset-slider-v1: var(--space-10);
+    --offset-slider-v2: var(--space-25);
+    --offset-slider-v3: var(--space-40);
+    
+    --offset-oled-y: var(--space-28);
+    
+    --gap-knobs-h: var(--space-16);
+    --gap-knobs-v: var(--space-11);
+    --offset-knob-orbit: var(--space-16);
+    
+    --size-log-collapsed: var(--rem-2-5);
+    --size-log-expanded: var(--rem-8);
 
     /* Yaw Ring Colors */
-    --color-yaw-bg: #181818;
-    --color-yaw-bg-alt: #2c2c2c;
-    --color-yaw-inner: #111;
-    --color-yaw-border: #111;
-    --color-yaw-indicator: #111;
-    --color-yaw-indicator-active: #ffffff;
+    --color-yaw-bg: var(--gray-700);
+    --color-yaw-bg-alt: var(--gray-500);
+    --color-yaw-inner: var(--gray-800);
+    --color-yaw-border: var(--gray-800);
+    --color-yaw-indicator: var(--gray-800);
+    --color-yaw-indicator-active: var(--base-white);
 
     /* Outer Ring Colors */
-    --color-outer-bg: #1b1b1b;
-    --color-outer-border: #3a3a3a;
-    --color-outer-border-active: #737373;
-    --color-outer-line: rgba(80, 80, 80, 0.8);
-    --color-outer-indicator: #ffffff;
+    --color-outer-bg: var(--gray-700);
+    --color-outer-bg-active: var(--white-a05);
+    --color-outer-border: var(--gray-500);
+    --color-outer-border-active: var(--gray-300);
+    --color-outer-line: var(--gray-500);
+    --color-outer-indicator: var(--base-white);
+    --color-ring-indicator-border: var(--base-white);
 
     /* Pan Boundary Colors */
-    --color-pan-border: rgba(255, 255, 255, 0.15);
-    --color-pan-border-active: rgba(255, 255, 255, 0.3);
-    --color-pan-bg-active: rgba(255, 255, 255, 0.05);
+    --color-pan-border: var(--white-a15);
+    --color-pan-border-active: var(--white-a30);
+    --color-pan-bg-active: var(--white-a05);
 
     /* Puck Colors */
-    --color-puck-grad-1: #3a3a3a;
-    --color-puck-grad-2: #1a1a1a;
-    --color-puck-slope: #222;
-    --color-puck-slope-border: #181818;
-    --color-puck-center-grad-1: #2c2c2c;
-    --color-puck-center-grad-2: #1f1f1f;
-    --color-puck-center-active-1: #f87171;
-    --color-puck-center-active-2: #991b1b;
-    --color-puck-arrow: #000;
+    --color-puck-grad-1: var(--gray-500);
+    --color-puck-grad-2: var(--gray-700);
+    --color-puck-slope: var(--gray-600);
+    --color-puck-slope-border: var(--gray-700);
+    --color-puck-center-grad-1: var(--gray-500);
+    --color-puck-center-grad-2: var(--gray-600);
+    --color-puck-center-active-1: var(--red-400);
+    --color-puck-center-active-2: var(--red-700);
+    --color-puck-arrow: var(--base-black);
 
     /* Console Colors */
-    --color-console-label: #525252;
-    --color-keycap-base: #1a1a1a;
-    --color-keycap-cavity: #262626;
-    --color-keycap-text: #a3a3a3;
-    --color-keycap-text-active: #ffffff;
-    --color-keycap-lit-green: #22c55e;
-    --color-keycap-lit-red: #ef4444;
+    --color-console-label: var(--gray-400);
+    --color-keycap-base: var(--gray-700);
+    --color-keycap-cavity: var(--gray-600);
+    --color-keycap-text: var(--gray-200);
+    --color-keycap-text-active: var(--base-white);
+    --color-keycap-lit-green: var(--green-500);
+    --color-keycap-lit-red: var(--red-500);
 
     /* Knob Colors */
-    --color-knob-base-grad-1: #2c2c2c;
-    --color-knob-base-grad-2: #181818;
-    --color-knob-dial-grad-1: #333333;
-    --color-knob-dial-grad-2: #1a1a1a;
-    --color-knob-border: #111;
+    --color-knob-base-grad-1: var(--gray-500);
+    --color-knob-base-grad-2: var(--gray-700);
+    --color-knob-dial-grad-1: var(--gray-500);
+    --color-knob-dial-grad-2: var(--gray-700);
+    --color-knob-border: var(--gray-800);
+
+    /* Slider / OLED Colors */
+    --color-slider-border: var(--base-black);
+    --color-oled-bg: var(--base-black);
+    --color-oled-border: var(--gray-500);
+    --color-oled-value: var(--base-white);
 
     /* Sizes */
     --size-yaw: 400px;
     --size-yaw-inner: 332px;
-    --size-yaw-indicator: 14px;
-
+    --size-yaw-indicator: var(--space-3);
+    --offset-yaw-indicator: calc(((var(--size-yaw) - var(--size-yaw-inner)) / 4) - (var(--size-yaw-indicator) / 2));
     --size-outer: 320px;
-    --size-outer-indicator: 16px;
-
+    --size-outer-indicator: var(--space-4);
     --size-pan: 200px;
-
     --size-puck: 100px;
     --size-puck-slope: 60px;
     --size-puck-center: 30px;
-
     --size-keycap: 76px;
     
+    /* Control Sizes */
+    --size-reset-wrap: var(--space-12);
+    --size-reset-inner: var(--space-10);
+    --size-reset-icon: var(--space-6);
     --size-slider-height: 36px;
     
     --size-knob-track: 120px;
     --size-knob-base: 80px;
     --size-knob-dial: 50px;
-    --size-knob-indicator-w: 4px;
-    --size-knob-indicator-h: 16px;
+    --size-knob-indicator-w: var(--space-1);
+    --size-knob-indicator-h: var(--space-4);
+    --size-knob-reset: var(--space-6);
+    --size-knob-reset-inner: var(--space-5);
+    --size-knob-reset-icon: var(--space-4);
+    
+    /* Master Knob Size Overrides */
+    --size-master-knob-base: 130px;
+    --size-master-knob-dial: 100px;
+    --size-master-knob-track: 170px;
+
+    /* Border Widths */
+    --border-thin: var(--space-px);
+    --border-medium: var(--space-0-5);
 
     /* Gradients */
-    --grad-keycap-base: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
-    --grad-keycap-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
-    --grad-keycap-glow-green: radial-gradient(circle at center, rgba(34, 197, 94, 0.7) 0%, rgba(34, 197, 94, 0.2) 60%, transparent 90%);
-    --grad-keycap-glow-red: radial-gradient(circle at center, rgba(239, 68, 68, 0.4) 0%, transparent 70%);
-    --grad-keycap-glow-base: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-    --grad-slider-overlay: linear-gradient(to right, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.3) 15%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,0.3) 85%, rgba(0,0,0,0.95) 100%);
+    --grad-keycap-base: linear-gradient(180deg, var(--white-a05) 0%, transparent 100%);
+    --grad-keycap-glass: linear-gradient(180deg, var(--white-a10) 0%, transparent 100%);
+    --grad-keycap-glow-green: radial-gradient(circle at center, var(--green-a70) 0%, var(--green-a20) 60%, transparent 90%);
+    --grad-keycap-glow-red: radial-gradient(circle at center, var(--red-a40) 0%, transparent 70%);
+    --grad-keycap-glow-base: radial-gradient(circle at center, var(--white-a20) 0%, transparent 70%);
+    --grad-slider-overlay: linear-gradient(to right, var(--black-a95) 0%, var(--black-a30) 15%, transparent 30%, transparent 70%, var(--black-a30) 85%, var(--black-a95) 100%);
+    --grad-slider-overlay-v: linear-gradient(to bottom, var(--black-a95) 0%, var(--black-a30) 15%, transparent 30%, transparent 70%, var(--black-a30) 85%, var(--black-a95) 100%);
     --grad-knob-base: linear-gradient(145deg, var(--color-knob-base-grad-1), var(--color-knob-base-grad-2));
     --grad-knob-dial: linear-gradient(145deg, var(--color-knob-dial-grad-1), var(--color-knob-dial-grad-2));
+    --grad-yaw-ring: conic-gradient(from 0deg, var(--white-a05) 0%, var(--black-a10) 25%, var(--white-a05) 50%, var(--black-a10) 75%, var(--white-a05) 100%);
+    --grad-yaw-bg: linear-gradient(145deg, var(--color-yaw-bg-alt), var(--color-yaw-bg));
+    --grad-puck: linear-gradient(145deg, var(--color-puck-grad-1), var(--color-puck-grad-2));
+    --grad-puck-center: linear-gradient(145deg, var(--color-puck-center-grad-1), var(--color-puck-center-grad-2));
+    --grad-puck-center-active: radial-gradient(circle at 30% 30%, var(--color-puck-center-active-1), var(--color-puck-center-active-2));
 
     /* Shadows - Default States */
-    --shadow-yaw: -4px -4px 10px rgba(255, 255, 255, 0.03), 12px 12px 25px rgba(0, 0, 0, 0.8), inset 2px 2px 4px rgba(255, 255, 255, 0.06), inset -2px -2px 6px rgba(0, 0, 0, 0.5);
-    --shadow-yaw-inner: inset 8px 8px 18px rgba(0, 0, 0, 0.9), inset -2px -2px 6px rgba(255, 255, 255, 0.02), 0 1px 2px rgba(255, 255, 255, 0.08);
-    --shadow-yaw-indicator: inset 1px 1px 2px rgba(0, 0, 0, 0.8);
+    --shadow-yaw: -4px -4px 10px var(--white-a05), 12px 12px 25px var(--black-a80), inset 2px 2px 4px var(--white-a05), inset -2px -2px 6px var(--black-a50);
+    --shadow-yaw-inner: inset 8px 8px 18px var(--black-a90), inset -2px -2px 6px var(--white-a05), 0 1px 2px var(--white-a10);
+    --shadow-yaw-indicator: inset 1px 1px 2px var(--black-a80);
 
-    --shadow-outer: 0 0 0 8px rgba(0, 0, 0, 0.6), inset 0 0 20px #000;
-    --shadow-outer-indicator: 0 0 8px rgba(255, 255, 255, 0.6), 0 0 16px rgba(255, 255, 255, 0.3);
+    --shadow-outer: 0 0 0 8px var(--black-a60), inset 0 0 20px var(--base-black);
+    --shadow-outer-indicator: 0 0 8px var(--white-a60), 0 0 16px var(--white-a30);
 
-    --shadow-puck: -3px -3px 8px rgba(255, 255, 255, 0.05), 6px 6px 16px rgba(0, 0, 0, 0.8), inset 2px 2px 4px rgba(255, 255, 255, 0.08), inset -2px -2px 6px rgba(0, 0, 0, 0.6);
-    --shadow-puck-slope: -1px -1px 2px rgba(0, 0, 0, 0.9), 1px 1px 2px rgba(255, 255, 255, 0.06), inset 5px 5px 10px rgba(0, 0, 0, 0.8), inset -2px -2px 5px rgba(255, 255, 255, 0.04);
-    --shadow-puck-center: -1px -1px 3px rgba(255, 255, 255, 0.06), 3px 3px 6px rgba(0, 0, 0, 0.7), inset 1px 1px 1px rgba(255, 255, 255, 0.05);
+    --shadow-puck: -3px -3px 8px var(--white-a05), 6px 6px 16px var(--black-a80), inset 2px 2px 4px var(--white-a10), inset -2px -2px 6px var(--black-a60);
+    --shadow-puck-slope: -1px -1px 2px var(--black-a90), 1px 1px 2px var(--white-a05), inset 5px 5px 10px var(--black-a80), inset -2px -2px 5px var(--white-a05);
+    --shadow-puck-center: -1px -1px 3px var(--white-a05), 3px 3px 6px var(--black-a70), inset 1px 1px 1px var(--white-a05);
 
-    --shadow-keycap: 0 8px 15px rgba(0, 0, 0, 0.8), inset 0 2px 2px rgba(255, 255, 255, 0.05);
-    --shadow-keycap-cavity: inset 0 2px 4px rgba(0, 0, 0, 0.5), 0 1px 1px rgba(255, 255, 255, 0.05);
-    --shadow-key-meta: inset 0 1px 2px rgba(0, 0, 0, 0.8), 0 1px 0 rgba(255, 255, 255, 0.05);
+    --shadow-keycap: 0 8px 15px var(--black-a80), inset 0 2px 2px var(--white-a05);
+    --shadow-keycap-cavity: inset 0 2px 4px var(--black-a50), 0 1px 1px var(--white-a05);
+    --shadow-key-meta: inset 0 1px 2px var(--black-a80), 0 1px 0 var(--white-a05);
     
-    --shadow-knob-base: 5px 5px 12px rgba(0, 0, 0, 0.6), -1px -1px 4px rgba(255, 255, 255, 0.03), inset 1px 1px 1px rgba(255, 255, 255, 0.05);
-    --shadow-knob-dial: 3px 3px 8px rgba(0, 0, 0, 0.8), -1px -1px 2px rgba(255, 255, 255, 0.02), inset 1px 1px 2px rgba(255, 255, 255, 0.08), inset -1px -1px 3px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--color-knob-border);
+    --shadow-knob-base: 5px 5px 12px var(--black-a60), -1px -1px 4px var(--white-a05), inset 1px 1px 1px var(--white-a05);
+    --shadow-knob-dial: 3px 3px 8px var(--black-a80), -1px -1px 2px var(--white-a05), inset 1px 1px 2px var(--white-a10), inset -1px -1px 3px var(--black-a50), 0 0 0 1px var(--color-knob-border);
     
-    --shadow-slider-housing: inset 3px 3px 10px rgba(0, 0, 0, 0.8), inset -2px -2px 6px rgba(255, 255, 255, 0.04);
-    --shadow-slider-track: inset 0 3px 5px rgba(0, 0, 0, 0.4), inset 0 -3px 5px rgba(0, 0, 0, 0.4);
-    --shadow-slider-overlay: inset 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 -3px 6px rgba(0, 0, 0, 0.4);
+    --shadow-slider-housing: inset 3px 3px 10px var(--black-a80), inset -2px -2px 6px var(--white-a05);
+    --shadow-slider-track: inset 0 3px 5px var(--black-a40), inset 0 -3px 5px var(--black-a40);
+    --shadow-slider-overlay: inset 0 3px 6px var(--black-a40), inset 0 -3px 6px var(--black-a40);
+    --shadow-slider-track-v: inset 3px 0 5px var(--black-a40), inset -3px 0 5px var(--black-a40);
+    --shadow-slider-overlay-v: inset 3px 0 6px var(--black-a40), inset -3px 0 6px var(--black-a40);
+
+    --shadow-oled: 0 0 10px var(--black-a80), inset 0 0 15px var(--white-a05);
+    --shadow-oled-text: 0 0 5px var(--white-a50);
+    --shadow-log-panel: 0 -10px 30px var(--black-a80);
 
     /* Shadows - Active/Interactive States */
-    --shadow-yaw-active: -1px -1px 4px rgba(255, 255, 255, 0.02), 6px 6px 15px rgba(0, 0, 0, 0.9), inset 2px 2px 4px rgba(255, 255, 255, 0.06), inset -2px -2px 6px rgba(0, 0, 0, 0.5);
-    --shadow-yaw-indicator-active: inset 1px 1px 3px rgba(0, 0, 0, 0.8), inset -1px -1px 2px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+    --shadow-yaw-active: -1px -1px 4px var(--white-a05), 6px 6px 15px var(--black-a90), inset 2px 2px 4px var(--white-a05), inset -2px -2px 6px var(--black-a50);
+    --shadow-yaw-indicator-active: inset 1px 1px 3px var(--black-a80), inset -1px -1px 2px var(--white-a80), 0 0 10px var(--white-a80), 0 0 20px var(--white-a40), 0 2px 4px var(--black-a80);
 
-    --shadow-puck-active: -1px -1px 3px rgba(255, 255, 255, 0.03), 2px 2px 8px rgba(0, 0, 0, 0.9), inset 1px 1px 2px rgba(255, 255, 255, 0.05), inset -1px -1px 3px rgba(0, 0, 0, 0.5);
-    --shadow-puck-center-active: -1px -1px 2px rgba(255, 255, 255, 0.1), 2px 2px 4px rgba(0, 0, 0, 0.8), inset 1px 1px 2px rgba(255, 255, 255, 0.4), 0 0 12px rgba(239, 68, 68, 0.6);
+    --shadow-puck-active: -1px -1px 3px var(--white-a05), 2px 2px 8px var(--black-a90), inset 1px 1px 2px var(--white-a05), inset -1px -1px 3px var(--black-a50);
+    --shadow-puck-center-active: -1px -1px 2px var(--white-a10), 2px 2px 4px var(--black-a80), inset 1px 1px 2px var(--white-a40), 0 0 12px var(--red-a60);
 
-    --shadow-keycap-active: 0 2px 4px rgba(0, 0, 0, 0.9), inset 0 2px 6px rgba(0, 0, 0, 0.8);
+    --shadow-keycap-active: 0 2px 4px var(--black-a90), inset 0 2px 6px var(--black-a80);
     
-    --shadow-key-meta-active: 0 0 8px rgba(34, 197, 94, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.8);
-    --shadow-keycap-lit-green-active: 0 0 25px rgba(34, 197, 94, 0.5), inset 0 2px 6px rgba(34, 197, 94, 0.4), inset 0 2px 2px rgba(255, 255, 255, 0.1);
-    --shadow-keycap-lit-red-active: 0 0 15px rgba(239, 68, 68, 0.2), inset 0 2px 2px rgba(255, 255, 255, 0.05);
+    --shadow-key-meta-active: 0 0 8px var(--green-a60), inset 0 1px 2px var(--white-a80);
+    --shadow-keycap-lit-green-active: 0 0 25px var(--green-a50), inset 0 2px 6px var(--green-a40), inset 0 2px 2px var(--white-a10);
+    --shadow-keycap-lit-red-active: 0 0 15px var(--red-a20), inset 0 2px 2px var(--white-a05);
 
-    --shadow-keycap-lit-green-text: 0 0 12px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.5);
-    --shadow-keycap-lit-red-text: 0 0 8px rgba(255, 255, 255, 0.5);
+    --shadow-keycap-lit-green-text: 0 0 12px var(--green-a80), 0 0 20px var(--green-a50);
+    --shadow-keycap-lit-red-text: 0 0 8px var(--white-a50);
 
-    --shadow-knob-base-active: 4px 4px 10px rgba(0, 0, 0, 0.9), -1px -1px 3px rgba(255, 255, 255, 0.02), inset 1px 1px 2px rgba(255, 255, 255, 0.05);
-    --shadow-knob-indicator-active: 0 0 10px rgba(248, 113, 113, 0.8);
+    --shadow-knob-base-active: 4px 4px 10px var(--black-a90), -1px -1px 3px var(--white-a05), inset 1px 1px 2px var(--white-a05);
+    --shadow-knob-indicator-active: 0 0 10px var(--red-a80);
+
+    /* Filter Drop Shadows */
+    --filter-power-active: drop-shadow(0 0 6px var(--red-a80)) drop-shadow(0 0 10px var(--red-a50));
+    --filter-af-active: drop-shadow(0 0 6px var(--green-a80)) drop-shadow(0 0 10px var(--green-a50));
 
     /* Z-indexes */
     --z-yaw: 1;
     --z-outer: 5;
     --z-indicator: 6;
     --z-pan: 7;
+    --z-oled: 10;
     --z-puck: 10;
     --z-knob: 15;
     --z-console: 20;
@@ -159,4 +365,6 @@
     /* Transitions */
     --transition-spring: 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
     --transition-fast: 0.2s ease;
+    --transition-log: 0.3s ease;
+    --transition-knob: 0.1s ease;
 }

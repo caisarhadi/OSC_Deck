@@ -1,36 +1,34 @@
 .oled-display {
     position: absolute;
-    top: calc(50% + var(--layout-console-offset) + 106px);
-    left: calc(50% + calc(var(--size-yaw) / 2) + 118px);
+    top: calc(var(--pos-center) + var(--layout-console-offset) + var(--offset-oled-y));
+    left: calc(var(--pos-center) + calc(var(--size-yaw) / 2) + var(--space-30));
     transform: translateX(-50%);
-    width: 180px;
-    height: 60px;
-    background-color: #000;
-    border: 2px solid #333;
-    border-radius: 8px;
+    width: var(--space-45);
+    height: var(--space-15);
+    background-color: var(--color-oled-bg);
+    border: var(--border-medium) solid var(--color-oled-border);
+    border-radius: var(--radius-base);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     font-family: var(--font-roboto-mono);
-    box-shadow: 
-        0 0 10px rgba(0,0,0,0.8),
-        inset 0 0 15px rgba(255,255,255,0.05);
-    z-index: 10;
+    box-shadow: var(--shadow-oled);
+    z-index: var(--z-oled);
 }
 
 .oled-label {
-    font-size: 0.7rem;
+    font-size: var(--font-size-oled-label);
     color: var(--color-keycap-text);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 4px;
+    letter-spacing: var(--letter-spacing-sub);
+    margin-bottom: var(--space-1);
 }
 
 .oled-value {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #fff;
-    text-shadow: 0 0 5px rgba(255,255,255,0.5);
-    letter-spacing: 0.05em;
+    font-size: var(--font-size-oled-value);
+    font-weight: var(--font-weight-label);
+    color: var(--color-oled-value);
+    text-shadow: var(--shadow-oled-text);
+    letter-spacing: var(--letter-spacing-mono);
 }

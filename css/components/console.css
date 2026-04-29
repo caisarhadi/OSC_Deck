@@ -1,7 +1,7 @@
 .console-unit {
     position: absolute;
-    top: calc(50% + var(--layout-console-offset));
-    left: 50%;
+    top: calc(var(--pos-center) + var(--layout-console-offset));
+    left: var(--pos-center);
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
@@ -11,19 +11,19 @@
 }
 
 .unit-label {
-    font-weight: 700;
+    font-weight: var(--font-weight-label);
     font-size: var(--font-size-label);
-    letter-spacing: 0.15em;
+    letter-spacing: var(--letter-spacing-label);
     color: var(--color-console-label);
     text-transform: uppercase;
-    margin-bottom: 24px;
+    margin-bottom: var(--spacing-lg);
 }
 
 .button-row {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    width: calc(var(--size-yaw) - 32px);
+    width: calc(var(--size-yaw) - var(--space-8));
 }
 
 .key-wrap {
@@ -40,6 +40,7 @@
     background: var(--color-keycap-base);
     box-shadow: var(--shadow-keycap);
     cursor: pointer;
+    touch-action: none;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,7 +49,7 @@
 }
 
 .keycap:active {
-    transform: translateY(2px);
+    transform: translateY(var(--space-0-5));
     box-shadow: var(--shadow-keycap-active);
 }
 
@@ -62,8 +63,8 @@
 
 .keycap-cavity {
     position: relative;
-    width: calc(100% - 12px);
-    height: calc(100% - 12px);
+    width: calc(var(--pos-full) - var(--space-3));
+    height: calc(var(--pos-full) - var(--space-3));
     border-radius: var(--radius-inner);
     background: var(--color-keycap-cavity);
     box-shadow: var(--shadow-keycap-cavity);
@@ -81,18 +82,18 @@
     align-items: center;
     z-index: 2;
     color: var(--color-keycap-text);
-    font-weight: 600;
+    font-weight: var(--font-weight-body);
 }
 
 .cam-word {
     font-size: var(--font-size-micro);
-    letter-spacing: 0.1em;
-    opacity: 0.7;
+    letter-spacing: var(--letter-spacing-sub);
+    opacity: var(--opacity-secondary);
 }
 
 .cam-num {
     font-size: var(--font-size-large);
-    margin-top: 2px;
+    margin-top: var(--space-0-5);
 }
 
 .keycap-glow {
@@ -105,10 +106,10 @@
 
 .keycap-glass {
     position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    height: 12px;
+    top: var(--space-0-5);
+    left: var(--space-0-5);
+    right: var(--space-0-5);
+    height: var(--space-3);
     background: var(--grad-keycap-glass);
     border-radius: var(--radius-small) var(--radius-small) 0 0;
     pointer-events: none;
@@ -144,9 +145,9 @@
 }
 
 .key-meta {
-    margin-top: 10px;
-    width: 28px;
-    height: 4px;
+    margin-top: var(--space-2);
+    width: var(--space-7);
+    height: var(--space-1);
     border-radius: var(--radius-tiny);
     background: var(--color-console-label);
     box-shadow: var(--shadow-key-meta);
@@ -156,4 +157,18 @@
 .key-meta.active {
     background: var(--color-keycap-lit-green);
     box-shadow: var(--shadow-key-meta-active);
+}
+
+.ribbon-slider--console {
+    margin-bottom: var(--spacing-md);
+}
+
+.unit-label--top {
+    margin-top: 0;
+    margin-bottom: var(--spacing-xl);
+}
+
+.unit-label--bottom {
+    margin-top: var(--spacing-lg);
+    margin-bottom: 0;
 }
