@@ -1,18 +1,7 @@
 /**
  * OSC Bridge Server
- *
- * WebSocket server that receives JSON from the browser and:
- *   1. Sends individual OSC messages over UDP to Unreal Engine (OSC Plugin)
- *
- * Unreal Engine can send telemetry back as OSC messages on the UDP listen port,
- * which are converted to JSON and broadcast to all WebSocket clients.
- *
- * Usage:  node server/osc-bridge.js
- *
- * Ports:
- *   9000  WebSocket           (Browser <-> Node)
- *   9001  UDP send            (Node -> Unreal)
- *   9002  UDP listen          (Unreal -> Node)
+ * Bridges JSON WebSocket traffic to OSC/UDP for Unreal Engine.
+ * Ports: 9000 (WS), 9001 (UDP Send), 9002 (UDP Listen)
  */
 
 const http = require('http');
@@ -45,13 +34,11 @@ const BOOLEAN_KEYS = new Set([
 
 const NON_OSC_KEYS = new Set(['cam', 'tRate', 'masterRate']);
 
-// Valid telemetry keys (address format: /telemetry/{cam}/{key})
 const TELEMETRY_KEYS = new Set(['shutter', 'ei', 'nd', 'wb', 'fcl', 'iris', 'fcs']);
 
 const VALID_CAMS = new Set(['A', 'B', 'C', 'D']);
 
 // ── Rate multiplier map ─────────────────────────────────────────────
-// Client sends raw values; server multiplies before OSC send.
 
 const RATE_MULTIPLIERS = {
     tx: ['tRate', 'masterRate'],
@@ -112,19 +99,16 @@ udpPort.on('ready', () => {
 
 udpPort.on('message', (oscMsg) => {
     const args = oscMsg.args || [];
-    // Parse /telemetry/{cam}/{key}
     const parts = oscMsg.address.split('/');
-    // Expected: ['', 'telemetry', cam, key]
     if (parts.length !== 4 || parts[1] !== 'telemetry') return;
     const cam = parts[2];
     const key = parts[3];
     if (!TELEMETRY_KEYS.has(key)) return;
 
-    // Take the last arg — UE's OSCMessage may accumulate floats across sends
+    // UE's OSCMessage may accumulate floats, take the last arg
     const value = args.length > 0 ? args[args.length - 1] : 0;
     console.log(`[+] OSC from UE: ${oscMsg.address} = ${value}`);
 
-    // Only forward telemetry for the currently active camera
     if (cam !== activeCam) return;
 
     broadcastToClients({ type: 'ue_update', data: { [key]: value } });
@@ -153,7 +137,6 @@ function sendOSCFromState(newState) {
 
     if (!VALID_CAMS.has(camLetter)) return;
 
-    // Update current rates from incoming state
     if (newState.tRate !== undefined) currentRates.tRate = newState.tRate;
     if (newState.masterRate !== undefined) currentRates.masterRate = newState.masterRate;
 
