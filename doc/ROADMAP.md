@@ -1,6 +1,6 @@
 # OSC Deck — Feature Roadmap & Specifications
 
-This document outlines the core high-level features, UX goals, and specifications for upcoming iterations of the OSC Deck, heavily inspired by professional broadcast CCUs and 1st AC FIZ (Focus, Iris, Zoom) systems.
+This document outlines the core high-level features, UX goals, and specifications for upcoming iterations of the OSC Deck.
 
 ## 1. Global Camera Profile Selector
 *   **Concept:** A dedicated master button to swap the underlying physical camera characteristics in Unreal Engine (Sensor Size, Camera Model, Aspect Ratio).
@@ -11,14 +11,14 @@ This document outlines the core high-level features, UX goals, and specification
 *   **Desired Outcome:** Gives the operator direct control over the virtual sensor properties, ensuring that focal length and depth-of-field calculations perfectly match the intended real-world camera body without diving into Unreal Engine menus.
 
 ## 2. Snapshot Memory Banks (Presets)
-*   **Concept:** Broadcast CCU-style memory presets for rapid, repeatable camera state recall.
+*   **Concept:** CCU-style memory presets for rapid, repeatable camera state recall.
 *   **Core Features:**
     *   Four dedicated memory banks (Presets 1-4).
     *   Presets will specifically capture and restore the state of the four core exposure/color knobs: **Shutter**, **EI**, **ND**, and **WB**.
 *   **Desired Outcome:** Operators can save an exact exposure state for a specific lighting scenario and instantly snap the camera back to those exact values with a single tap.
 
-## 23. Focus & Zoom Limits (FIZ A/B Marks)
-*   **Concept:** Emulating high-end 1st AC hand units (like Preston or Arri Hi-5) to allow for flawless, repeatable lens pulls.
+## 3. Focus & Zoom Limits (FIZ A/B Marks)
+*   **Concept:** Emulating high-end 1st AC hand units (like Preston or Arri Hi-5) to allow for repeatable lens pulls.
 *   **Core Features:**
     *   Ability to set "Mark A" (Min) and "Mark B" (Max) points on the **FCS** (Focus) and **FCL** (Zoom) sliders.
     *   A dedicated "Clear Mark" function to remove the constraints.
