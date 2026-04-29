@@ -57,13 +57,11 @@
     --space-45: 180px;
 
     /* Viewport & Percentages */
-    --h-screen: 100vh;
+    --h-screen: 100dvh;
     --pct-35: 35%;
     --pct-50: 50%;
     --pct-65: 65%;
     --pct-100: 100%;
-    --rem-2-5: 2.5rem;
-    --rem-8: 8rem;
 
     /* Color Palette (Merged) */
     --base-black: #000;
@@ -189,8 +187,8 @@
     --gap-knobs-v: var(--space-11);
     --offset-knob-orbit: var(--space-16);
     
-    --size-log-collapsed: var(--rem-2-5);
-    --size-log-expanded: var(--rem-8);
+    --size-log-collapsed: var(--space-10);
+    --size-log-expanded: var(--space-25);
 
     /* Yaw Ring Colors */
     --color-yaw-bg: var(--gray-700);
@@ -249,6 +247,7 @@
 
     /* Sizes */
     --size-yaw: 400px;
+    --size-console-width: calc(var(--size-yaw) - var(--space-8));
     --size-yaw-inner: 332px;
     --size-yaw-indicator: var(--space-3);
     --offset-yaw-indicator: calc(((var(--size-yaw) - var(--size-yaw-inner)) / 4) - (var(--size-yaw-indicator) / 2));
@@ -348,10 +347,6 @@
     --shadow-knob-base-active: 4px 4px 10px var(--black-a90), -1px -1px 3px var(--white-a05), inset 1px 1px 2px var(--white-a05);
     --shadow-knob-indicator-active: 0 0 10px var(--red-a80);
 
-    /* Filter Drop Shadows */
-    --filter-power-active: drop-shadow(0 0 6px var(--red-a80)) drop-shadow(0 0 10px var(--red-a50));
-    --filter-af-active: drop-shadow(0 0 6px var(--green-a80)) drop-shadow(0 0 10px var(--green-a50));
-
     /* Z-indexes */
     --z-yaw: 1;
     --z-outer: 5;
@@ -367,4 +362,10 @@
     --transition-fast: 0.2s ease;
     --transition-log: 0.3s ease;
     --transition-knob: 0.1s ease;
+}
+
+@supports not (height: 100dvh) {
+    :root {
+        --h-screen: 100vh;
+    }
 }

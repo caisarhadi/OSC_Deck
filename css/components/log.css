@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     pointer-events: auto;
-    transition: width var(--transition-log), height var(--transition-log), box-shadow var(--transition-log), border-top-color var(--transition-log);
+    transition: box-shadow var(--transition-log), border-top-color var(--transition-log);
 }
 
 .osc-log-panel:not(.collapsed) {

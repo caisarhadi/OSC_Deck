@@ -184,7 +184,6 @@
 }
 
 .af-toggle.is-active .reset-icon {
-    filter: var(--filter-af-active);
 }
 .FCL-label {
     position: absolute;

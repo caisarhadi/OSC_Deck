@@ -23,7 +23,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    width: calc(var(--size-yaw) - var(--space-8));
+    width: var(--size-console-width);
 }
 
 .key-wrap {

@@ -29,8 +29,8 @@
 
 .knob-wrap.master-knob .knob-track {
     top: var(--space-16);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 170'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='26.7' cy='143.3' r='1.5'/%3E%3Ccircle cx='5.3' cy='106.4' r='1.5'/%3E%3Ccircle cx='5.3' cy='63.6' r='1.5'/%3E%3Ccircle cx='26.7' cy='26.7' r='1.5'/%3E%3Ccircle cx='63.6' cy='5.3' r='1.5'/%3E%3Ccircle cx='106.4' cy='5.3' r='1.5'/%3E%3Ccircle cx='143.3' cy='26.7' r='1.5'/%3E%3Ccircle cx='164.7' cy='63.6' r='1.5'/%3E%3Ccircle cx='164.7' cy='106.4' r='1.5'/%3E%3Ccircle cx='143.3' cy='143.3' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 170 170'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='26.7' cy='143.3' r='1.5'/%3E%3Ccircle cx='5.3' cy='106.4' r='1.5'/%3E%3Ccircle cx='5.3' cy='63.6' r='1.5'/%3E%3Ccircle cx='26.7' cy='26.7' r='1.5'/%3E%3Ccircle cx='63.6' cy='5.3' r='1.5'/%3E%3Ccircle cx='106.4' cy='5.3' r='1.5'/%3E%3Ccircle cx='143.3' cy='26.7' r='1.5'/%3E%3Ccircle cx='164.7' cy='63.6' r='1.5'/%3E%3Ccircle cx='164.7' cy='106.4' r='1.5'/%3E%3Ccircle cx='143.3' cy='143.3' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='15.7' cy='84.3' r='0.88'/%3E%3Ccircle cx='3.1' cy='62.6' r='0.88'/%3E%3Ccircle cx='3.1' cy='37.4' r='0.88'/%3E%3Ccircle cx='15.7' cy='15.7' r='0.88'/%3E%3Ccircle cx='37.4' cy='3.1' r='0.88'/%3E%3Ccircle cx='62.6' cy='3.1' r='0.88'/%3E%3Ccircle cx='84.3' cy='15.7' r='0.88'/%3E%3Ccircle cx='96.9' cy='37.4' r='0.88'/%3E%3Ccircle cx='96.9' cy='62.6' r='0.88'/%3E%3Ccircle cx='84.3' cy='84.3' r='0.88'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='15.7' cy='84.3' r='0.88'/%3E%3Ccircle cx='3.1' cy='62.6' r='0.88'/%3E%3Ccircle cx='3.1' cy='37.4' r='0.88'/%3E%3Ccircle cx='15.7' cy='15.7' r='0.88'/%3E%3Ccircle cx='37.4' cy='3.1' r='0.88'/%3E%3Ccircle cx='62.6' cy='3.1' r='0.88'/%3E%3Ccircle cx='84.3' cy='15.7' r='0.88'/%3E%3Ccircle cx='96.9' cy='37.4' r='0.88'/%3E%3Ccircle cx='96.9' cy='62.6' r='0.88'/%3E%3Ccircle cx='84.3' cy='84.3' r='0.88'/%3E%3C/g%3E%3C/svg%3E") center/cover;
 }
 
 .knob-wrap.master-knob .knob-base::after,
@@ -123,8 +123,8 @@
     height: var(--size-knob-track);
     border-radius: var(--radius-round);
     background: var(--color-console-label);
-    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='19.3' cy='100.7' r='1.5'/%3E%3Ccircle cx='4.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='4.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='19.3' cy='19.3' r='1.5'/%3E%3Ccircle cx='45.1' cy='4.5' r='1.5'/%3E%3Ccircle cx='74.9' cy='4.5' r='1.5'/%3E%3Ccircle cx='100.7' cy='19.3' r='1.5'/%3E%3Ccircle cx='115.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='115.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='100.7' cy='100.7' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
-    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='19.3' cy='100.7' r='1.5'/%3E%3Ccircle cx='4.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='4.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='19.3' cy='19.3' r='1.5'/%3E%3Ccircle cx='45.1' cy='4.5' r='1.5'/%3E%3Ccircle cx='74.9' cy='4.5' r='1.5'/%3E%3Ccircle cx='100.7' cy='19.3' r='1.5'/%3E%3Ccircle cx='115.5' cy='45.1' r='1.5'/%3E%3Ccircle cx='115.5' cy='74.9' r='1.5'/%3E%3Ccircle cx='100.7' cy='100.7' r='1.5'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='16.1' cy='83.9' r='1.25'/%3E%3Ccircle cx='3.8' cy='62.4' r='1.25'/%3E%3Ccircle cx='3.8' cy='37.6' r='1.25'/%3E%3Ccircle cx='16.1' cy='16.1' r='1.25'/%3E%3Ccircle cx='37.6' cy='3.8' r='1.25'/%3E%3Ccircle cx='62.4' cy='3.8' r='1.25'/%3E%3Ccircle cx='83.9' cy='16.1' r='1.25'/%3E%3Ccircle cx='96.2' cy='37.6' r='1.25'/%3E%3Ccircle cx='96.2' cy='62.4' r='1.25'/%3E%3Ccircle cx='83.9' cy='83.9' r='1.25'/%3E%3C/g%3E%3C/svg%3E") center/cover;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cg fill='%23fff'%3E%3Ccircle cx='16.1' cy='83.9' r='1.25'/%3E%3Ccircle cx='3.8' cy='62.4' r='1.25'/%3E%3Ccircle cx='3.8' cy='37.6' r='1.25'/%3E%3Ccircle cx='16.1' cy='16.1' r='1.25'/%3E%3Ccircle cx='37.6' cy='3.8' r='1.25'/%3E%3Ccircle cx='62.4' cy='3.8' r='1.25'/%3E%3Ccircle cx='83.9' cy='16.1' r='1.25'/%3E%3Ccircle cx='96.2' cy='37.6' r='1.25'/%3E%3Ccircle cx='96.2' cy='62.4' r='1.25'/%3E%3Ccircle cx='83.9' cy='83.9' r='1.25'/%3E%3C/g%3E%3C/svg%3E") center/cover;
     pointer-events: none;
     z-index: 1;
     transition: opacity var(--transition-fast);
@@ -240,7 +240,6 @@
 }
 
 .power-toggle.is-active .reset-icon {
-    filter: var(--filter-power-active);
 }
 
 .power-toggle .reset-icon {
