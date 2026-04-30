@@ -11,6 +11,6 @@ call pm2 delete osc-ui
 
 echo.
 echo OSC Deck has been stopped and removed from background processes.
-echo Terminal will close in 2 seconds or you can safely close this window.
+echo Terminal will close in 3 seconds or you can safely close this window.
 echo ========================================================
-timeout /t 2 >nul
+timeout /t 3 >nul
