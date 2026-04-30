@@ -10,5 +10,7 @@ call pm2 delete osc-bridge
 call pm2 delete osc-ui
 
 echo.
-echo Servers have been stopped and removed from background processes.
-timeout /t 4 >nul
+echo OSC Deck has been stopped and removed from background processes.
+echo Terminal will close in 2 seconds or you can safely close this window.
+echo ========================================================
+timeout /t 2 >nul
