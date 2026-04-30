@@ -30,7 +30,7 @@ echo OSC Deck is now running in the background!
 echo Bridge: ws://localhost:9000
 echo UI:     http://localhost:8080
 echo.
-echo Run stop-camctrl.bat to terminate the background servers.
+echo Run stop-camctrl.bat to stop OSC Deck and remove servers from background processes.
 echo Terminal will close in 3 seconds or you can safely close this window.
 echo ========================================================
 timeout /t 3 >nul
