@@ -36,6 +36,11 @@ See [ARCHITECTURE.md](doc/ARCHITECTURE.md) for module dependency graphs, data fl
 ## Quick Start
 
 ```bash
+# Option 1: Quick Start (Windows)
+start-camctrl.bat               # installs dependencies, starts servers silently in background
+stop-camctrl.bat                # stops background servers
+
+# Option 2: Manual Start (All platforms)
 npm install
 node server/osc-bridge.js       # starts bridge on port 9000
 npx -y serve -l 8080            # serve UI
